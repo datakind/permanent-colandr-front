@@ -1,7 +1,6 @@
 const rp = require('request-promise')
 
 function signin (body) {
-  console.log(body)
   let { email, password } = body
   if (!(email && password)) return Promise.reject()
 
