@@ -1,0 +1,17 @@
+<form action="{{ auth_action }}" class="row">
+  {% if auth_action == 'signup' %}
+    <div class="input-field col s12">
+      <input id="username" type="text" class="validate">
+      <label for="username">Username</label>
+    </div>
+  {% endif %}
+  <div class="input-field col s12">
+    <input id="email" type="email" class="validate">
+    <label for="email">Email</label>
+  </div>
+  <div class="input-field col s12">
+    <input id="password" type="password" class="validate">
+    <label for="password">Password</label>
+  </div>
+  <input type="submit" value="{{ auth_action }}" class="col s12 z-depth-0 btn btn-large">
+</form>

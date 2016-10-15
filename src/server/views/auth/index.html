@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/auth.css">
+{% endblock %}
+
+{% block content %}
+
+  <div class="auth-page container">
+    <div class="row">
+      <div class="card-panel col offset-s3 s6">
+        <div class="row">
+          <ul class="tabs">
+            <li class="tab col s6">
+              <a class="active" href="#signin">Sign In</a>
+            </li>
+            <li class="tab col s6">
+              <a href="#signup">Sign Up</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="row">
+          <div id="signin" class="col offset-s1 s10">
+            {% set auth_action = 'signin' %}
+            {% include './partials/form.html' %}
+            {% include './partials/forget-password.html' %}
+          </div>
+
+          <div id="signup" class="col offset-s1 s10">
+            {% set auth_action = 'signup' %}
+            {% include './partials/form.html' %}
+            {% include './partials/forget-password.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
