@@ -14,9 +14,9 @@
     {% block css %}{% endblock %}
   </head>
   <body>
-      {% block content %}
-      {% endblock %}
-
+    {% include './shared/nav.html' %}
+    {% block content %}
+    {% endblock %}
     <!-- vendor scripts -->
     <script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>

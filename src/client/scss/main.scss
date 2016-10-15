@@ -1,0 +1,6 @@
+@import "components/color";
+@import "shared/nav";
+
+.colandr-color {
+  @extend .cyan, .darken-2;
+}
