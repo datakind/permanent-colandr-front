@@ -17,6 +17,20 @@ function signin (body) {
   return rp(options)
 }
 
+function signup (body) {
+  let { name, email, password } = body
+  if (!(name && email && password)) return Promise.reject()
+
+  let options = {
+    method: 'POST',
+    uri: `${process.env.API_URL}/register`,
+    json: true,
+    body: { name, email, password }
+  }
+
+  return rp(options)
+}
+
 module.exports = {
-  signin
+  signin, signup
 }

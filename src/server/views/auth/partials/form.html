@@ -1,9 +1,9 @@
 <form action="/{{ auth_action }}" method="POST" class="row">
-  {% include '../../shared/errors.html' %}
+  {% include '../../shared/notifications.html' %}
   {% if auth_action == 'signup' %}
     <div class="input-field col s12">
-      <input id="username" name="username" type="text" class="validate">
-      <label for="username">Username</label>
+      <input id="name" name="name" type="text" class="validate">
+      <label for="name">Name</label>
     </div>
   {% endif %}
   <div class="input-field col s12">
