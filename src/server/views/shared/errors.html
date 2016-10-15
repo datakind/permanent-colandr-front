@@ -1,0 +1,11 @@
+{% if messages.error %}
+  <div class="card-panel z-depth-0 red lighten-2">
+    <span class="white-text">{{ messages.error }}</span>
+  </div>
+{% endif %}
+
+{% if messages.success %}
+  <div class="card-panel z-depth-0 colandr-color">
+    <span class="white-text">{{ messages.success }}</span>
+  </div>
+{% endif %}
