@@ -4,6 +4,7 @@ const api = require('./api')
 
 router.get('/', index)
 router.get('/new', newReview)
+router.get('/:id', show)
 router.post('/', create)
 
 // reviews routes
@@ -20,6 +21,15 @@ function index (req, res, next) {
 function newReview (req, res, next) {
   let review = {}
   res.render('reviews/new', { review })
+}
+
+function show (req, res, next) {
+  api.reviews.get(req.session.user, req.params.id)
+    .then(review => res.render('reviews/show', { review }))
+    .catch(err => {
+      console.log(err)
+      next()
+    })
 }
 
 function create (req, res, next) {

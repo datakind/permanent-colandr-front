@@ -1,8 +1,11 @@
 const rp = require('request-promise')
 
-function get (user) {
+function get (user, id) {
+  let uri = `${process.env.API_URL}/reviews`
+  if (id) uri += `/${id}`
+
   let options = {
-    uri: `${process.env.API_URL}/reviews`,
+    uri,
     json: true,
     auth: { user: user.token }
   }
