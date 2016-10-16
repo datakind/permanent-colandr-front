@@ -1,0 +1,13 @@
+<a href="/reviews/{{ review.id }}">
+  <div class="row card-panel grey lighten-5 z-depth-0">
+    <div class="col offset-s1 s10">
+      <h2 class="review-name">
+        {{ review.name }}
+        <span>
+          {{ review.created_at | date('YYYY-MM-DD') }}
+        </span>
+        <i class="small material-icons right">settings</i>
+      </h2>
+    </div>
+  </div>
+</a>
