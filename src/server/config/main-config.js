@@ -21,10 +21,11 @@ require('dotenv').config()
 
 module.exports.init = function (app, express) {
   // *** view engine *** //
-  nunjucks.configure(viewFolders, {
+  const nunjucksEnv = nunjucks.configure(viewFolders, {
     express: app,
     autoescape: true
   })
+  nunjucksEnv.addFilter('date', require('nunjucks-date-filter'))
   app.set('view engine', 'html')
 
   // *** app middleware *** //
