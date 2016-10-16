@@ -1,0 +1,30 @@
+<form action="/reviews/{{ review.id }}" method="POST" class="col s12">
+  <div class="row">
+    <div class="input-field col s12">
+      <input id="name" type="text" class="validate" name="name" required>
+      <label for="name">Review Name</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <textarea id="description"
+        class="materialize-textarea"
+        name="description"
+        required></textarea>
+      <label for="description">Description</label>
+    </div>
+  </div>
+
+  <div class="row action-buttons">
+    <a href="/reviews"
+      class="cancel-button waves-effect waves-light btn btn-large z-depth-0 right">
+      Cancel
+    </a>
+    <button type="submit"
+      class="waves-effect waves-light btn z-depth-0 btn-large right">
+      Create
+      <i class="material-icons left">done</i>
+    </button>
+  </div>
+</form>

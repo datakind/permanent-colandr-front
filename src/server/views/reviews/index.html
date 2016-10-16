@@ -6,14 +6,14 @@
 
 {% block content %}
 
-  <div class="reviews-page container">
+  <div class="reviews reviews-page container">
     <div class="row">
       <div class="col s6">
         <h1>My Reviews</h1>
       </div>
       <div class="col s6">
         <p>
-          <a href="">
+          <a href="/reviews/new">
             <button class="btn btn-large right z-depth-0">New Review</button>
           </a>
         </p>
@@ -21,6 +21,7 @@
     </div>
     <hr>
     <div class="reviews-list">
+      {% include '../shared/notifications.html' %}
       {% for review in reviews %}
         {% include './partials/review-listing.html' %}
       {% endfor %}
