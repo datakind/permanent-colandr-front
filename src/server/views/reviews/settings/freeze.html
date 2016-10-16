@@ -1,12 +1,33 @@
 <div class="row">
   <div class="col s12">
     <div class="settings-header card-panel z-depth-0 grey lighten-3">
-      <h2>Freeze Review</h2>
+      <h2>
+        {% if review.status == 'active' %}
+          Freeze Review
+        {% else %}
+          Unfreeze Review
+        {% endif %}
+      </h2>
     </div>
-    <p>You may freeze this review at any time to prevent further additions or changes from being made. This change is reversible.</p>
-    <button class="btn btn-large light-blue darken-1 z-depth-0">
-      <i class="material-icons left">pause_circle_outline</i>
-      Freeze
-    </button>
+    {% if review.status == 'active' %}
+      <p>You may freeze this review at any time to prevent further additions or changes from being made. This change is reversible.</p>
+    {% else %}
+      <p>You may unfreeze this review at any time to allow additions and changes to continue being made. This change is reversible.</p>
+    {% endif %}
+    <form action="/reviews/{{ review.id }}?_method=PUT" method="POST">
+      {% if review.status == 'active' %}
+        <input type="hidden" name="status" value="archived">
+        <button type="submit" class="btn btn-large light-blue darken-1 z-depth-0">
+          <i class="material-icons left">pause_circle_outline</i>
+          Freeze
+        </button>
+      {% else %}
+        <input type="hidden" name="status" value="active">
+        <button type="submit" class="btn btn-large indigo lighten-1 z-depth-0">
+          <i class="material-icons left">play_circle_outline</i>
+          Unfreeze
+        </button>
+      {% endif %}
+    </form>
   </div>
 </div>

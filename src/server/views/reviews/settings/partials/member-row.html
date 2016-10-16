@@ -7,16 +7,25 @@
   </td>
   <td>
     {% if member.is_owner %}
-      <span class="is-owner right">Owner</span>
+      <p class="right">Is Owner</p>
     {% else %}
-      <div class="actions right">
-        <a href="">
-          <span class="make-owner">Make Owner</span>
-        </a>
-
-        <a href="">
-          <span class="remove-team-member">Remove</span>
-        </a>
+      <div class="action-buttons row">
+        <div class="col s12">
+          <form method="POST" action="/reviews/{{ review.id }}/team/remove?_method=PUT">
+            <input type="hidden" name="user_id" value="{{ member.id }}">
+            <button type="submit"
+              class="cancel-button btn btn-flat white-text red lighten-1 z-depth-0 right">
+              Remove
+            </button>
+          </form>
+          <form method="POST" action="/reviews/{{ review.id }}/team/promote?_method=PUT">
+            <input type="hidden" name="user_id" value="{{ member.id }}">
+            <button type="submit"
+              class="btn btn-flat white-text light-blue darken-1 z-depth-0 right">
+              Make Owner
+            </button>
+          </form>
+        </div>
       </div>
     {% endif %}
   </td>

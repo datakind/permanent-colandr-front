@@ -11,10 +11,18 @@
       </tbody>
     </table>
     <br>
-    <button class="btn btn-large z-depth-0">
-      <i class="material-icons left">send</i>
-      Invite
-    </button>
+    <form action="/reviews/{{ review.id }}/team/invite?_method=PUT" method="POST" class="row">
+      <div class="col s6">
+        <div class="input-field">
+          <input id="email" type="email" class="validate" name="email" required>
+          <label for="email">User's Email</label>
+        </div>
+        <button type="submit" class="btn btn-large z-depth-0">
+          <i class="material-icons left">send</i>
+          Invite
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
