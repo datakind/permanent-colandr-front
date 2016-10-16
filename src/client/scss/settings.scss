@@ -1,37 +1,22 @@
 @import "components/color";
 
-.settings {
-  .member {
-    margin: 1.2rem 0;
+.settings-header {
+  margin-bottom: 2rem;
 
-    .is-owner {
-      color: color('indigo', 'base');
-      font-weight: 700;
-      margin-left: 1rem;
-    }
+  h2 {
+    font-size: 2rem;
+    margin: 0;
+  }
+}
 
-    a {
-      margin-right: 1rem;
+.screeners-form {
+  margin-top: 2rem;
 
-      .make-owner {
-        color: color('indigo', 'lighten-3');
-      }
-
-      .remove-team-member {
-        color: color('red', 'base');
-      }
-    }
+  .screeners-heading {
+    font-weight: 700;
   }
 
-  .screeners-form {
-    h4 {
-      font-size: 2rem;
-      font-weight: 300;
-      margin-top: 4rem;
-    }
-
-    label {
-      margin-right: 1.5rem;
-    }
+  label {
+    margin-right: 1.5rem;
   }
 }

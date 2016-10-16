@@ -17,14 +17,14 @@
   </div>
 
   <div class="row action-buttons">
-    <a href="/reviews/{{ review.id }}"
-      class="cancel-button waves-effect waves-light btn btn-large z-depth-0 right">
-      Cancel
-    </a>
     <button type="submit"
-      class="waves-effect waves-light btn z-depth-0 btn-large right">
+      class="waves-effect waves-light btn z-depth-0 btn-large">
       {% if review.id %}Update{% else %}Create{% endif %}
       <i class="material-icons left">done</i>
     </button>
+    <a href="/reviews/{{ review.id }}"
+      class="cancel-button waves-effect waves-light btn btn-large z-depth-0">
+      Cancel
+    </a>
   </div>
 </form>

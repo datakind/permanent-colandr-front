@@ -1600,23 +1600,15 @@
 .transparent-text {
   color: transparent !important; }
 
-.settings .member {
-  margin: 1.2rem 0; }
-  .settings .member .is-owner {
-    color: #3f51b5;
-    font-weight: 700;
-    margin-left: 1rem; }
-  .settings .member a {
-    margin-right: 1rem; }
-    .settings .member a .make-owner {
-      color: #9fa8da; }
-    .settings .member a .remove-team-member {
-      color: #F44336; }
+.settings-header {
+  margin-bottom: 2rem; }
+  .settings-header h2 {
+    font-size: 2rem;
+    margin: 0; }
 
-.settings .screeners-form h4 {
-  font-size: 2rem;
-  font-weight: 300;
-  margin-top: 4rem; }
-
-.settings .screeners-form label {
-  margin-right: 1.5rem; }
+.screeners-form {
+  margin-top: 2rem; }
+  .screeners-form .screeners-heading {
+    font-weight: 700; }
+  .screeners-form label {
+    margin-right: 1.5rem; }
