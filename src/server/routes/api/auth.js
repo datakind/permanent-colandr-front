@@ -1,39 +1,31 @@
-const rp = require('request-promise')
+const { send } = require('./helpers')
 const jwt = require('jsonwebtoken')
 
 function signin (body) {
   let { email, password } = body
   if (!(email && password)) return Promise.reject()
 
-  let options = {
-    uri: `${process.env.API_URL}/authtoken`,
-    json: true,
+  return send('/authtoken', '', {
     auth: {
       user: email,
       pass: password,
       sendImmediately: false
     }
-  }
-
-  return rp(options)
+  })
 }
 
 function signup (body) {
   let { name, email, password } = body
   if (!(name && email && password)) return Promise.reject()
 
-  let options = {
+  return send('/register', '', {
     method: 'POST',
-    uri: `${process.env.API_URL}/register`,
-    json: true,
     body: { name, email, password }
-  }
-
-  return rp(options)
+  })
 }
 
 function authenticate (req, res, next) {
-  // TODO: Remove
+  // TODO: Remove)
   if (process.env.NODE_ENV === 'development') {
     signin({
       email: process.env.DEV_LOGIN_EMAIL,
