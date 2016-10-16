@@ -25,6 +25,32 @@ function create (user, body) {
   return rp(options)
 }
 
+function update (user, body) {
+  let { id } = body
+  delete body.id
+
+  let options = {
+    method: 'PUT',
+    uri: `${process.env.API_URL}/reviews/${id}`,
+    json: true,
+    auth: { user: user.token },
+    body
+  }
+
+  return rp(options)
+}
+
+function del (user, id) {
+  let options = {
+    method: 'DELETE',
+    uri: `${process.env.API_URL}/reviews/${id}`,
+    json: true,
+    auth: { user: user.token }
+  }
+
+  return rp(options)
+}
+
 module.exports = {
-  get, create
+  get, create, update, del
 }

@@ -4,9 +4,11 @@
       <h2>Delete Review</h2>
     </div>
     <p>You may delete this review at any time. This change is NOT reversible.</p>
-    <button class="btn red btn-large z-depth-0">
-      <i class="material-icons left">delete</i>
-      Delete
-    </button>
+    <form action="/reviews/{{ review.id }}?_method=DELETE" method="POST">
+      <button type="submit" class="btn red btn-large z-depth-0">
+        <i class="material-icons left">delete</i>
+        Delete
+      </button>
+    </form>
   </div>
 </div>

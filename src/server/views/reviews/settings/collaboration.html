@@ -6,29 +6,7 @@
     <table class="highlight">
       <tbody>
         {% for member in team %}
-          <tr>
-            <td>
-              {{ member.name }}
-            </td>
-            <td>
-              {{ member.email }}
-            </td>
-            <td>
-              {% if member.is_owner %}
-                <span class="is-owner right">Owner</span>
-              {% else %}
-                <div class="actions right">
-                  <a href="">
-                    <span class="make-owner">Make Owner</span>
-                  </a>
-
-                  <a href="">
-                    <span class="remove-team-member">Remove</span>
-                  </a>
-                </div>
-              {% endif %}
-            </td>
-          </div>
+          {% include "./partials/member-row.html" %}
         {% endfor %}
       </tbody>
     </table>
@@ -42,35 +20,14 @@
 
 <div class="row">
   <div class="col s12">
-    <form class="screeners-form" action="#">
+    <form class="screeners-form" action="/reviews/{{ review.id }}?_method=PUT" method="POST">
       <div class="row">
         <div class="col s3">
           <p class="screeners-heading">Screeners per Citation</p>
         </div>
         <div class="col s9">
-          <p>
-            <input name="num_citation_screening_reviewers"
-              type="radio"
-              {% if review.num_citation_screening_reviewers === 1 %}
-              checked
-              {% endif %}
-              id="one" />
-            <label for="one">One</label>
-            <input name="num_citation_screening_reviewers"
-              type="radio"
-              {% if review.num_citation_screening_reviewers === 2 %}
-              checked
-              {% endif %}
-              id="two" />
-            <label for="two">Two</label>
-            <input name="num_citation_screening_reviewers"
-              type="radio"
-              {% if review.num_citation_screening_reviewers === 3 %}
-              checked
-              {% endif %}
-              id="three" />
-            <label for="three">Three</label>
-          </p>
+          {% set field = "num_citation_screening_reviewers" %}
+          {% include "./partials/screening-radio-buttons.html" %}
         </div>
       </div>
 
@@ -79,34 +36,13 @@
           <p class="screeners-heading">Screeners per Full-Text</p>
         </div>
         <div class="col s9">
-          <p>
-            <input name="num_fulltext_screening_reviewers"
-              type="radio"
-              {% if review.num_fulltext_screening_reviewers === 1 %}
-              checked
-              {% endif %}
-              id="one" />
-            <label for="one">One</label>
-            <input name="num_fulltext_screening_reviewers"
-              type="radio"
-              {% if review.num_fulltext_screening_reviewers === 2 %}
-              checked
-              {% endif %}
-              id="two" />
-            <label for="two">Two</label>
-            <input name="num_fulltext_screening_reviewers"
-              type="radio"
-              {% if review.num_fulltext_screening_reviewers === 3 %}
-              checked
-              {% endif %}
-              id="three" />
-            <label for="three">Three</label>
-          </p>
+          {% set field = "num_fulltext_screening_reviewers" %}
+          {% include "./partials/screening-radio-buttons.html" %}
         </div>
       </div>
 
       <br>
-      
+
       <button type="submit"
         class="waves-effect waves-light btn z-depth-0 btn-large">
         Update Collaboration Settings

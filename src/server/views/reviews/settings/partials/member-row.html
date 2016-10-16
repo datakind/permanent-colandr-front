@@ -1,0 +1,23 @@
+<tr>
+  <td>
+    {{ member.name }}
+  </td>
+  <td>
+    {{ member.email }}
+  </td>
+  <td>
+    {% if member.is_owner %}
+      <span class="is-owner right">Owner</span>
+    {% else %}
+      <div class="actions right">
+        <a href="">
+          <span class="make-owner">Make Owner</span>
+        </a>
+
+        <a href="">
+          <span class="remove-team-member">Remove</span>
+        </a>
+      </div>
+    {% endif %}
+  </td>
+</tr>

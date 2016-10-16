@@ -1,0 +1,11 @@
+<p>
+  <input name="{{ field }}" type="radio" value="1" id="{{ field }}_one"
+    {% if review[field] === 1 %} checked {% endif %} />
+  <label for="{{ field }}_one">One</label>
+  <input name="{{ field }}" type="radio" value="2" id="{{ field }}_two"
+    {% if review[field] === 2 %} checked {% endif %} />
+  <label for="{{ field }}_two">Two</label>
+  <input name="{{ field }}" type="radio" value="3" id="{{ field }}_three"
+    {% if review[field] === 3 %} checked {% endif %} />
+  <label for="{{ field }}_three">Three</label>
+</p>

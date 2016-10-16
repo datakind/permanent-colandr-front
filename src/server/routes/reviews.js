@@ -7,6 +7,8 @@ router.get('/new', newReview)
 router.get('/:id', show)
 router.get('/:id/settings', settings)
 router.post('/', create)
+router.put('/:id', update)
+router.delete('/:id', del)
 
 // reviews routes
 
@@ -44,6 +46,24 @@ function create (req, res, next) {
       req.flash('success', `${review.name} has been created!`)
       res.redirect('/reviews')
     })
+    .catch(api.handleError(next))
+}
+
+function update (req, res, next) {
+  let { id } = req.params
+  req.body.id = id
+
+  api.reviews.update(req.session.user, req.body)
+    .then(review => {
+      req.flash('success', `Update successful!`)
+      res.redirect(`/reviews/${id}/settings`)
+    })
+    .catch(api.handleError(next))
+}
+
+function del (req, res, next) {
+  api.reviews.del(req.session.user, req.params.id)
+    .then(() => res.redirect('/reviews'))
     .catch(api.handleError(next))
 }
 
