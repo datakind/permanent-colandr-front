@@ -3,7 +3,7 @@ const router = express.Router()
 const api = require('./api')
 
 router.get('/signin', index)
-router.post('/signin', signin)
+router.post('/signin', signin, api.auth.authenticate, goUserHome)
 router.post('/signup', signup, signin)
 
 // auth routes
@@ -13,9 +13,10 @@ function index (req, res, next) {
 }
 
 function signin (req, res, next) {
-  api.signin(req.body)
-    .then(auth => {
-      res.status(201).json(auth)
+  api.auth.signin(req.body)
+    .then(token => {
+      req.session.user = token
+      next()
     })
     .catch(err => {
       console.log(err)
@@ -24,8 +25,12 @@ function signin (req, res, next) {
     })
 }
 
+function goUserHome (req, res, next) {
+  res.redirect('/reviews')
+}
+
 function signup (req, res, next) {
-  api.signup(req.body)
+  api.auth.signup(req.body)
   .then(success => {
     req.flash('success', 'Thanks for signing up! Please check your email to confirm your account.')
     res.redirect('/signin#signin')
