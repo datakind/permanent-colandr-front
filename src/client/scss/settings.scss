@@ -1,0 +1,37 @@
+@import "components/color";
+
+.settings {
+  .member {
+    margin: 1.2rem 0;
+
+    .is-owner {
+      color: color('indigo', 'base');
+      font-weight: 700;
+      margin-left: 1rem;
+    }
+
+    a {
+      margin-right: 1rem;
+
+      .make-owner {
+        color: color('indigo', 'lighten-3');
+      }
+
+      .remove-team-member {
+        color: color('red', 'base');
+      }
+    }
+  }
+
+  .screeners-form {
+    h4 {
+      font-size: 2rem;
+      font-weight: 300;
+      margin-top: 4rem;
+    }
+
+    label {
+      margin-right: 1.5rem;
+    }
+  }
+}

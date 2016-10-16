@@ -2,6 +2,7 @@
 
 {% block css %}
   <link rel="stylesheet" href="/css/reviews.css">
+  <link rel="stylesheet" href="/css/settings.css">
 {% endblock %}
 
 {% block content %}
@@ -22,9 +23,18 @@
     <div class="row">
       <div class="col s3">
         <div class="collection">
-          <a href="#!" class="collection-item active">Basic Info</a>
-          <a href="#!" class="collection-item">Collaboration</a>
-          <a href="#!" class="collection-item">Status</a>
+          <a href="/reviews/{{ review.id }}/settings/edit"
+            class="collection-item {% if edit %}active{% endif %}">
+            Basic Info
+          </a>
+          <a href="/reviews/{{ review.id }}/settings/collaboration"
+            class="collection-item {% if collaboration %}active{% endif %}">
+            Collaboration
+          </a>
+          <a href="/reviews/{{ review.id }}/settings/status"
+            class="collection-item {% if status %}active{% endif %}">
+            Status
+          </a>
         </div>
       </div>
       <div class="col offset-s1 s8">

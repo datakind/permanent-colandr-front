@@ -1,0 +1,88 @@
+{% extends "./_settings.html" %}
+
+{% block settingContent %}
+
+  <div class="settings row">
+    <div class="col s6">
+      <h4>Collaboration</h4>
+      {% for member in team %}
+        <div class="member">
+          <h6>
+            {{ member.name }}
+            {% if member.is_owner %}
+              <span class="is-owner">Owner</span>
+            {% endif %}
+          </h6>
+          {% if not member.is_owner %}
+            <a href="">
+              <span class="make-owner">Make Owner</span>
+            </a>
+
+            <a href="">
+              <span class="remove-team-member">Remove</span>
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <br>
+      <button class="btn btn-large z-depth-0">
+        <i class="material-icons left">send</i>
+        Invite
+      </button>
+    </div>
+    <div class="col s6">
+      <form class="screeners-form" action="#">
+        <h4>Screeners per Citation</h4>
+        <p>
+          <input name="num_citation_screening_reviewers"
+            type="radio"
+            {% if review.num_citation_screening_reviewers === 1 %}
+            checked
+            {% endif %}
+            id="one" />
+          <label for="one">One</label>
+          <input name="num_citation_screening_reviewers"
+            type="radio"
+            {% if review.num_citation_screening_reviewers === 2 %}
+            checked
+            {% endif %}
+            id="two" />
+          <label for="two">Two</label>
+          <input name="num_citation_screening_reviewers"
+            type="radio"
+            {% if review.num_citation_screening_reviewers === 3 %}
+            checked
+            {% endif %}
+            id="three" />
+          <label for="three">Three</label>
+        </p>
+
+        <h4>Screeners per Full-Text</h4>
+        <p>
+          <input name="num_fulltext_screening_reviewers"
+            type="radio"
+            {% if review.num_fulltext_screening_reviewers === 1 %}
+            checked
+            {% endif %}
+            id="one" />
+          <label for="one">One</label>
+          <input name="num_fulltext_screening_reviewers"
+            type="radio"
+            {% if review.num_fulltext_screening_reviewers === 2 %}
+            checked
+            {% endif %}
+            id="two" />
+          <label for="two">Two</label>
+          <input name="num_fulltext_screening_reviewers"
+            type="radio"
+            {% if review.num_fulltext_screening_reviewers === 3 %}
+            checked
+            {% endif %}
+            id="three" />
+          <label for="three">Three</label>
+        </p>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
