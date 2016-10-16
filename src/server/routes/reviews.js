@@ -5,6 +5,7 @@ const api = require('./api')
 router.get('/', index)
 router.get('/new', newReview)
 router.get('/:id', show)
+router.get('/:id/settings/edit', settingsEdit)
 router.post('/', create)
 
 // reviews routes
@@ -26,6 +27,15 @@ function newReview (req, res, next) {
 function show (req, res, next) {
   api.reviews.get(req.session.user, req.params.id)
     .then(review => res.render('reviews/show', { review }))
+    .catch(err => {
+      console.log(err)
+      next()
+    })
+}
+
+function settingsEdit (req, res, next) {
+  api.reviews.get(req.session.user, req.params.id)
+    .then(review => res.render('reviews/settings/edit', { review }))
     .catch(err => {
       console.log(err)
       next()

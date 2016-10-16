@@ -24,10 +24,8 @@
   }
 }
 
-.create-review-page {
-  .action-buttons .cancel-button {
-    background: color('grey', 'lighten-4');
-    color: color('grey', 'darken-3');
-    margin-left: 0.5rem;
-  }
+.action-buttons .cancel-button {
+  background: color('grey', 'lighten-4');
+  color: color('grey', 'darken-3');
+  margin-left: 0.5rem;
 }
