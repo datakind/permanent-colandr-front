@@ -1,0 +1,25 @@
+@import "components/color";
+
+.reviews-page {
+  margin-top: 3rem;
+
+  h1 {
+    font-size: 3rem;
+    margin: 1rem 0;
+  }
+}
+
+.reviews-list {
+  margin-top: 3rem;
+
+  a h2.review-name {
+    color: color('grey', 'darken-3');
+    font-size: 1.8rem;
+
+    span {
+      color: color('grey', 'base');
+      font-size: 1rem;
+      margin: 0 0.5rem
+    }
+  }
+}

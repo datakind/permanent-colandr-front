@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css">
+{% endblock %}
+
+{% block content %}
+
+  <div class="reviews-page container">
+    <div class="row">
+      <div class="col s6">
+        <h1>My Reviews</h1>
+      </div>
+      <div class="col s6">
+        <p>
+          <a href="">
+            <button class="btn btn-large right z-depth-0">New Review</button>
+          </a>
+        </p>
+      </div>
+    </div>
+    <hr>
+    <div class="reviews-list">
+      {% for review in reviews %}
+        <a href="/reviews/{{ review.id }}">
+          <div class="row card-panel grey lighten-5 z-depth-0">
+            <div class="col offset-s1 s10">
+              <h2 class="review-name">
+                {{ review.name }}
+                <span>
+                  {{ review.created_at | date('YYYY-MM-DD') }}
+                </span>
+                <i class="small material-icons right">settings</i>
+              </h2>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}
