@@ -12,11 +12,8 @@ router.post('/', create)
 
 function index (req, res, next) {
   api.reviews.get(req.session.user)
-  .then(reviews => res.render('reviews/index', { reviews }))
-  .catch(err => {
-    console.log(err)
-    next()
-  })
+    .then(reviews => res.render('reviews/index', { reviews }))
+    .catch(api.handleError(next))
 }
 
 function newReview (req, res, next) {
@@ -27,19 +24,13 @@ function newReview (req, res, next) {
 function show (req, res, next) {
   api.reviews.get(req.session.user, req.params.id)
     .then(review => res.render('reviews/show', { review }))
-    .catch(err => {
-      console.log(err)
-      next()
-    })
+    .catch(api.handleError(next))
 }
 
 function settingsEdit (req, res, next) {
   api.reviews.get(req.session.user, req.params.id)
     .then(review => res.render('reviews/settings/edit', { review }))
-    .catch(err => {
-      console.log(err)
-      next()
-    })
+    .catch(api.handleError(next))
 }
 
 function create (req, res, next) {
@@ -48,10 +39,7 @@ function create (req, res, next) {
       req.flash('success', `${review.name} has been created!`)
       res.redirect('/reviews')
     })
-    .catch(err => {
-      console.log(err)
-      next()
-    })
+    .catch(api.handleError(next))
 }
 
 module.exports = router

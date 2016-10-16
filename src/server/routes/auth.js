@@ -31,15 +31,15 @@ function goUserHome (req, res, next) {
 
 function signup (req, res, next) {
   api.auth.signup(req.body)
-  .then(success => {
-    req.flash('success', 'Thanks for signing up! Please check your email to confirm your account.')
-    res.redirect('/signin#signin')
-  })
-  .catch(err => {
-    console.log(err)
-    req.flash('error', 'Could not register with the provided information')
-    res.redirect('/signin#signup')
-  })
+    .then(success => {
+      req.flash('success', 'Thanks for signing up! Please check your email to confirm your account.')
+      res.redirect('/signin#signin')
+    })
+    .catch(err => {
+      console.log(err)
+      req.flash('error', 'Could not register with the provided information')
+      res.redirect('/signin#signup')
+    })
 }
 
 module.exports = router
