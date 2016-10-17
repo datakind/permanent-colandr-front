@@ -30,6 +30,7 @@
     "eslint-config-standard": "^6.0.0",
     "eslint-plugin-promise": "^2.0.1",
     "eslint-plugin-standard": "^2.0.0",
+    "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
     "gulp-nodemon": "^2.1.0",
     "gulp-notify": "^2.2.0",
