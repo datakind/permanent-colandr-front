@@ -7,12 +7,8 @@
     font-size: 3rem;
     margin: 1rem 0;
   }
-}
 
-.reviews-list {
-  margin-top: 3rem;
-
-  a h2.review-name {
+  a h2 {
     color: color('grey', 'darken-3');
     font-size: 1.8rem;
 
@@ -21,6 +17,20 @@
       font-size: 1rem;
       margin: 0 0.5rem
     }
+  }
+}
+
+.reviews-list {
+  margin-top: 3rem;
+}
+
+.review-step {
+  h2 {
+    margin: 1rem 0;
+  }
+
+  .flow-text {
+    font-size: 1rem;
   }
 }
 
