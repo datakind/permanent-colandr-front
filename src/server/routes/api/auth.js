@@ -28,8 +28,8 @@ function authenticate (req, res, next) {
   // TODO: Remove)
   if (process.env.NODE_ENV === 'development') {
     signin({
-      email: process.env.DEV_LOGIN_EMAIL,
-      password: process.env.DEV_LOGIN_PASSWORD
+      email: process.env.APP_LOGIN_EMAIL,
+      password: process.env.APP_LOGIN_PASSWORD
     }).then(token => {
       req.session.user = token
       next()

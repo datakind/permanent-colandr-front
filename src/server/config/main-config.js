@@ -41,7 +41,7 @@ module.exports.init = function (app, express) {
   app.use(flash())
   app.use(express.static(path.join(__dirname, '..', '..', 'client')))
   app.use(session({
-    secret: process.env.SECRET_KEY,
+    secret: process.env.SESSION_SECRET_KEY,
     resave: true,
     saveUninitialized: true
   }))
