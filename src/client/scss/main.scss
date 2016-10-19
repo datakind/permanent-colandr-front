@@ -4,3 +4,12 @@
 .colandr-color {
   @extend .indigo;
 }
+
+.section-header {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 2rem;
+    margin: 0;
+  }
+}
