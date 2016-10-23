@@ -14,7 +14,7 @@ router.put('/:id',
 
 function index (req, res, next) {
   api.plans.get(req.body)
-    .then(plan => res.render('reviews/plans/index', { plan }))
+    .then(plan => res.render('plans/index', { plan }))
     .catch(api.handleError(next))
 }
 
