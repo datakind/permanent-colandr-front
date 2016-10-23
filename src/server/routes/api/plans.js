@@ -1,9 +1,15 @@
 const { send } = require('./helpers')
 
-function get (user, reviewId) {
+function get (body) {
+  const { reviewId, user } = body
   return send(`/reviews/${reviewId}/plan`, user)
 }
 
+function update (body) {
+  const { reviewId, user } = body
+  return send(`/reviews/${reviewId}/plan`, user, { method: 'PUT', body })
+}
+
 module.exports = {
-  get
+  get, update
 }

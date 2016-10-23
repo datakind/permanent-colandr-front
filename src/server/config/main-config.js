@@ -37,7 +37,7 @@ module.exports.init = function (app, express) {
   app.use(cookieParser())
   app.use(methodOverride('_method'))
   app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.urlencoded({ extended: true }))
   app.use(flash())
   app.use(express.static(path.join(__dirname, '..', '..', 'client')))
   app.use(session({

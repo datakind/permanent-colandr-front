@@ -1,0 +1,93 @@
+<div class="row">
+  <a name="data-extraction-form-a"></a>
+  <div class="col s12">
+    <div class="section-header card-panel z-depth-0 grey lighten-3">
+      <h2>Data Extraction Form</h2>
+    </div>
+    <form action="/reviews/{{ plan.review_id }}/plan/{{ plan.id }}?_method=PUT"
+      method="POST"
+      class="input-field"
+      id="form-data-extraction-form">
+      <div class="row">
+        <div class="col s3"><h4>Label</h4></div>
+        <div class="col s3"><h4>Description</h4></div>
+        <div class="col s3"><h4>Type</h4></div>
+        <div class="col s3"><h4>Allowed Values</h4></div>
+      </div>
+
+      {% for field in plan.data_extraction_form %}
+        <div class="row question-wrap">
+          <div class="col s3 input-field">
+            <input id="data_extraction_form_label_{{ loop.index }}"
+              type="text"
+              class="validate"
+              name="data_extraction_form[{{ loop.index }}][label]"
+              value="{{ field.label }}">
+          </div>
+          <div class="col s3 input-field">
+            <input id="data_extraction_form_description_{{ loop.index }}"
+              type="text"
+              class="validate"
+              name="data_extraction_form[{{ loop.index }}][description]"
+              value="{{ field.description }}">
+          </div>
+          <div class="col s3 input-field">
+            <select id="data_extraction_form_field_type_{{ loop.index }}"
+              class="browser-default"
+              name="data_extraction_form[{{ loop.index }}][field_type]">
+              <option value="">-- Select An Option --</option>
+              <option value="str"
+                {% if field.field_type === 'str' %}selected{% endif %}>
+                Text
+              </option>
+              <option value="int"
+                {% if field.field_type === 'int' %}selected{% endif %}>
+                Integer
+              </option>
+              <option value="float"
+                {% if field.field_type === 'float' %}selected{% endif %}>
+                Float
+              </option>
+              <option value="date"
+                {% if field.field_type === 'date' %}selected{% endif %}>
+                Date
+              </option>
+              <option value="bool"
+                {% if field.field_type === 'bool' %}selected{% endif %}>
+                Boolean
+              </option>
+              <option value="select_one"
+                {% if field.field_type === 'select_one' %}selected{% endif %}>
+                Select One
+              </option>
+              <option value="select_many"
+                {% if field.field_type === 'select_many' %}selected{% endif %}>
+                Select Many
+              </option>
+            </select>
+          </div>
+          <div class="col s3 input-field">
+            {% if field.field_type === 'select_many' or field.field_type === 'select_one' %}
+              <input id="data_extraction_form_allowed_values_{{ loop.index }}"
+                class="validate"
+                name="data_extraction_form[{{ loop.index }}][allowed_values]"
+                value="{{ field.allowed_values }}">
+            {% endif %}
+            <a class="btn-floating waves-effect waves-light red remove-field-button">
+              <i class="material-icons">remove</i>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+
+      <button id="add-field-data-extraction-form"
+        class="btn btn-large z-depth-0 green lighten-2">
+        <i class="material-icons left">add</i>
+        Add Keyterm
+      </button>
+      <button type="submit" class="btn btn-large z-depth-0">
+        Save
+      </button>
+    </form>
+  </div>
+</div>

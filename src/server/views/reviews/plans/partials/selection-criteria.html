@@ -1,0 +1,25 @@
+<div class="row">
+  <a name="selection-criteria-a"></a>
+  <div class="col s12">
+    <div class="section-header card-panel z-depth-0 grey lighten-3">
+      <h2>Selection Criteria</h2>
+    </div>
+    <form action="/reviews/{{ plan.review_id }}/plan/{{ plan.id }}?_method=PUT"
+      method="POST"
+      class="input-field"
+      id="form-selection-criteria">
+      {% for criteria in plan.selection_criteria %}
+        {% include './fields/_selection.html' %}
+      {% endfor %}
+
+      <button id="add-field-selection-criteria"
+        class="btn btn-large z-depth-0 green lighten-2">
+        <i class="material-icons left">add</i>
+        Add Question
+      </button>
+      <button type="submit" class="btn btn-large z-depth-0">
+        Save
+      </button>
+    </form>
+  </div>
+</div>

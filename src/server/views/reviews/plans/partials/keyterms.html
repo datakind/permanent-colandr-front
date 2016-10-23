@@ -1,0 +1,53 @@
+<div class="row">
+  <a name="keyterms-a"></a>
+  <div class="col s12">
+    <div class="section-header card-panel z-depth-0 grey lighten-3">
+      <h2>Search Terms</h2>
+    </div>
+    <form action="/reviews/{{ plan.review_id }}/plan/{{ plan.id }}?_method=PUT"
+      method="POST"
+      class="input-field"
+      id="form-keyterms">
+      <div class="row">
+        <div class="col s4">
+          <h4>Term</h4>
+          <p class="explainer">A keyterm</p>
+        </div>
+        <div class="col s4">
+          <h4>Synonyms</h4>
+          <p class="explainer">A list of synonyms, separated by commas</p>
+        </div>
+        <div class="col s4">
+          <h4>Group</h4>
+          <p class="explainer">Associated group for the keyterm</p>
+        </div>
+      </div>
+
+      {% for keyterm in plan.keyterms %}
+        {% include './fields/_keyterms.html' %}
+      {% endfor %}
+
+      <br>
+      <button id="add-field-keyterms"
+        class="btn btn-large z-depth-0 green lighten-2">
+        <i class="material-icons left">add</i>
+        Add Keyterm
+      </button>
+      <button type="submit" class="btn btn-large z-depth-0">
+        Save
+      </button>
+    </form>
+
+    {% if plan.keyterms.length %}
+      <br>
+      <div class="row">
+        <div class="col s12">
+          <h4 class="boolean-search-query">
+            Boolean Search Query <span></span>
+          </h4>
+          <p class="grey-text">{{ plan.boolean_search_query }}</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

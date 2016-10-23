@@ -1,0 +1,25 @@
+<div class="row input-field question-wrap">
+  <div class="col s4">
+    <input id="selection_criteria_label_{{ loop.index }}"
+      type="text"
+      class="validate"
+      name="selection_criteria[{{ loop.index }}][label]"
+      value="{{ criteria.label }}">
+    <label for="selection_criteria[{{ loop.index }}][label]">
+      Label
+    </label>
+  </div>
+  <div class="col s8">
+    <input id="selection_criteria_description_{{ loop.index }}"
+      type="text"
+      class="validate"
+      name="selection_criteria[{{ loop.index }}][description]"
+      value="{{ criteria.description }}">
+    <label for="selection_criteria[{{ loop.index }}][description]">
+      Description
+    </label>
+    <a class="btn-floating waves-effect waves-light red remove-field-button">
+      <i class="material-icons">remove</i>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="row question-wrap">
+  <div class="col s4 input-field">
+    <input id="keyterm_term_{{ loop.index }}"
+      type="text"
+      class="validate"
+      name="keyterms[{{ loop.index }}][term]"
+      value="{{ keyterm.term }}">
+  </div>
+
+  <div class="col s4 input-field">
+    <input id="keyterm_synonyms_{{ loop.index }}"
+      type="text"
+      class="validate"
+      name="keyterms[{{ loop.index }}][synonyms]"
+      value="{{ keyterm.synonyms }}">
+  </div>
+
+  <div class="col s4 input-field">
+    <input id="keyterm_group_{{ loop.index }}"
+      type="text"
+      class="validate"
+      name="keyterms[{{ loop.index }}][group]"
+      value="{{ keyterm.group }}">
+    <a class="btn-floating waves-effect waves-light red remove-field-button">
+      <i class="material-icons">remove</i>
+    </a>
+  </div>
+</div>

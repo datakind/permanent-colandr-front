@@ -1,0 +1,19 @@
+.explainer {
+  font-style: italic;
+}
+
+.question-wrap {
+  position: relative;
+}
+
+.remove-field-button {
+  position: absolute;
+  top: 0;
+  right: 0
+}
+
+.boolean-search-query span {
+  color: red;
+  text-transform: uppercase;
+  font-size: 1rem;
+}

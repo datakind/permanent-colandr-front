@@ -19,6 +19,17 @@
     </div>
 
     <hr>
+
+    {% include './partials/objective.html' %}
+    {% include './partials/pico.html' %}
+    {% include './partials/research-questions.html' %}
+    {% include './partials/keyterms.html' %}
+    {% include './partials/selection-criteria.html' %}
+    {% include './partials/data-extraction-form.html' %}
   </div>
 
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/plan.js"></script>
 {% endblock %}
