@@ -26,7 +26,7 @@
         newDataExtractionFormField()
         break
       default:
-        console.log('!')
+        console.log('Something went wrong.')
     }
   }
 
@@ -91,9 +91,7 @@
     var fieldTypes = ['label', 'description', 'field_type']
     var $columns = fieldTypes.map(dataExtractionFormColumn(idNum))
 
-    $columns.forEach(function (column) {
-      $row.append(column)
-    })
+    $columns.forEach(function (column) { $row.append(column) })
 
     var $emptyCol = $('<div class="col s3 input-field"></div>')
     var $removeBtn = newRemoveButton()
@@ -184,7 +182,7 @@
   function updateDataExtractionField (e) {
     var $select = $(this)
     var idArr = $select.attr('id').split('_')
-    var id = idArr[idArr.length-1]
+    var id = idArr[idArr.length - 1]
 
     if ($select.val().indexOf('select_') > -1) {
       var $allowedValuesCol = $select.parent().next()

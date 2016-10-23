@@ -12,16 +12,6 @@ router.put('/:id',
 
 // plans routes
 
-function populateBodyWithDefaults (req, res, next) {
-  const { reviewId } = req.params
-  const { user } = req.session
-
-  req.body.user = user
-  req.body.reviewId = reviewId
-
-  next()
-}
-
 function index (req, res, next) {
   api.plans.get(req.body)
     .then(plan => res.render('reviews/plans/index', { plan }))
@@ -37,11 +27,25 @@ function update (req, res, next) {
     .catch(api.handleError(next))
 }
 
+// middleware
+
+function populateBodyWithDefaults (req, res, next) {
+  const { reviewId } = req.params
+  const { user } = req.session
+
+  req.body.user = user
+  req.body.reviewId = reviewId
+
+  next()
+}
+
 function parseLists (req, res, next) {
-  let { keyterms, data_extraction_form } = req.body
+  let keyterms = req.body.keyterms
+  let dataExtractionForm = req.body.data_extraction_form
+
   let lists = [
     [keyterms, 'synonyms'],
-    [data_extraction_form, 'allowed_values']
+    [dataExtractionForm, 'allowed_values']
   ]
 
   lists.forEach(([list, key]) => {
