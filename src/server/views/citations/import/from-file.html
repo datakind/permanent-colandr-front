@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col s12">
+    <br>
+    <form action="/reviews/{{ reviewId }}/citations/import" method="POST" enctype="multipart/form-data">
+      <div class="row valign-wrapper">
+        <div class="col s3">
+          <span class="side-label valign">Import from</span>
+        </div>
+        <div class="input-field col s9">
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>Upload</span>
+              <input name="uploaded_file" type="file">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s3">
+          <span class="side-label">Data Source</span>
+        </div>
+        <div class="col s3">
+          <select id="data_source[source_type]"
+            name="data_source[source_type]" class="browser-default">
+            <option value="">-- Select One --</option>
+            <option value="database">database</option>
+            <option value="gray_literature">gray literature</option>
+          </select>
+        </div>
+        <div class="col s6">
+          <input id="data_source[name]"
+            name="data_source[name]" type="text" class="validate">
+          <label for="data_source[name]">Database Name</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s3">
+          <span class="side-label">Status</span>
+        </div>
+        <div class="col s3">
+          <select name="status" id="" class="browser-default">
+            <option value="">not screened</option>
+            <!-- TODO: Once backend can handle "included", uncomment -->
+            <!-- <option value="included">included</option> -->
+            <option value="excluded">excluded</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-large right">
+        Import
+      </button>
+    </form>
+  </div>
+</div>

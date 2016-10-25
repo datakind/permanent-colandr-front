@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col s12">
+    <br>
+
+    <table>
+      <thead>
+        <tr>
+            <th data-field="date">Date</th>
+            <th data-field="user">User</th>
+            <th data-field="data_source">Data Source</th>
+            <th data-field="status">Status</th>
+            <th data-field="num">#</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for import in imports %}
+          <tr>
+            <td>{{ import.created_at | date('YYYY-MM-DD') }}</td>
+            <td>{{ import.user.name }}</td>
+            <td>{{ import.data_source | dump }}</td>
+            <td>{{ import.status }}</td>
+            <td>{{ import.num_records }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

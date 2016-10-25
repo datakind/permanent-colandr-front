@@ -1,0 +1,47 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/citations.css">
+{% endblock %}
+
+{% block content %}
+
+  <div class="citations container">
+    <div class="row">
+      <div class="col s12">
+        <h1>
+          <a href="/reviews/{{ reviewId }}">
+            <i class="small material-icons">fast_rewind</i>
+          </a>
+          Import Citations
+        </h1>
+      </div>
+    </div>
+
+    <div class="row">
+     <div class="col s6">
+       <ul class="tabs">
+         <li class="tab col s2">
+           <a href="#from-file" class="active">from file</a>
+         </li>
+         <li class="tab col s2 disabled">
+           <a href="#with-a-form">with a form</a>
+         </li>
+         <li class="tab col s2">
+           <a href="#history">import history</a>
+         </li>
+       </ul>
+     </div>
+     <div id="from-file" class="col s12">
+       {% include './from-file.html' %}
+     </div>
+     <div id="with-a-form" class="col s12">
+       {% include './with-a-form.html' %}
+     </div>
+     <div id="history" class="col s12">
+       {% include './import-history.html' %}
+     </div>
+   </div>
+  </div>
+
+{% endblock %}

@@ -3,10 +3,10 @@ const router = express.Router({ mergeParams: true })
 const api = require('./api')
 
 router.get('/',
-  populateBodyWithDefaults,
+  api.populateBodyWithDefaults,
   index)
 router.put('/:id',
-  populateBodyWithDefaults,
+  api.populateBodyWithDefaults,
   parseLists,
   update)
 
@@ -28,16 +28,6 @@ function update (req, res, next) {
 }
 
 // middleware
-
-function populateBodyWithDefaults (req, res, next) {
-  const { reviewId } = req.params
-  const { user } = req.session
-
-  req.body.user = user
-  req.body.reviewId = reviewId
-
-  next()
-}
 
 function parseLists (req, res, next) {
   let keyterms = req.body.keyterms
