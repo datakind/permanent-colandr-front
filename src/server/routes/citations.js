@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 const upload = require('multer')()
-const rp = require('request-promise')
 const api = require('./api')
 
 router.get('/import',

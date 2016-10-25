@@ -6,7 +6,7 @@ function get (body) {
 }
 
 function create (body, { uploaded_file: [file] }) {
-  const { reviewId, user, files } = body
+  const { reviewId, user } = body
   const opts = { method: 'POST' }
   let request = send(`/citations/imports?review_id=${reviewId}`, user, opts)
   let form = request.form()
