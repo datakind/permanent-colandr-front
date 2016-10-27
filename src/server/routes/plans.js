@@ -29,6 +29,11 @@ function update (req, res, next) {
 
 // middleware
 
+// This fn takes a string of comma separated items and
+// sensibly transforms them into arrays. Afterwards, it
+// associates those lists back where they need to be
+// in the request body.
+
 function parseLists (req, res, next) {
   let keyterms = req.body.keyterms
   let dataExtractionForm = req.body.data_extraction_form
@@ -38,19 +43,18 @@ function parseLists (req, res, next) {
     [dataExtractionForm, 'allowed_values']
   ]
 
-  lists.forEach(([list, key]) => {
-    if (list) {
-      list.forEach((listObj) => {
-        if (listObj[key]) {
-          listObj[key] = listObj[key].split(',').map(el => el.trim())
-        } else {
-          delete listObj[key]
-        }
-      })
+  lists.filter(([list]) => list).forEach(splitStr)
+  next()
+}
+
+function splitStr ([collection, key]) {
+  collection.forEach(list => {
+    if (list[key]) {
+      list[key] = list[key].split(',').map(el => el.trim())
+    } else {
+      delete list[key]
     }
   })
-
-  next()
 }
 
 module.exports = router
