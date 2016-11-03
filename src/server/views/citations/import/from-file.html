@@ -24,17 +24,22 @@
           <span class="side-label">Data Source</span>
         </div>
         <div class="col s3">
-          <select id="data_source[source_type]"
-            name="data_source[source_type]" class="browser-default">
+          <select id="source_type"
+            name="source_type" class="browser-default">
             <option value="">-- Select One --</option>
             <option value="database">database</option>
             <option value="gray_literature">gray literature</option>
           </select>
         </div>
-        <div class="col s6">
-          <input id="data_source[name]"
-            name="data_source[name]" type="text" class="validate">
-          <label for="data_source[name]">Database Name</label>
+        <div class="col s3">
+          <input id="source_name"
+            name="source_name" type="text" class="validate">
+          <label for="source_name">Source Name</label>
+        </div>
+        <div class="col s3">
+          <input id="source_url"
+            name="source_url" type="text" class="validate">
+          <label for="source_url">Source URL</label>
         </div>
       </div>
 
@@ -43,10 +48,9 @@
           <span class="side-label">Status</span>
         </div>
         <div class="col s3">
-          <select name="status" id="" class="browser-default">
-            <option value="">not screened</option>
-            <!-- TODO: Once backend can handle "included", uncomment -->
-            <!-- <option value="included">included</option> -->
+          <select name="status" id="status" class="browser-default">
+            <option value="not_screened">not screened</option>
+            <option value="included">included</option>
             <option value="excluded">excluded</option>
           </select>
         </div>

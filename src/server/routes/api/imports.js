@@ -16,6 +16,11 @@ function create (body, { uploaded_file: [file] }) {
     contentType: file.mimetype
   })
 
+  form.append('source_type', body.source_type)
+  form.append('source_name', body.source_name)
+  form.append('source_url', body.source_url)
+  form.append('status', body.status)
+
   return request
 }
 

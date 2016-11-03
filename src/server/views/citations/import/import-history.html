@@ -17,7 +17,12 @@
           <tr>
             <td>{{ import.created_at | date('YYYY-MM-DD') }}</td>
             <td>{{ import.user.name }}</td>
-            <td>{{ import.data_source | dump }}</td>
+            <td>
+              {{ import.data_source.source_type }}
+              {% if import.data_source.source_name %}
+                ({{ import.data_source.source_name }})
+              {% endif %}
+            </td>
             <td>{{ import.status }}</td>
             <td>{{ import.num_records }}</td>
           </tr>
