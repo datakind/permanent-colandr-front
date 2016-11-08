@@ -1,0 +1,14 @@
+<a href="/reviews/{{ review.id }}/citations/show/{{ study.id }}">
+  <div class="row card-panel grey lighten-3 z-depth-0">
+    <div class="col offset-s1 s10">
+      <h2 class="review-name">
+        {{ study.citation.title }}
+
+        <p> {{ study.citation.abstract  }}</p>
+        <span>
+            {{ study.citation_status }} 
+        </span>
+        </h2>
+    </div>
+  </div>
+</a>

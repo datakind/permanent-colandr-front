@@ -10,8 +10,19 @@ router.post('/import',
   upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
   api.populateBodyWithDefaults,
   createImport)
+router.get('/',
+  api.populateBodyWithDefaults,
+  showCitations)
 
 // reviews routes
+
+function showCitations (req, res, next) {
+  api.citations.get(req.body)
+    .then(citations => {
+      const renderObj = { reviewId: req.body.reviewId, studies: citations }
+      res.render('citations/show', renderObj)
+    })
+}
 
 function importPage (req, res, next) {
   api.imports.get(req.body)

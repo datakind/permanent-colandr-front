@@ -5,11 +5,19 @@ const api = require('./api')
 router.get('/signin', index)
 router.post('/signin', signin, api.auth.authenticate, goUserHome)
 router.post('/signup', signup, signin)
+/* new */
+router.get('/logout', logout)
 
 // auth routes
 
 function index (req, res, next) {
   res.render('auth/index', {})
+}
+
+/* new */
+function logout (req, res, next) {
+  req.session.destroy()
+  res.redirect('/')
 }
 
 function signin (req, res, next) {

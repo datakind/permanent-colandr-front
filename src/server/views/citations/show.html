@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css">
+{% endblock %}
+
+{% block content %}
+
+  <div class="reviews reviews-page container">
+    <div class="row">
+      <div class="col s6">
+        <h1>Citations</h1>
+      </div>
+      <div class="col s6">
+      </div>
+    </div>
+    <hr>
+    <div class="reviews-list">
+      {% include '../shared/notifications.html' %}
+      {% for study in studies %}
+        {% include './partials/citation-listing.html' %}
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

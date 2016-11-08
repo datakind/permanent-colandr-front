@@ -1,6 +1,7 @@
 module.exports = {
   auth: require('./auth'),
   reviews: require('./reviews'),
+  citations: require('./citations'),
   teams: require('./teams'),
   users: require('./users'),
   plans: require('./plans'),
