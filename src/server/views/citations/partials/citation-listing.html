@@ -1,16 +1,29 @@
   <div class="row card-panel grey lighten-3 z-depth-0">
     <div class="col offset-s1 s10">
-      <!-- <a href="/reviews/{{ review.id }}/citations/show/{{ study.id }}"></a> -->
-        <!-- <h2 class="review-name">  -->
-        <p><input type="checkbox" name="screen[{{ study.id }}]" id="citation{{ study.id }}" /><label for="citation{{ study.id }}" >{{ study.citation.title }}</label></p>
-        
-        <!-- </h2> -->
-
-        <p> {{ study.citation.abstract  }}</p>
-        <p> {{ study.citation.keywords  }}</p>
+			<p>
+      <h2 class="review-name">
+	{{ study.citation.authors }}
+	<h3>
+		<p>
+			<input type = "checkbox" id = "citation{{ study.id }}" name = "citation[{{ study.id }}]"/>
+			<label for = "citation{{ study.id }}">{{ study.citation.title }}</label>
+		</p>
+	</h3>
+	
+	<span class = "journal"> {{ study.citation.journal_name }} </span>
+	<span class = "year">{{ study.citation.pub_year }}</span>
+	<div style="height:240px;border:1px solid #ccc;overflow:auto;">
+	{{ study.citation.abstract }}</div>
+	<span class = "keywords"><span class = "keyword-title">Keywords: </span>
+		{{ study.citation.keywords }} </span>
         <span>
             {{ study.citation_status }} 
         </span>
+      </h2>
+			<div class="something">
+				<input type="submit" value ="include" name = "status[included] "/>
+				<input type="submit" value ="skip" name = "status[skip] "/>
+				<input type="submit" value ="exclude" name = "status[excluded] "/>
+			</div>
     </div>
   </div>
-

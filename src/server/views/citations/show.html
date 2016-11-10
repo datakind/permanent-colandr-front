@@ -22,6 +22,7 @@
       <button name="status[excluded]">Exclude</button>
     </div>
     <div class="reviews-list">
+			<form action="/reviews/{{ reviewId }}/citations/screenings" method="POST">
       {% include '../shared/notifications.html' %}
       {% for study in studies %}
         {% include './partials/citation-listing.html' %}

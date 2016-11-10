@@ -14,9 +14,8 @@ router.get('/',
   api.populateBodyWithDefaults,
   showCitations)
 router.post('/screenings',
-   api.populateBodyWithDefaults,
+  api.populateBodyWithDefaults,
   screenCitations, showCitations)
-// reviews routes
 
 function screenCitations (req, res, next) {
   api.citations.post(req.body)
