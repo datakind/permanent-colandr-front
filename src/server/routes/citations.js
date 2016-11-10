@@ -13,8 +13,15 @@ router.post('/import',
 router.get('/',
   api.populateBodyWithDefaults,
   showCitations)
-
+router.post('/screenings',
+   api.populateBodyWithDefaults,
+  screenCitations, showCitations)
 // reviews routes
+
+function screenCitations (req, res, next) {
+  api.citations.post(req.body)
+  next()
+}
 
 function showCitations (req, res, next) {
   api.citations.get(req.body)

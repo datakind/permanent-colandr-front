@@ -1,14 +1,16 @@
-<a href="/reviews/{{ review.id }}/citations/show/{{ study.id }}">
   <div class="row card-panel grey lighten-3 z-depth-0">
     <div class="col offset-s1 s10">
-      <h2 class="review-name">
-        {{ study.citation.title }}
+      <!-- <a href="/reviews/{{ review.id }}/citations/show/{{ study.id }}"></a> -->
+        <!-- <h2 class="review-name">  -->
+        <p><input type="checkbox" name="screen[{{ study.id }}]" id="citation{{ study.id }}" /><label for="citation{{ study.id }}" >{{ study.citation.title }}</label></p>
+        
+        <!-- </h2> -->
 
         <p> {{ study.citation.abstract  }}</p>
+        <p> {{ study.citation.keywords  }}</p>
         <span>
             {{ study.citation_status }} 
         </span>
-        </h2>
     </div>
   </div>
-</a>
+

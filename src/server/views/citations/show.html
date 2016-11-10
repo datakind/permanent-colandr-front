@@ -15,12 +15,18 @@
       </div>
     </div>
     <hr>
+    <form action="/reviews/{{ reviewId }}/citations/screenings" method="post">
+    <div>
+      <button name="status[included]">Include</button>
+      <button name="status[skip]">Skip</button>
+      <button name="status[excluded]">Exclude</button>
+    </div>
     <div class="reviews-list">
       {% include '../shared/notifications.html' %}
       {% for study in studies %}
         {% include './partials/citation-listing.html' %}
       {% endfor %}
-    </div>
+    </div></form>
   </div>
 
 {% endblock %}
