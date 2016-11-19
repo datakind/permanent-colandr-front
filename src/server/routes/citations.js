@@ -28,19 +28,32 @@ function screenCitations (req, res, next) {
   next()
 }
 
+function getProgress (req) {
+  api.progress.get(req.body)
+    .then(progress => {
+      req.body.progress = progress
+    })
+}
+
+function getPlan (req) {
+  api.plans.get(req.body)
+    .then(plan => {
+      req.body.plan = plan
+    })
+}
+
 function showCitations (req, res, next) {
   var pageNum = req.params.page
   if (pageNum === undefined) {
     pageNum = 0
   }
-  api.progress.get(req.body)
-  .then(progress => {
-    api.citations.get(req.body, pageNum)
+  getProgress(req)
+  getPlan(req)
+  api.citations.get(req.body, pageNum)
      .then(citations => {
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: progress.citation_screening }
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria }
        res.render('citations/show', renderObj)
      })
-  })
 }
 
 function importPage (req, res, next) {
