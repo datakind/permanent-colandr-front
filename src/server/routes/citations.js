@@ -13,7 +13,7 @@ router.post('/import',
 router.get('/:page',
   api.populateBodyWithDefaults,
   showCitations)
-router.post('/screenings',
+router.post('/screenings/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
 
@@ -26,7 +26,7 @@ function showCitations (req, res, next) {
   req.body.page = req.params.page
   api.citations.get(req.body)
     .then(citations => {
-      const renderObj = { reviewId: req.body.reviewId, studies: citations }
+      const renderObj = { reviewId: req.body.reviewId, studies: citations, page: req.params.page }
       res.render('citations/show', renderObj)
     })
 }
