@@ -1,0 +1,19 @@
+
+      <div class="row card-panel grey lighten-3 z-depth-0">
+        <div class="col offset-s2 s9">
+          <ul class="pagination">
+            <li class="disabled"><a href="/reviews/{{ reviewId }}/citations/{{ 0 }}"><i class="material-icons">chevron_left</i></a></li>
+            <li class="active"><a href="#!">1</a></li>
+
+
+			 {% for i in range %}
+	                  <li class="waves-effect"><a href="/reviews/{{ reviewId }}/citations/{{ i }}">{{i}}</a></li>
+			 {% endfor %}
+
+
+            <li class="waves-effect"><a href="#!">2</a></li>
+            <li class="waves-effect"> page {{page}} of {{ numPages }} </li>
+            <li class="waves-effect"><a href="/reviews/{{ reviewId }}/citations/{{ numPages }}"><i class="material-icons">chevron_right</i></a></li>
+          </ul>
+        </div>
+      </div>
