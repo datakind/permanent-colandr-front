@@ -23,7 +23,6 @@ router.post('/screenings',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
 
-
 function screenCitations (req, res, next) {
   api.citations.post(req.body)
   next()
@@ -32,13 +31,16 @@ function screenCitations (req, res, next) {
 function showCitations (req, res, next) {
   var pageNum = req.params.page
   if (pageNum === undefined) {
-      pageNum = 0;
+    pageNum = 0
   }
-  api.citations.get(req.body, pageNum)
-    .then(citations => {
-      const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum }
-      res.render('citations/show', renderObj)
-    })
+  api.progress.get(req.body)
+  .then(progress => {
+    api.citations.get(req.body, pageNum)
+     .then(citations => {
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: progress.citation_screening }
+       res.render('citations/show', renderObj)
+     })
+  })
 }
 
 function importPage (req, res, next) {

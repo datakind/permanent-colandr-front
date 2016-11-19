@@ -7,7 +7,8 @@
 				  <!--<label for = "citation{{ study.id }}">-->{{ study.citation.title }}<!--</label>-->
 		</p>
 	</div>
-     <div class="collapsible-body"><p>    
+     <div class="collapsible-body">		 
+		 <p>    
 	<div class="row">
       <div class="col s9">
      {{ study.citation.authors }}	
@@ -24,23 +25,20 @@
 			    </button>
 			    <button class="btn waves-effect waves-light grey" type="submit" name="status[skip]">Skip
 			    </button>
-			    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
-			    </button>
-			    <div class="input-field col s12">
-			    <select multiple>
-			        <option value="" disabled selected>Exclude Citation</option>
-			        <option value="1">Location</option>
-			        <option value="2">Undefined pop</option>
-			        <option value="3">Intervention type</option>
-			        <option value="4">In-situ</option>
-			    </select>
-			    <label>Exclude</label>
+				<div class = "row">
+	            <div class="input-field col s12">
+	              <select multiple>
+	                <option value="" disabled selected>Choose your option</option>
+	                <option value="1">Option 1</option>
+	                <option value="2">Option 2</option>
+	                <option value="3">Option 3</option>
+	              </select>
+	              <label>Materialize Multiple Select</label>
+	            </div>
 			</div>
-				<!--<script>
-				$(document).ready(function() {
-				    $('select').material_select();
-				});
-				</script>-->
+				
+		    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
+		    </button>
 			</div>
 		    </div>
 		</p>
