@@ -30,13 +30,13 @@ function screenCitations (req, res, next) {
 }
 
 function showCitations (req, res, next) {
-  var page = req.params.page
-  if (page === undefined) {
-      page = 0;
+  var pageNum = req.params.page
+  if (pageNum === undefined) {
+      pageNum = 0;
   }
-  api.citations.get(req.body, page)
+  api.citations.get(req.body, pageNum)
     .then(citations => {
-      const renderObj = { reviewId: req.body.reviewId, studies: citations, page: req.params.page }
+      const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum }
       res.render('citations/show', renderObj)
     })
 }
