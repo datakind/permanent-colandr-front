@@ -51,7 +51,8 @@ function showCitations (req, res, next) {
   getPlan(req)
   api.citations.get(req.body, pageNum)
      .then(citations => {
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria }
+       var numberOfPages = Math.ceil(req.body.progress.citation_screening.not_screened / 10)
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages }
        res.render('citations/show', renderObj)
      })
 }
