@@ -26,7 +26,7 @@ function signup (body) {
 
 function authenticate (req, res, next) {
   // TODO: Remove)
-  if (process.env.NODE_ENV === '') {
+  if (process.env.NODE_ENV === 'development') {
     signin({
       email: process.env.APP_LOGIN_EMAIL,
       password: process.env.APP_LOGIN_PASSWORD

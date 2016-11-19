@@ -9,24 +9,22 @@
   <div class="reviews reviews-page container">
     <div class="row">
       <div class="col s6">
-        <h1>Citations</h1>
+        <h1>Citation Screening</h1>
       </div>
       <div class="col s6">
       </div>
     </div>
     <hr>
+    {% include './partials/nav.html' %}	  
     <form action="/reviews/{{ reviewId }}/citations/screenings" method="post">
-    <div>
-      <button name="status[included]">Include</button>
-      <button name="status[skip]">Skip</button>
-      <button name="status[excluded]">Exclude</button>
-    </div>
     <div class="reviews-list">
 			<form action="/reviews/{{ reviewId }}/citations/screenings" method="POST">
+			    <ul class="collapsible popout" data-collapsible="accordion">
       {% include '../shared/notifications.html' %}
       {% for study in studies %}
         {% include './partials/citation-listing.html' %}
       {% endfor %}
+  </ul>
     </div></form>
   </div>
 
