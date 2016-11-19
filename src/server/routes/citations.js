@@ -19,6 +19,10 @@ router.get('/:page',
 router.post('/screenings/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
+router.post('/screenings',
+  api.populateBodyWithDefaults,
+  screenCitations, showCitations)
+
 
 function screenCitations (req, res, next) {
   api.citations.post(req.body)
