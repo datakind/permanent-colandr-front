@@ -52,9 +52,24 @@ function showCitations (req, res, next) {
   api.citations.get(req.body, pageNum)
      .then(citations => {
        var numberOfPages = Math.ceil(req.body.progress.citation_screening.not_screened / 10)
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages }
+       var range = pageRange(pageNum, numberOfPages)
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range }
        res.render('citations/show', renderObj)
      })
+}
+
+function pageRange (pageNum, numPages) {
+  console.log(pageNum)
+  console.log(numPages)
+  console.log(parseInt(pageNum) + 5)
+  var endpoint = Math.min(parseInt(pageNum) + 5, numPages)
+  console.log(endpoint)
+  var pageNav = []
+  for (var i = Math.max(parseInt(pageNum) - 5, 0); i < endpoint; i++) {
+    pageNav.push(i)
+    console.log(i)
+  }
+  return pageNav
 }
 
 function importPage (req, res, next) {
