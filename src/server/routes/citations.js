@@ -10,6 +10,9 @@ router.post('/import',
   upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
   api.populateBodyWithDefaults,
   createImport)
+router.get('/',
+  api.populateBodyWithDefaults,
+  showCitations)
 router.get('/:page',
   api.populateBodyWithDefaults,
   showCitations)
@@ -23,8 +26,11 @@ function screenCitations (req, res, next) {
 }
 
 function showCitations (req, res, next) {
-  req.body.page = req.params.page
-  api.citations.get(req.body)
+  var page = req.params.page
+  if (page === undefined) {
+      page = 0;
+  }
+  api.citations.get(req.body, page)
     .then(citations => {
       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: req.params.page }
       res.render('citations/show', renderObj)

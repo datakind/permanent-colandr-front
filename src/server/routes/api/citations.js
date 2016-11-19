@@ -1,7 +1,7 @@
 const { send } = require('./helpers')
 
-function get (body) {
-  const { reviewId, user, page } = body
+function get (body, page = 0) {
+  const { reviewId, user } = body
   const uri = '/studies'
   console.log('reviewId %s', reviewId)
   let req = send(uri, user)
