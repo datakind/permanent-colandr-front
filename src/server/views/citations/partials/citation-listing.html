@@ -27,7 +27,7 @@
 			    </button>
 				<div class = "row">
 	            <div class="input-field col s12">
-	              <select multiple>
+	              <select multiple name = "criteria[{{ study.id }}]">
 	                <option value="" disabled selected>Exclude reasons:</option>
 			        {% for selection in selectionCriteria %}
 	                  <option value="{{ selection.label }}">{{ selection.label }}</option>

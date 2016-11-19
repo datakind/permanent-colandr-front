@@ -15,7 +15,7 @@ function get (body, page = 0) {
 
 function post (body) {
   console.log('review 1')
-  const { reviewId, user, citation, status } = body
+  const { reviewId, user, citation, status, criteria } = body
   console.log('review 2')
   console.log()
   var statusKey = Object.keys(status)[0]
@@ -23,6 +23,7 @@ function post (body) {
   console.log(reviewId)
   console.log(citation)
   console.log(statusKey)
+  console.log(criteria)
   const opts = { method: 'POST' }
   for (var citationId in citation) {
     const uri = `/citations/${citationId}/screenings`
@@ -30,6 +31,12 @@ function post (body) {
     let req = send(uri, user, opts)
     let form = req.form()
     form.append('status', statusKey)
+    if (statusKey === 'excluded') {
+      var excluded = criteria[citationId]
+      for (var i = 0; i < excluded.length; i++) {
+        form.append('exclude_reasons', excluded[i])
+      }
+    }
     req.then(res =>
       console.log(res))
   }
