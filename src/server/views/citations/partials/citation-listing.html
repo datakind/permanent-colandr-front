@@ -7,7 +7,9 @@
 				  <!--<label for = "citation{{ study.id }}">-->{{ study.citation.title }}<!--</label>-->
 		</p>
 	</div>
-     <div class="collapsible-body"><p>
+     <div class="collapsible-body"><p>    
+	<div class="row">
+      <div class="col s9">
      {{ study.citation.authors }}	
 	<span class = "journal"> {{ study.citation.journal_name }} </span>
 	<span class = "year">{{ study.citation.pub_year }}</span>
@@ -16,7 +18,8 @@
         <span>
             {{ study.citation_status }} 
         </span>
-			<div class="buttons">
+	</div>
+			<div class="col s3">
 			    <button class="btn waves-effect waves-light green" type="submit" name="status[included]">Include
 			    </button>
 			    <button class="btn waves-effect waves-light grey" type="submit" name="status[skip]">Skip
@@ -24,6 +27,7 @@
 			    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
 			    </button>
 			</div>
+		    </div>
 		</p>
 	</div>
    </li>
