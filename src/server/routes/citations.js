@@ -13,10 +13,13 @@ router.post('/import',
 router.get('/',
   api.populateBodyWithDefaults,
   showCitations)
-router.get('/:page',
+router.get('/:status',
   api.populateBodyWithDefaults,
   showCitations)
-router.post('/screenings/:page',
+router.get('/:status/:page',
+  api.populateBodyWithDefaults,
+  showCitations)
+router.post('/screenings/:status/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
 router.post('/screenings',
@@ -29,7 +32,7 @@ function screenCitations (req, res, next) {
 }
 
 function getProgress (req) {
-  api.progress.get(req.body)
+  api.progress.get(req.body, 'True')
     .then(progress => {
       req.body.progress = progress
     })
@@ -49,9 +52,9 @@ function showCitations (req, res, next) {
   }
   getProgress(req)
   getPlan(req)
-  api.citations.get(req.body, pageNum)
+  api.citations.get(req.body, pageNum, req.params.status)
      .then(citations => {
-       var numberOfPages = Math.ceil(req.body.progress.citation_screening.not_screened / 10)
+       var numberOfPages = Math.ceil(req.body.progress.citation_screening.pending / 10)
        var range = pageRange(pageNum, numberOfPages)
        const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range }
        res.render('citations/show', renderObj)
