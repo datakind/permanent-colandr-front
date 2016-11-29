@@ -10,7 +10,7 @@ function get (body, page = 0, status = 'pending') {
   form.append('fields', 'citation_status,citation.title,citation.abstract,citation.journal_name,citation.pub_year,citation.authors,citation.keywords,citation.screenings')
   form.append('page', page)
   form.append('per_page', 10)
-  console.log("status %s", status)
+  console.log('status %s', status)
   form.append('citation_status', status)
   return req
 }
