@@ -15,7 +15,7 @@
     </div>
     <hr>
     {% include './partials/nav.html' %}	  
-    <form action="/reviews/{{ reviewId }}/citations/screenings/{{ page }}" method="post">
+    <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
     <div class="reviews-list">
 			<form action="/reviews/{{ reviewId }}/citations/screenings" method="POST">
 			    <ul class="collapsible popout" data-collapsible="accordion">

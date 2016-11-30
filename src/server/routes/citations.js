@@ -31,17 +31,19 @@ function screenCitations (req, res, next) {
   next()
 }
 
-function getProgress (req) {
+function getProgress (req, next) {
   api.progress.get(req.body, 'True')
     .then(progress => {
       req.body.progress = progress
+      next()
     })
 }
 
-function getPlan (req) {
+function getPlan (req, next) {
   api.plans.get(req.body)
     .then(plan => {
       req.body.plan = plan
+      next()
     })
 }
 
@@ -50,15 +52,14 @@ function showCitations (req, res, next) {
   if (pageNum === undefined) {
     pageNum = 0
   }
-  getProgress(req)
-  getPlan(req)
-  api.citations.get(req.body, pageNum, req.params.status)
+  getProgress(req, p => getPlan(req,
+    n => api.citations.get(req.body, pageNum, req.params.status)
      .then(citations => {
        var numberOfPages = Math.ceil(req.body.progress.citation_screening.pending / 10)
        var range = pageRange(pageNum, numberOfPages)
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range }
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status }
        res.render('citations/show', renderObj)
-     })
+     })))
 }
 
 function pageRange (pageNum, numPages) {
