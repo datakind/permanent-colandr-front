@@ -55,7 +55,7 @@ function showCitations (req, res, next) {
   getProgress(req, p => getPlan(req,
     n => api.citations.get(req.body, pageNum, req.params.status)
      .then(citations => {
-       var numberOfPages = Math.ceil(req.body.progress.citation_screening.pending / 10)
+       var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 10)
        var range = pageRange(pageNum, numberOfPages)
        const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status }
        res.render('citations/show', renderObj)
@@ -63,15 +63,10 @@ function showCitations (req, res, next) {
 }
 
 function pageRange (pageNum, numPages) {
-  console.log(pageNum)
-  console.log(numPages)
-  console.log(parseInt(pageNum) + 5)
-  var endpoint = Math.min(parseInt(pageNum) + 5, numPages)
-  console.log(endpoint)
+  var endpoint = Math.min(Math.max(parseInt(pageNum) + 5, 11), numPages)
   var pageNav = []
   for (var i = Math.max(parseInt(pageNum) - 5, 0); i < endpoint; i++) {
     pageNav.push(i)
-    console.log(i)
   }
   return pageNav
 }
