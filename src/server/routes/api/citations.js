@@ -1,6 +1,6 @@
 const { send } = require('./helpers')
 
-function get (body, page = 0, status = 'pending') {
+function get (body, page = 1, status = 'pending') {
   const { reviewId, user } = body
   const uri = '/studies'
   console.log('reviewId %s', reviewId)
@@ -8,7 +8,7 @@ function get (body, page = 0, status = 'pending') {
   let form = req.form()
   form.append('review_id', reviewId)
   form.append('fields', 'citation_status,citation.title,citation.abstract,citation.journal_name,citation.pub_year,citation.authors,citation.keywords,citation.screenings')
-  form.append('page', page)
+  form.append('page', page-1)
   form.append('per_page', 10)
   console.log('status %s', status)
   form.append('citation_status', status)

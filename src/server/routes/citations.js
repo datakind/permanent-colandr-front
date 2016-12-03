@@ -50,7 +50,7 @@ function getPlan (req, next) {
 function showCitations (req, res, next) {
   var pageNum = req.params.page
   if (pageNum === undefined) {
-    pageNum = 0
+    pageNum = 1
   }
   getProgress(req, p => getPlan(req,
     n => api.citations.get(req.body, pageNum, req.params.status)
@@ -65,7 +65,7 @@ function showCitations (req, res, next) {
 function pageRange (pageNum, numPages) {
   var endpoint = Math.min(Math.max(parseInt(pageNum) + 5, 11), numPages)
   var pageNav = []
-  for (var i = Math.max(parseInt(pageNum) - 5, 0); i < endpoint; i++) {
+  for (var i = Math.max(parseInt(pageNum) - 5, 1); i < endpoint; i++) {
     pageNav.push(i)
   }
   return pageNav
