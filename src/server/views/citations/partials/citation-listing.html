@@ -1,25 +1,62 @@
  
    <li>
      <div class="collapsible-header">
-		 <p>
-				  <input type = "checkbox" id = "citation{{ study.id }}" name = "citation[{{ study.id }}]"/>
+		 <div class = "row">
+			 <div class = "col s9">
+		 <p> 				  <input type = "checkbox" id = "citation{{ study.id }}" name = "citation[{{ study.id }}]"/>
 				  <label for = "citation{{ study.id }}">.</label>
+		 </p>
+		 <p>  <span class = "authors">   {{ study.citation.authors }} </span>	</p>
+		 <p>
 				  <!--<label for = "citation{{ study.id }}">-->{{ study.citation.title }}<!--</label>-->
 		</p>
+			<span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">{{ study.citation.pub_year }}</span></div>
+		{% if shownStatus != 'pending' %}
+		  <div class = "col s3">
+		  <ul class="collection screens">
+			 {% for screen in study.citation.screenings %}
+			   <li class = "{{ screen.status }}{% if screen.status == 'excluded' %} red darken-3{% endif %}{% if screen.status == 'included' %} green lighten-1 {% endif %}">
+				    {{ users[screen.user_id] }}
+			   	{% if screen.status == 'excluded' %}
+		     	   <ul>
+				   {% for reason in screen.exclude_reasons %}
+				   <li>{{ reason }}</li>
+				   {% endfor %}
+			   	   </ul>
+				{% endif %}
+			   </li>
+			 {% endfor %}
+		  </ul>
+	  </div>
+		{% endif %}
 	</div>
      <div class="collapsible-body">		 
 		 <p>    
 	<div class="row">
       <div class="col s9">
-     {{ study.citation.authors }}	
-	<span class = "journal"> {{ study.citation.journal_name }} </span>
-	<span class = "year">{{ study.citation.pub_year }}</span>
 	<p class = "abstract">{{ study.citation.abstract }}</p>
 	<span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords }} </span>
+			<ul>
+	    {% for tag in tags %}
+			<li>tag</li>
+		{% endfor %}
+			</ul>
+			<p>
+			 <input type = "text" name = "tags[{{ study.id }}][]" id = "tag1" />
+			 <label for = "tag1">Tag 1</label>
+			</p>
+			<p>
+			 <input type = "text" name = "tags[{{ study.id }}][]" id = "tag2" />
+			 <label for = "tag2">Tag 2</label>
+			</p>
+			<p>
+			 <input type = "text" name = "tags[{{ study.id }}][]" id = "tag3" />
+			 <label for = "tag3">Tag 3</label>
+			</p>
         <span>
             {{ study.citation_status }} 
         </span>
-	</div>
+	</div>  {% if shownStatus == 'pending' %}
 			<div class="col s3">
 			    <button class="btn waves-effect waves-light green" type="submit" name="status[included]">Include
 			    </button>
@@ -39,6 +76,7 @@
 		    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
 		    </button>
 			</div>
+			{% endif %}
 		    </div>
 		</p>
 	</div>

@@ -15,10 +15,11 @@
     </div>
     <hr>
     {% include './partials/nav.html' %}	  
+    {% include './partials/filters.html' %}	  
     <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
     <div class="reviews-list">
 			<form action="/reviews/{{ reviewId }}/citations/screenings" method="POST">
-			    <ul class="collapsible popout" data-collapsible="accordion">
+			    <ul class="collapsible" data-collapsible="accordion">
       {% include '../shared/notifications.html' %}
       {% for study in studies %}
         {% include './partials/citation-listing.html' %}

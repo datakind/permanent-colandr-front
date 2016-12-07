@@ -47,19 +47,37 @@ function getPlan (req, next) {
     })
 }
 
+function attachUsers (req, next) {
+  api.users.getTeam(req.body.user, req.body)
+    .then(users => {
+      var userMap = {}
+      for (var i = 0; i < users.length; i++) {
+        userMap[users[i].id] = users[i].name
+      }
+      req.body.users = userMap
+      next()
+    })
+}
+
 function showCitations (req, res, next) {
   var pageNum = req.params.page
   if (pageNum === undefined) {
     pageNum = 1
   }
+  var orderBy = req.query.order_by
+  if (orderBy === undefined) {
+    orderBy = 'recency'
+  }
+  console.log(orderBy)
   getProgress(req, p => getPlan(req,
-    n => api.citations.get(req.body, pageNum, req.params.status)
+    n => attachUsers(req, o => api.citations.get(req.body, pageNum, req.params.status, req.query.tsquery, orderBy, req.query.tag)
      .then(citations => {
+       console.log('users %s', req.body.users)
        var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 10)
        var range = pageRange(pageNum, numberOfPages)
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status }
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users }
        res.render('citations/show', renderObj)
-     })))
+     }))))
 }
 
 function pageRange (pageNum, numPages) {
