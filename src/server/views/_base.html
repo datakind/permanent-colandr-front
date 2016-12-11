@@ -24,10 +24,12 @@
 				<script>
 				$(document).ready(function() {
 				    $('select').material_select();
+				    $('.chips').material_chip({
+    					placeholder: 'Enter a tag',
+    					secondaryPlaceholder: '+Tag',
+  				  	});
+  			        $('.collapsible').collapsible();
 				});
-			    $(document).ready(function(){
-			      $('.collapsible').collapsible();
-			    });
 				</script>
 
     <!-- main -->

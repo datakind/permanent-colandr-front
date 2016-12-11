@@ -2,17 +2,35 @@
    <li>
      <div class="collapsible-header">
 		 <div class = "row">
-			 <div class = "col s9">
-		 <p> 				  <input type = "checkbox" id = "citation{{ study.id }}" name = "citation[{{ study.id }}]"/>
-				  <label for = "citation{{ study.id }}">.</label>
-		 </p>
+		<div class = "col s12">
 		 <p>  <span class = "authors">   {{ study.citation.authors }} </span>	</p>
-		 <p>
-				  <!--<label for = "citation{{ study.id }}">-->{{ study.citation.title }}<!--</label>-->
-		</p>
-			<span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">{{ study.citation.pub_year }}</span></div>
-		{% if shownStatus != 'pending' %}
-		  <div class = "col s3">
+		 <h3 class = "title">
+				  {{ study.citation.title }}
+		</h3>
+			<p><span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">({{ study.citation.pub_year }})</span></p></div>
+		  </div>
+		  <div class = "row">
+			  {% if shownStatus == 'pending' %}
+			  			<div class="col s12">
+			  			    <button class="btn waves-effect waves-light green btn-small" type="submit" name="status[included]">Include
+			  			    </button>
+			  			    <button class="btn waves-effect waves-light grey btn-small" type="submit" name="status[skip]">Skip
+			  			    </button>
+							<!--<div class = "col s3">
+										  		    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
+										  		    </button</div>-->
+								<div class = "selectbox btn-small">
+			  	              <select multiple name = "criteria[{{ study.id }}]">
+			  	                <option value="" disabled selected>Exclude</option>
+			  			        {% for selection in selectionCriteria %}
+			  	                  <option value="{{ selection.label }}">{{ selection.label }}</option>
+			  			        {% endfor %}
+			  	              </select>
+						  </div>
+
+			  			</div></div>
+			  			{% endif %}
+						{% if shownStatus != 'pending' %}
 		  <ul class="collection screens">
 			 {% for screen in study.citation.screenings %}
 			   <li class = "{{ screen.status }}{% if screen.status == 'excluded' %} red darken-3{% endif %}{% if screen.status == 'included' %} green lighten-1 {% endif %}">
@@ -24,59 +42,28 @@
 				   {% endfor %}
 			   	   </ul>
 				{% endif %}
+				
 			   </li>
 			 {% endfor %}
 		  </ul>
-	  </div>
-		{% endif %}
-	</div>
+  		{% endif %}
 	</div>
      <div class="collapsible-body">		 
 	<div class="row">
-      <div class="col s9">
+      <div class="col s12">
 	<p class = "abstract">{{ study.citation.abstract }}</p>
-	<span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords }} </span>
-			<ul>
+	<p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords }} </span></p>
+    <div class="chips chips-initial">
 	    {% for tag in tags %}
+	    <div class="chip">
+	      {{tag}}
+	      <i class="close material-icons">close</i>
+	    </div>
+		
 			<li>tag</li>
 		{% endfor %}
-			</ul>
-			<p>
-			 <input type = "text" name = "tags[{{ study.id }}][]" id = "tag1" />
-			 <label for = "tag1">Tag 1</label>
-			</p>
-			<p>
-			 <input type = "text" name = "tags[{{ study.id }}][]" id = "tag2" />
-			 <label for = "tag2">Tag 2</label>
-			</p>
-			<p>
-			 <input type = "text" name = "tags[{{ study.id }}][]" id = "tag3" />
-			 <label for = "tag3">Tag 3</label>
-			</p>
-        <span>
-            {{ study.citation_status }} 
-        </span>
-	</div>  {% if shownStatus == 'pending' %}
-			<div class="col s3">
-			    <button class="btn waves-effect waves-light green" type="submit" name="status[included]">Include
-			    </button>
-			    <button class="btn waves-effect waves-light grey" type="submit" name="status[skip]">Skip
-			    </button>
-				<div class = "row">
-	            <div class="input-field col s12">
-	              <select multiple name = "criteria[{{ study.id }}]">
-	                <option value="" disabled selected>Exclude reasons:</option>
-			        {% for selection in selectionCriteria %}
-	                  <option value="{{ selection.label }}">{{ selection.label }}</option>
-			        {% endfor %}
-	              </select>
-	            </div>
-			</div>
-				
-		    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
-		    </button>
-			</div>
-			{% endif %}
-		    </div>
+    	 </div>
+	</div> 
+	</div>
 	</div>
    </li>

@@ -66,7 +66,7 @@ function showCitations (req, res, next) {
   }
   var orderBy = req.query.order_by
   if (orderBy === undefined) {
-    orderBy = 'recency'
+    orderBy = 'relevance'
   }
   console.log(orderBy)
   getProgress(req, p => getPlan(req,
