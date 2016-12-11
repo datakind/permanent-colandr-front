@@ -84,4 +84,29 @@
 			margin:25px 20px 20px;
 		}
 	}
+	.screens {
+		margin:0 10px 10px;
+		li {
+			display:inline;
+			float:left;
+		}
+		div.screenuser {
+			display:inline-block;
+			padding: 0 10px;
+			margin: 0 0 0 3px;
+			color:white;
+			border:1px solid #000;
+			line-height:24px;
+		}
+		.included {
+			div.screenuser {
+				background-color:#6AA84F;
+			}
+		}
+		.excluded {
+			div.screenuser {
+				background-color:#C00;
+			}
+		}
+	}
 }

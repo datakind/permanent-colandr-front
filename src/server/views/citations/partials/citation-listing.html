@@ -3,7 +3,7 @@
      <div class="collapsible-header">
 		 <div class = "row">
 		<div class = "col s12">
-		 <p>  <span class = "authors">   {{ study.citation.authors }} </span>	</p>
+		 <p>  <span class = "authors">{{ study.citation.authors }}&nbsp;</span>	</p>
 		 <h3 class = "title">
 				  {{ study.citation.title }}
 		</h3>
@@ -33,12 +33,12 @@
 						{% if shownStatus != 'pending' %}
 		  <ul class="collection screens">
 			 {% for screen in study.citation.screenings %}
-			   <li class = "{{ screen.status }}{% if screen.status == 'excluded' %} red darken-3{% endif %}{% if screen.status == 'included' %} green lighten-1 {% endif %}">
-				    {{ users[screen.user_id] }}
+			   <li class = "{{ screen.status }}">
+				    <div class = "screenuser">{{ users[screen.user_id] }}</div>
 			   	{% if screen.status == 'excluded' %}
 		     	   <ul>
 				   {% for reason in screen.exclude_reasons %}
-				   <li>{{ reason }}</li>
+				   <li> <i class="tiny material-icons">thumb_down</i>{{ reason }}</li>
 				   {% endfor %}
 			   	   </ul>
 				{% endif %}
