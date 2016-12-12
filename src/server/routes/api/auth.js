@@ -31,8 +31,19 @@ function authenticate (req, res, next) {
       email: process.env.APP_LOGIN_EMAIL,
       password: process.env.APP_LOGIN_PASSWORD
     }).then(token => {
-      req.session.user = token
-      next()
+      // req.session.user = token
+      console.log(token.token)
+      jwt.verify(token.token, process.env.JWT_SECRET_KEY, (err, userInfo) => {
+        if (err) return Promise.reject(err)
+
+          // TODO: Refresh token
+        req.session.user = {
+          token: token.token,
+          user_id: userInfo.id
+        }
+
+        next()
+      })
     })
   } else {
     let { user } = req.session

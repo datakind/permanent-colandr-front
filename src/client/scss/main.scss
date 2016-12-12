@@ -25,6 +25,7 @@
 }
 
 .reviews-list {
+	margin-top:5px;
 	.btn-small {
 	    height: 24px;
 	    line-height: 24px;
@@ -34,6 +35,9 @@
 	.collapsible-header {
 		.row {
 			margin-bottom:0;
+			.collection.screens {
+				overflow:visible;
+			}
 		}
 		h3 {
 			font-size:20px;
@@ -69,6 +73,31 @@
 				box-shadow:0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 			}
 		}
+		.dropdown {
+			position:absolute;
+			top:26px;
+			left:3px;
+			background-color:#fff;
+			border:1px solid #000;
+			li {
+				display:block;
+			}
+		}
+		.removing {
+			position:absolute;
+			top:26px;
+			left:3px;
+			background-color:#fff;
+			border:1px solid #000;
+			li {
+				display:block;
+			}
+			width:170px;
+			line-height:16px;
+			font-size:15px;
+			padding:10px;
+			text-align:center;
+		}
 	}
 	.collapsible-body {
 		p.abstract {
@@ -88,7 +117,12 @@
 		margin:0 10px 10px;
 		li {
 			display:inline;
-			float:left;
+		}
+		li i.tiny {
+			font-size:15px;
+			margin:0 3px;
+			display:inline;
+			float:none;
 		}
 		div.screenuser {
 			display:inline-block;
@@ -97,7 +131,16 @@
 			color:white;
 			border:1px solid #000;
 			line-height:24px;
+			float:left;
 		}
+		ul {
+			float:left;
+			li {
+				margin:0 10px;
+				vertical-align:top;
+			}
+		}
+
 		.included {
 			div.screenuser {
 				background-color:#6AA84F;

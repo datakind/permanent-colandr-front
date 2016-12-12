@@ -29,6 +29,45 @@
     					secondaryPlaceholder: '+Tag',
   				  	});
   			        $('.collapsible').collapsible();
+					$('.screenuser.active').click(function( e ) {
+  					  var dropdown = $(this).parent().children(".dropdown")
+					  dropdown.attr('style',"display:block")
+					  var position = $(this).position()
+					  console.log(position)
+					  e.preventDefault();	
+    				  e.stopPropagation();
+				  });
+				  $('a.remove').click(function( e ) {
+					  $(this).parent().parent().parent().attr('style', 'display:none')
+					  console.log($(this).parent().parent())
+					  $(this).parent().parent().parent().parent().children(".removing").attr('style', 'display:block')
+					  e.preventDefault();
+  					  e.stopPropagation();
+				  });
+				  $('a.switch').click(function( e ) {
+  					  e.stopPropagation();
+					  $(this).parent().parent().parent().attr('style', 'display:none')
+					  $(this).parent().parent().parent().children(".switching").attr('style', 'display:block')
+				  });
+				  $(window).click(function(e) {
+					  console.log(e.target.className)
+					  var target = $(e.target)
+				      if(!target.is('.dropdown li a')) {
+				      	  $('.dropdown').each(function( index ) {
+  							$( this ).attr('style',"display:none")
+						  });
+				      }
+				      if(!target.is('.removing')) {
+				      	  $('.removing').each(function( index ) {
+  							$( this ).attr('style',"display:none")
+						  });
+					  }
+					  if(!target.is('.switching')) {
+					  	  $('.switching').each(function( index ) {
+	  					  $( this ).attr('style',"display:none")
+					   });
+				      }
+				  });
 				});
 				</script>
 

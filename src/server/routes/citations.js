@@ -75,7 +75,7 @@ function showCitations (req, res, next) {
        console.log('users %s', req.body.users)
        var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 10)
        var range = pageRange(pageNum, numberOfPages)
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users }
+       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id }
        res.render('citations/show', renderObj)
      }))))
 }
