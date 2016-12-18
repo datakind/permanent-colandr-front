@@ -33,6 +33,17 @@
 	}
 	
 	.collapsible-header {
+		.exclusions {
+		    float: right;
+		    display: block;
+		    position: relative;
+			.editexclusions {
+				top:33px;
+				right:0;
+				left:inherit;
+				z-index:1000;
+			}
+		}
 		.row {
 			margin-bottom:0;
 			.collection.screens {
@@ -82,8 +93,12 @@
 			li {
 				display:block;
 			}
+			box-shadow:0px -1px 13px 0px rgba(50, 50, 50, 0.76);
 		}
-		.removing {
+		.editexclusions {
+			width: 240px;
+		}
+		.removing, .editexclusions {
 			position:absolute;
 			top:26px;
 			left:3px;
@@ -92,11 +107,17 @@
 			li {
 				display:block;
 			}
-			width:170px;
 			line-height:16px;
 			font-size:15px;
 			padding:10px;
+			label {
+				color:#000;
+			}
+			box-shadow:0px -1px 13px 0px rgba(50, 50, 50, 0.76);
+		}
+		.removing {
 			text-align:center;
+			width:170px;
 		}
 	}
 	.collapsible-body {

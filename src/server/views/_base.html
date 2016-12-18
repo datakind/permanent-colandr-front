@@ -37,6 +37,15 @@
 					  e.preventDefault();	
     				  e.stopPropagation();
 				  });
+					$('a.doexclude').click(function( e ) {
+					  var dropdown = $(this).parent().children(".editexclusions")
+				  	  dropdown.attr('style',"display:block")
+				  	  var position = $(this).position()
+				  	  console.log(position)
+				  	  e.preventDefault();	
+  				  	  e.stopPropagation();
+			  		});
+				  
 				  $('a.remove').click(function( e ) {
 					  $(this).parent().parent().parent().attr('style', 'display:none')
 					  console.log($(this).parent().parent())
@@ -46,9 +55,49 @@
 				  });
 				  $('a.switch').click(function( e ) {
   					  e.stopPropagation();
+					  e.preventDefault();
 					  $(this).parent().parent().parent().attr('style', 'display:none')
-					  $(this).parent().parent().parent().children(".switching").attr('style', 'display:block')
+					  $(this).parent().parent().parent().parent().toggleClass('included').toggleClass('excluded')
+					  $(this).parent().parent().parent().parent().children(".editexclusions").attr('style', 'display:block')
 				  });
+				  $('.removing a.cancel').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+			      	  $('.removing').each(function( index ) {
+						$( this ).attr('style',"display:none")
+					  });
+				  });
+				  $('.removing a.ok').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+			      	  $('.removing').each(function( index ) {
+						$( this ).attr('style',"display:none")
+					  });
+					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+				  });
+				  
+				  $('.editexclusions a.cancel').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+			      	  $('.editexclusions').each(function( index ) {
+						$( this ).attr('style',"display:none")
+					  });
+					  var p = $(this).parent().parent()
+					  if(p.is("li")) {	  
+					    p.toggleClass('included').toggleClass('excluded')
+					  }
+				  });
+				  $('.editexclusions a.ok').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+			      	  $('.editexclusions').each(function( index ) {
+						$( this ).attr('style',"display:none")
+					  });
+					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+				  });
+				  
+				  
+				  
 				  $(window).click(function(e) {
 					  console.log(e.target.className)
 					  var target = $(e.target)

@@ -1,5 +1,6 @@
  
    <li>
+       <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
      <div class="collapsible-header">
 		 <div class = "row">
 		<div class = "col s12">
@@ -13,22 +14,26 @@
 			  
 			  {% if shownStatus == 'pending' %}
 			  			<div class="col s12">
-			  			    <button class="btn waves-effect waves-light green btn-small" type="submit" name="status[included]">Include
+							<input type = "hidden" name = "citationId" value="{{ study.id }}" />
+							<input type = "hidden" name = "action" value="included" />
+			  			    <button class="btn waves-effect waves-light green btn-small" type="submit">Include
 			  			    </button>
-			  			    <button class="btn waves-effect waves-light grey btn-small" type="submit" name="status[skip]">Skip
+			  			    <button class="btn waves-effect waves-light grey btn-small" type="button" >Skip
 			  			    </button>
-							<!--<div class = "col s3">
-										  		    <button class="btn waves-effect waves-light red" type="submit" name="status[excluded]">Exclude
-										  		    </button</div>-->
-								<div class = "selectbox btn-small">
-			  	              <select multiple name = "criteria[{{ study.id }}]">
-			  	                <option value="" disabled selected>Exclude</option>
-			  			        {% for selection in selectionCriteria %}
-			  	                  <option value="{{ selection.label }}">{{ selection.label }}</option>
+							<div class = "exclusions">
+							<a href="#" class = "btn-small btn wases-effect red doexclude">Exclude</a>
+							<div class = "editexclusions" style="display:none;">
+			  			        <ul>
+								{% for selection in selectionCriteria %}
+			  	                  <li>
+									  <input type = "checkbox" id="{{ selection.label }}" value="critera[{{ selection.label }}]" />
+									  <label for="{{ selection.label }}">{{ selection.label }}</label>
+								  </li>
 			  			        {% endfor %}
-			  	              </select>
-						  </div>
-
+								</ul>
+								<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+							</div>
+						</div>
 			  			</div>
 			  			{% endif %}
 						{% if shownStatus != 'pending' %}
@@ -49,6 +54,22 @@
 					<div class = "switching" style="display:none;">
 						Upon removing this screening, citation will be returned to your screen list.
 					</div>
+					<div class = "editexclusions" style="display:none;">
+	  			        <ul>
+						{% for selection in selectionCriteria %}
+	  	                  <li>
+							  <input type = "checkbox" id="{{ selection.label }}" value="{{ selection.label }}" />
+							  <label for="{{ selection.label }}">{{ selection.label }}</label>
+						  </li>
+	  			        {% endfor %}
+						</ul>
+						<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+					</div>
+					<div class = "editinclusion" style="display:none;">
+						Change your screening for this citation to <strong>include</strong> this citation? <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+					</div>
+					
+					
 					{% else %}
 				    <div class = "screenuser">{{ users[screen.user_id] }}</div>
 					{% endif %}
@@ -84,4 +105,5 @@
 	</div> 
 	</div>
 	</div>
+	</form>
    </li>

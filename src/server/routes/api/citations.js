@@ -27,42 +27,36 @@ function get (body, page = 1, status = 'pending', tsquery = '', orderBy = '', ta
 
 function post (body) {
   console.log('review 1')
-  const { reviewId, user, citation, status, criteria, tags } = body
+  const { reviewId, user, citationId, criteria, action } = body
   console.log('review 2')
-  console.log()
-  var statusKey = Object.keys(status)[0]
-  console.log('review 3')
   console.log(reviewId)
-  console.log(citation)
-  console.log(statusKey)
+  console.log('review 3')
+  console.log(citationId)
   console.log(criteria)
-  console.log('tags %s', tags)
   const opts = { method: 'POST' }
-  const putOpts = { method: 'PUT' }
-  for (var citationId in citation) {
-    const uri = `/citations/${citationId}/screenings`
-    console.log('uri %s', uri)
-    let req = send(uri, user, opts)
-    let form = req.form()
-    form.append('status', statusKey)
-    if (statusKey === 'excluded') {
-      var excluded = criteria[citationId]
-      for (var i = 0; i < excluded.length; i++) {
-        form.append('exclude_reasons', excluded[i])
-      }
-    }
-    req.then(res =>
-      console.log(res))
-    var currentTags = tags[citationId].filter(a => a.length > 0)
-    if (currentTags.length > 0) {
-      console.log('tags %s', JSON.stringify(currentTags))
-      const turi = `/studies/${citationId}`
-      let treq = send(turi, user, putOpts)
-      let tform = treq.form()
-      tform.append('tags', JSON.stringify(currentTags))
-      treq.then(res => console.log(res))
+  // const putOpts = { method: 'PUT' }
+  const uri = `/citations/${citationId}/screenings`
+  console.log('uri %s', uri)
+  let req = send(uri, user, opts)
+  let form = req.form()
+  form.append('status', action)
+  if (action === 'excluded') {
+    var excluded = criteria[citationId]
+    for (var i = 0; i < excluded.length; i++) {
+      form.append('exclude_reasons', excluded[i])
     }
   }
+  req.then(res =>
+    console.log(res))
+  /* var currentTags = tags[citationId].filter(a => a.length > 0)
+  if (currentTags.length > 0) {
+    console.log('tags %s', JSON.stringify(currentTags))
+    const turi = `/studies/${citationId}`
+    let treq = send(turi, user, putOpts)
+    let tform = treq.form()
+    tform.append('tags', JSON.stringify(currentTags))
+    treq.then(res => console.log(res))
+  } */
 }
 
 module.exports = {
