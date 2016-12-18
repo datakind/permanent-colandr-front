@@ -1,7 +1,7 @@
  
    <li>
-       <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
      <div class="collapsible-header">
+         <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
 		 <div class = "row">
 		<div class = "col s12">
 		 <p>  <span class = "authors">{{ study.citation.authors }}&nbsp;</span>	</p>
@@ -86,6 +86,7 @@
 		  </ul>
   		{% endif %}
 	</div>
+	</form>
 	</div>
      <div class="collapsible-body">		 
 	<div class="row">
@@ -105,5 +106,4 @@
 	</div> 
 	</div>
 	</div>
-	</form>
    </li>
