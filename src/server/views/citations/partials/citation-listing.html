@@ -15,10 +15,10 @@
 			  {% if shownStatus == 'pending' %}
 			  			<div class="col s12">
 							<input type = "hidden" name = "citationId" value="{{ study.id }}" />
-							<input type = "hidden" name = "action" value="included" />
-			  			    <button class="btn waves-effect waves-light green btn-small" type="submit">Include
+							<input type = "hidden" name = "action" class = "action" value="included" />
+			  			    <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include
 			  			    </button>
-			  			    <button class="btn waves-effect waves-light grey btn-small" type="button" >Skip
+			  			    <button class="btn waves-effect waves-light grey btn-small skip-btn" type="button" >Skip
 			  			    </button>
 							<div class = "exclusions">
 							<a href="#" class = "btn-small btn wases-effect red doexclude">Exclude</a>
@@ -26,8 +26,8 @@
 			  			        <ul>
 								{% for selection in selectionCriteria %}
 			  	                  <li>
-									  <input type = "checkbox" id="{{ selection.label }}" value="critera[{{ selection.label }}]" />
-									  <label for="{{ selection.label }}">{{ selection.label }}</label>
+									  <input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" />
+									  <label for="{{ selection.label }}{{ study.id }}">{{ selection.label }}</label>
 								  </li>
 			  			        {% endfor %}
 								</ul>

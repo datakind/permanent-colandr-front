@@ -22,9 +22,18 @@ router.get('/:status/:page',
 router.post('/screenings/:status/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
+router.post('/screenings/submit',
+  api.populateBodyWithDefaults,
+  screenCitation)
 router.post('/screenings',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
+
+function screenCitation (req, res, next) {
+  api.citations.post(req.body).then(data =>
+    res.json(data)
+  )
+}
 
 function screenCitations (req, res, next) {
   api.citations.post(req.body)
@@ -73,7 +82,7 @@ function showCitations (req, res, next) {
     n => attachUsers(req, o => api.citations.get(req.body, pageNum, req.params.status, req.query.tsquery, orderBy, req.query.tag)
      .then(citations => {
        console.log('users %s', req.body.users)
-       var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 10)
+       var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100)
        var range = pageRange(pageNum, numberOfPages)
        const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id }
        res.render('citations/show', renderObj)

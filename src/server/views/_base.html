@@ -90,13 +90,89 @@
 				  $('.editexclusions a.ok').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
-			      	  $('.editexclusions').each(function( index ) {
-						$( this ).attr('style',"display:none")
-					  });
+			      	  //$('.editexclusions').each(function( index ) {
+					  //	$( this ).attr('style',"display:none")
+					  // });
 					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
 				  });
 				  
+				  $('.exclusions .editexclusions a.ok').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+					  console.log("JSON Request")
+					  var form = $(this).closest('form')
+					  var action = form.find('.action')
+					  console.log(action)
+					  action.val('excluded');
+					  console.log(form)
+					  var serialized = form.serialize()
+					  console.log(serialized)
+					  action.val('included');
+					  $.ajax({
+  						url: "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/submit",
+  						context: document.body,
+						method: 'POST',
+						type: 'POST',
+						data: serialized,
+						error: function(jqXHR, textStatus, errorThrown )
+						{
+							action.val('included');
+							alert(errorThrown);
+  	  			      	    $('.editexclusions').each(function( index ) {
+  	  						  $( this ).attr('style',"display:none")
+  	  					    });
+						},
+						success: function(data, textStatus, jqXHR)
+						{
+						  console.log(data)
+	  			      	  $('.editexclusions').each(function( index ) {
+	  						$( this ).attr('style',"display:none")
+	  					  });
+						  form.parent().parent().slideUp()
+						},
+						
+					  })
+					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+				  });
 				  
+				  $('.include-btn').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+					  console.log("JSON Request")
+					  var form = $(this).closest('form')
+					  var action = form.find('.action')
+					  action.val('included');
+					  console.log(action)
+					  console.log(form)
+					  var serialized = form.serialize()
+					  console.log(serialized)
+					  $.ajax({
+  						url: "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/submit",
+  						context: document.body,
+						method: 'POST',
+						type: 'POST',
+						data: serialized,
+						error: function(jqXHR, textStatus, errorThrown )
+						{
+							alert(errorThrown);
+						},
+						success: function(data, textStatus, jqXHR)
+						{
+						  console.log(data)
+						  form.parent().parent().slideUp()
+						},
+						
+					  })
+					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+				  });
+				  
+				  $('.skip-btn').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+					  var form = $(this).closest('form')
+				      form.parent().parent().slideUp()
+					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+				  });
 				  
 				  $(window).click(function(e) {
 					  console.log(e.target.className)

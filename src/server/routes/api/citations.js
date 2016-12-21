@@ -10,7 +10,7 @@ function get (body, page = 1, status = 'pending', tsquery = '', orderBy = '', ta
   form.append('review_id', reviewId)
   form.append('fields', 'citation_status,citation.title,citation.abstract,citation.journal_name,citation.pub_year,citation.authors,citation.keywords,citation.screenings,tags')
   form.append('page', page - 1)
-  form.append('per_page', 10)
+  form.append('per_page', 100)
   if (tsquery.length > 0) {
     form.append('tsquery', tsquery)
   }
@@ -32,6 +32,7 @@ function post (body) {
   console.log(reviewId)
   console.log('review 3')
   console.log(citationId)
+  console.log(action)
   console.log(criteria)
   const opts = { method: 'POST' }
   // const putOpts = { method: 'PUT' }
@@ -41,13 +42,10 @@ function post (body) {
   let form = req.form()
   form.append('status', action)
   if (action === 'excluded') {
-    var excluded = criteria[citationId]
-    for (var i = 0; i < excluded.length; i++) {
-      form.append('exclude_reasons', excluded[i])
+    for (var criterion in criteria) {
+      form.append('exclude_reasons', criterion)
     }
   }
-  req.then(res =>
-    console.log(res))
   /* var currentTags = tags[citationId].filter(a => a.length > 0)
   if (currentTags.length > 0) {
     console.log('tags %s', JSON.stringify(currentTags))
@@ -57,6 +55,7 @@ function post (body) {
     tform.append('tags', JSON.stringify(currentTags))
     treq.then(res => console.log(res))
   } */
+  return req
 }
 
 module.exports = {
