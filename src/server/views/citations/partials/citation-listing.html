@@ -11,10 +11,9 @@
 			<p><span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">({{ study.citation.pub_year }})</span></p></div>
 		  </div>
 		  <div class = "row">
-			  
+			<input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
 			  {% if shownStatus == 'pending' %}
 			  			<div class="col s12">
-							<input type = "hidden" name = "citationId" value="{{ study.id }}" />
 							<input type = "hidden" name = "action" class = "action" value="included" />
 			  			    <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include
 			  			    </button>
@@ -93,16 +92,8 @@
       <div class="col s12">
 	<p class = "abstract">{{ study.citation.abstract }}</p>
 	<p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords }} </span></p>
-    <div class="chips chips-initial">
-	    {% for tag in tags %}
-	    <div class="chip">
-	      {{tag}}
-	      <i class="close material-icons">close</i>
-	    </div>
-		
-			<li>tag</li>
-		{% endfor %}
-    	 </div>
+	<input type = "hidden" class = "startTags" value = "{{ study.tags }}" >
+    <div class="chips"></div>
 	</div> 
 	</div>
 	</div>

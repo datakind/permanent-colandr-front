@@ -132,6 +132,10 @@
 		}
 		div.chips {
 			margin:25px 20px 20px;
+			min-height:0;
+			input {
+				margin:0;
+			}
 		}
 	}
 	.screens {

@@ -46,18 +46,23 @@ function post (body) {
       form.append('exclude_reasons', criterion)
     }
   }
-  /* var currentTags = tags[citationId].filter(a => a.length > 0)
-  if (currentTags.length > 0) {
-    console.log('tags %s', JSON.stringify(currentTags))
-    const turi = `/studies/${citationId}`
-    let treq = send(turi, user, putOpts)
-    let tform = treq.form()
-    tform.append('tags', JSON.stringify(currentTags))
-    treq.then(res => console.log(res))
-  } */
   return req
 }
 
+function addTags (citationId, body) {
+  const putOpts = { method: 'PUT' }
+  const { user, tags } = body
+  var currentTags = tags
+  console.log(citationId)
+  console.log(currentTags)
+  console.log('tags %s', JSON.stringify(currentTags))
+  const turi = `/studies/${citationId}`
+  let treq = send(turi, user, putOpts)
+  let tform = treq.form()
+  tform.append('tags', JSON.stringify(currentTags))
+  return treq
+}
+
 module.exports = {
-  get, post
+  get, post, addTags
 }

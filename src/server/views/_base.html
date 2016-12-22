@@ -24,10 +24,22 @@
 				<script>
 				$(document).ready(function() {
 				    $('select').material_select();
-				    $('.chips').material_chip({
+					$( ".chips" ).each(function( index ) {
+					  var chip = $( this )
+					  var tagsString = chip.parent().find('input').val()
+					  var objects = []
+					  if(tagsString.length > 0) {
+						var tags = $.parseJSON(tagsString)
+					    for(tag in tags) {
+					      objects.push({tag:tags[tag]})
+					    }
+				      }
+					  chip.material_chip({
+						data:objects,
     					placeholder: 'Enter a tag',
     					secondaryPlaceholder: '+Tag',
-  				  	});
+  				  	  });
+				    });
   			        $('.collapsible').collapsible();
 					$('.screenuser.active').click(function( e ) {
   					  var dropdown = $(this).parent().children(".dropdown")
@@ -193,6 +205,76 @@
 					   });
 				      }
 				  });
+				  
+				  $('.chips').on('chip.add', function(e, chip){
+				    // you have the added chip here
+					  console.log("added")
+					  console.log(chip)
+					  console.log(chip.tag)
+					  var data = $(this).closest(".chips").material_chip('data')
+					  var form = $(this).closest('li').find('form')
+					  console.log(form)
+					  var citationId = form.find('input.citationId').val()
+					  console.log(citationId)
+					  var tags = []
+					  for(var tag in data) {
+					  	tags.push(data[tag].tag)
+					  }
+					  console.log(tags)
+					  
+					  $.ajax({
+  						url: "http://localhost:3000/reviews/{{ reviewId }}/citations/tags/" + citationId,
+  						context: document.body,
+						method: 'POST',
+						type: 'POST',
+						data: {tags:tags},
+						error: function(jqXHR, textStatus, errorThrown )
+						{
+							alert(errorThrown);
+						},
+						success: function(data, textStatus, jqXHR)
+						{
+						  console.log(data)
+						},
+						
+					  })
+					  
+				  });
+
+				  $('.chips').on('chip.delete', function(e, chip){
+					  console.log("removed")
+					  console.log(chip)
+					  console.log(chip.tag)
+					  var data = $(this).closest(".chips").material_chip('data')
+					  var form = $(this).closest('li').find('form')
+					  console.log(form)
+					  var citationId = form.find('input.citationId').val()
+					  console.log(citationId)
+					  var tags = []
+					  for(var tag in data) {
+					  	tags.push(data[tag].tag)
+					  }
+					  console.log(tags)
+					  
+					  $.ajax({
+  						url: "http://localhost:3000/reviews/{{ reviewId }}/citations/tags/" + citationId,
+  						context: document.body,
+						method: 'POST',
+						type: 'POST',
+						data: {tags:tags},
+						error: function(jqXHR, textStatus, errorThrown )
+						{
+							alert(errorThrown);
+						},
+						success: function(data, textStatus, jqXHR)
+						{
+						  console.log(data)
+						},
+						
+					  })
+					  
+				  });
+				  
 				});
 				</script>
 

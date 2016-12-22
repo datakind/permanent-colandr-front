@@ -19,6 +19,9 @@ router.get('/:status',
 router.get('/:status/:page',
   api.populateBodyWithDefaults,
   showCitations)
+router.post('/tags/:citationId',
+  api.populateBodyWithDefaults,
+  addTags)
 router.post('/screenings/:status/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
@@ -31,6 +34,13 @@ router.post('/screenings',
 
 function screenCitation (req, res, next) {
   api.citations.post(req.body).then(data =>
+    res.json(data)
+  )
+}
+
+function addTags (req, res, next) {
+  var citationId = req.params.citationId
+  api.citations.addTags(citationId, req.body).then(data =>
     res.json(data)
   )
 }
