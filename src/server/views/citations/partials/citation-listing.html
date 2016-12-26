@@ -1,5 +1,5 @@
  
-   <li>
+   <li class = "{{ shownStatus }}">
      <div class="collapsible-header">
          <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
 		 <div class = "row">
@@ -12,9 +12,9 @@
 		  </div>
 		  <div class = "row">
 			<input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
+			<input type = "hidden" name = "action" class = "action" value="included" />
 			  {% if shownStatus == 'pending' %}
 			  			<div class="col s12">
-							<input type = "hidden" name = "action" class = "action" value="included" />
 			  			    <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include
 			  			    </button>
 			  			    <button class="btn waves-effect waves-light grey btn-small skip-btn" type="button" >Skip
@@ -56,10 +56,10 @@
 					<div class = "editexclusions" style="display:none;">
 	  			        <ul>
 						{% for selection in selectionCriteria %}
-	  	                  <li>
-							  <input type = "checkbox" id="{{ selection.label }}" value="{{ selection.label }}" />
-							  <label for="{{ selection.label }}">{{ selection.label }}</label>
-						  </li>
+			  	                  <li>
+									  <input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" />
+									  <label for="{{ selection.label }}{{ study.id }}">{{ selection.label }}</label>
+								  </li>
 	  			        {% endfor %}
 						</ul>
 						<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>

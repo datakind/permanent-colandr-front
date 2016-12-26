@@ -28,6 +28,9 @@ router.post('/screenings/:status/:page',
 router.post('/screenings/submit',
   api.populateBodyWithDefaults,
   screenCitation)
+router.post('/screenings/change',
+  api.populateBodyWithDefaults,
+  changeCitation)
 router.post('/screenings/delete',
   api.populateBodyWithDefaults,
   deleteCitation)
@@ -38,6 +41,14 @@ router.post('/screenings',
 function deleteCitation (req, res, next) {
   api.citations.deleteCitation(req.body).then(data =>
     res.json(data)
+  )
+}
+
+function changeCitation (req, res, next) {
+  api.citations.deleteCitation(req.body).then(d =>
+    api.citations.post(req.body).then(data =>
+      res.json(data)
+    )
   )
 }
 

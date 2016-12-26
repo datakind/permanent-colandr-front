@@ -86,10 +86,6 @@
 				  $('.removing a.ok').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
-			      	  //$('.removing').each(function( index ) {
-					  //	 $( this ).attr('style',"display:none")
-				      // });
-					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
 					  var form = $(this).closest('form')
 					  var serialized = form.serialize()
 					  console.log(serialized)
@@ -131,16 +127,16 @@
 					    p.toggleClass('included').toggleClass('excluded')
 					  }
 				  });
-				  $('.editexclusions a.ok').click(function( e ) {
+				  /*$('.editexclusions a.ok').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
 			      	  //$('.editexclusions').each(function( index ) {
 					  //	$( this ).attr('style',"display:none")
 					  // });
 					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
-				  });
+				  });*/
 				  
-				  $('.exclusions .editexclusions a.ok').click(function( e ) {
+				  $('.editexclusions a.ok').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
 					  console.log("JSON Request")
@@ -152,8 +148,16 @@
 					  var serialized = form.serialize()
 					  console.log(serialized)
 					  action.val('included');
+					  var li = form.closest('li')
+					  var url = ''
+					  if(li.is('.pending')) {
+					  	url = "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/submit"
+					  } else {
+  					  	url = "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/change"
+					  }
+					  console.log(url)
 					  $.ajax({
-  						url: "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/submit",
+  						url: url,
   						context: document.body,
 						method: 'POST',
 						type: 'POST',
