@@ -49,6 +49,18 @@ function post (body) {
   return req
 }
 
+function deleteCitation (body) {
+  const { reviewId, user, citationId } = body
+  console.log(reviewId)
+  console.log('review 3')
+  console.log(citationId)
+  const opts = { method: 'DELETE' }
+  const uri = `/citations/${citationId}/screenings`
+  console.log('uri %s', uri)
+  let req = send(uri, user, opts)
+  return req
+}
+
 function addTags (citationId, body) {
   const putOpts = { method: 'PUT' }
   const { user, tags } = body
@@ -64,5 +76,5 @@ function addTags (citationId, body) {
 }
 
 module.exports = {
-  get, post, addTags
+  get, post, addTags, deleteCitation
 }

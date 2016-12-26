@@ -29,9 +29,13 @@
 					  var tagsString = chip.parent().find('input').val()
 					  var objects = []
 					  if(tagsString.length > 0) {
-						var tags = $.parseJSON(tagsString)
-					    for(tag in tags) {
-					      objects.push({tag:tags[tag]})
+						try {
+						  var tags = $.parseJSON(tagsString)
+					      for(tag in tags) {
+					        objects.push({tag:tags[tag]})
+					      }
+					    } catch(err) {
+					    	console.log(err)
 					    }
 				      }
 					  chip.material_chip({
@@ -82,10 +86,38 @@
 				  $('.removing a.ok').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
-			      	  $('.removing').each(function( index ) {
-						$( this ).attr('style',"display:none")
-					  });
+			      	  //$('.removing').each(function( index ) {
+					  //	 $( this ).attr('style',"display:none")
+				      // });
 					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+					  var form = $(this).closest('form')
+					  var serialized = form.serialize()
+					  console.log(serialized)
+					  $.ajax({
+  						url: "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/delete",
+  						context: document.body,
+						method: 'POST',
+						type: 'POST',
+						data: serialized,
+						error: function(jqXHR, textStatus, errorThrown )
+						{
+							action.val('included');
+							alert(errorThrown);
+  	  			      	    $('.removing').each(function( index ) {
+  	  						  $( this ).attr('style',"display:none")
+  	  					    });
+						},
+						success: function(data, textStatus, jqXHR)
+						{
+						  console.log(data)
+	  			      	  $('.removing').each(function( index ) {
+	  						$( this ).attr('style',"display:none")
+	  					  });
+						  form.parent().parent().slideUp()
+						},
+						
+					  });
+					  
 				  });
 				  
 				  $('.editexclusions a.cancel').click(function( e ) {
