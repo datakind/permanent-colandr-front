@@ -26,6 +26,13 @@ module.exports.init = function (app, express) {
     autoescape: true
   })
   nunjucksEnv.addFilter('date', require('nunjucks-date-filter'))
+  nunjucksEnv.addFilter('containsElement', function (array, value) {
+    console.log(array)
+    console.log(value)
+    if (array.indexOf(value) > -1) return true
+    else return false
+  })
+
   app.set('view engine', 'html')
 
   // *** app middleware *** //

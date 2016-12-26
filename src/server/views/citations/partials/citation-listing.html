@@ -4,7 +4,7 @@
          <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
 		 <div class = "row">
 		<div class = "col s12">
-		 <p>  <span class = "authors">{{ study.citation.authors }}&nbsp;</span>	</p>
+		 <p>  <span class = "authors">{{ study.citation.authors | replace(", ",", ") }}&nbsp;</span>	</p>
 		 <h3 class = "title">
 				  {{ study.citation.title }}
 		</h3>
@@ -45,6 +45,9 @@
 						<ul>
 							<li><a href = "#" class = "remove"><i class="tiny material-icons">restore</i>remove</a></li>
 							<li><a href = "#" class = "switch"><i class="tiny material-icons">repeat</i>switch</a></li>
+							{% if screen.status == "excluded" %}
+							<li><a href = "#" class = "edit"><i class="tiny material-icons">repeat</i>edit</a></li>
+							{% endif %}
 						</ul>
 					</div>
 					<div class = "removing" style="display:none;">
@@ -56,18 +59,24 @@
 					<div class = "editexclusions" style="display:none;">
 	  			        <ul>
 						{% for selection in selectionCriteria %}
-			  	                  <li>
-									  <input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" />
+			  	                  <li>									   
+									  <input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" {% if screen.status == "excluded" %}
+									   {% if screen.exclude_reasons | containsElement(selection.label) %}
+										 checked="checked"
+									   {% endif %}
+									  {% endif %} />
 									  <label for="{{ selection.label }}{{ study.id }}">{{ selection.label }}</label>
 								  </li>
 	  			        {% endfor %}
 						</ul>
 						<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
 					</div>
+					{% if screen.status == "excluded" %}
 					<div class = "editinclusion" style="display:none;">
-						Change your screening for this citation to <strong>include</strong> this citation? <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+						Change your screening for this citation to <strong>include</strong> this citation?
+						<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
 					</div>
-					
+					{% endif %}					
 					
 					{% else %}
 				    <div class = "screenuser">{{ users[screen.user_id] }}</div>
@@ -91,7 +100,7 @@
 	<div class="row">
       <div class="col s12">
 	<p class = "abstract">{{ study.citation.abstract }}</p>
-	<p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords }} </span></p>
+	<p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords | replace(",",", ") }} </span></p>
 	<input type = "hidden" class = "startTags" value = "{{ study.tags }}" >
     <div class="chips"></div>
 	</div> 
