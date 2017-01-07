@@ -69,11 +69,28 @@
 					  e.preventDefault();
   					  e.stopPropagation();
 				  });
-				  $('a.switch').click(function( e ) {
+				  $('li.included a.switch').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
 					  $(this).parent().parent().parent().attr('style', 'display:none')
-					  $(this).parent().parent().parent().parent().toggleClass('included').toggleClass('excluded')
+					  $(this).parent().parent().parent().parent()
+					  .toggleClass('included').toggleClass('excluded')
+					  .addClass('tempexcluded')
+					  $(this).parent().parent().parent().parent().children(".editexclusions").attr('style', 'display:block')
+				  });
+				  $('li.excluded a.switch').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+					  $(this).parent().parent().parent().attr('style', 'display:none')
+					  $(this).parent().parent().parent().parent()
+					  	.toggleClass('included').toggleClass('excluded')
+					    .addClass('tempincluded')
+					  $(this).parent().parent().parent().parent().children(".editinclusion").attr('style', 'display:block')
+				  });
+				  $('li.excluded a.edit').click(function( e ) {
+  					  e.stopPropagation();
+					  e.preventDefault();
+					  $(this).parent().parent().parent().attr('style', 'display:none')
 					  $(this).parent().parent().parent().parent().children(".editexclusions").attr('style', 'display:block')
 				  });
 				  $('.removing a.cancel').click(function( e ) {
@@ -83,6 +100,8 @@
 						$( this ).attr('style',"display:none")
 					  });
 				  });
+				  
+				  
 				  $('.removing a.ok').click(function( e ) {
   					  e.stopPropagation();
 					  e.preventDefault();
@@ -123,8 +142,8 @@
 						$( this ).attr('style',"display:none")
 					  });
 					  var p = $(this).parent().parent()
-					  if(p.is("li")) {	  
-					    p.toggleClass('included').toggleClass('excluded')
+					  if(p.is("li.tempexcluded")) {	  
+					    p.toggleClass('included').toggleClass('excluded').removeClass('tempexcluded')
 					  }
 				  });
 				  /*$('.editexclusions a.ok').click(function( e ) {
@@ -135,6 +154,58 @@
 					  // });
 					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
 				  });*/
+					  
+					  $('.editinclusion a.cancel').click(function( e ) {
+	  					  e.stopPropagation();
+						  e.preventDefault();
+				      	  $('.editinclusion').each(function( index ) {
+							$( this ).attr('style',"display:none")
+						  });
+						  var p = $(this).parent().parent()
+						  if(p.is("li.tempincluded")) {	  
+						    p.toggleClass('included').toggleClass('excluded').removeClass('tempincluded')
+						  }
+					  });
+					  
+				  
+					  $('.editinclusion a.ok').click(function( e ) {
+	  					  e.stopPropagation();
+						  e.preventDefault();
+						  console.log("JSON Request")
+						  var form = $(this).closest('form')
+						  var action = form.find('.action')
+						  action.val('included');
+						  var li = form.closest('li')
+					      var serialized = form.serialize()
+						  var url = "http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/change"
+						  console.log(url)
+						  console.log(serialized)
+						  $.ajax({
+	  						url: url,
+	  						context: document.body,
+							method: 'POST',
+							type: 'POST',
+							data: serialized,
+							error: function(jqXHR, textStatus, errorThrown )
+							{
+								alert(errorThrown);
+	  	  			      	    $('.editinclusion').each(function( index ) {
+	  	  						  $( this ).attr('style',"display:none")
+	  	  					    });
+							},
+							success: function(data, textStatus, jqXHR)
+							{
+							  console.log(data)
+		  			      	  $('.editinclusion').each(function( index ) {
+		  						$( this ).attr('style',"display:none")
+		  					  });
+							  form.parent().parent().slideUp()
+							}
+						
+						  })
+						  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
+					  });
+				  
 				  
 				  $('.editexclusions a.ok').click(function( e ) {
   					  e.stopPropagation();
@@ -177,7 +248,7 @@
 	  						$( this ).attr('style',"display:none")
 	  					  });
 						  form.parent().parent().slideUp()
-						},
+						}
 						
 					  })
 					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')
@@ -208,7 +279,7 @@
 						{
 						  console.log(data)
 						  form.parent().parent().slideUp()
-						},
+						}
 						
 					  })
 					  //$(this).parent().parent().children(".editexclusions").attr('style', 'display:block')

@@ -98,7 +98,7 @@
 		.editexclusions {
 			width: 240px;
 		}
-		.removing, .editexclusions {
+		.removing, .editexclusions, .editinclusion {
 			position:absolute;
 			top:26px;
 			left:3px;
@@ -115,7 +115,7 @@
 			}
 			box-shadow:0px -1px 13px 0px rgba(50, 50, 50, 0.76);
 		}
-		.removing {
+		.removing, .editinclusion {
 			text-align:center;
 			width:170px;
 		}

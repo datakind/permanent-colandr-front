@@ -34,8 +34,8 @@ function post (body) {
   console.log(citationId)
   console.log(action)
   console.log(criteria)
+  console.log(user)
   const opts = { method: 'POST' }
-  // const putOpts = { method: 'PUT' }
   const uri = `/citations/${citationId}/screenings`
   console.log('uri %s', uri)
   let req = send(uri, user, opts)
