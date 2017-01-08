@@ -6,34 +6,44 @@ const api = require('./api')
 router.get('/import',
   api.populateBodyWithDefaults,
   importPage)
+
 router.post('/import',
   upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
   api.populateBodyWithDefaults,
   createImport)
+
 router.get('/',
   api.populateBodyWithDefaults,
   showCitations)
+
 router.get('/:status',
   api.populateBodyWithDefaults,
   showCitations)
+
 router.get('/:status/:page',
   api.populateBodyWithDefaults,
   showCitations)
+
 router.post('/tags/:citationId',
   api.populateBodyWithDefaults,
   addTags)
+
 router.post('/screenings/:status/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
+
 router.post('/screenings/submit',
   api.populateBodyWithDefaults,
   screenCitation)
+
 router.post('/screenings/change',
   api.populateBodyWithDefaults,
   changeCitation)
+
 router.post('/screenings/delete',
   api.populateBodyWithDefaults,
   deleteCitation)
+
 router.post('/screenings',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
@@ -114,8 +124,24 @@ function showCitations (req, res, next) {
        console.log('users %s', req.body.users)
        var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100)
        var range = pageRange(pageNum, numberOfPages)
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id }
-       res.render('citations/show', renderObj)
+       const renderObj = { 
+          reviewId: req.body.reviewId, 
+          studies: citations, 
+          page: pageNum, 
+          citationProgress: req.body.progress.citation_screening, 
+          selectionCriteria: req.body.plan.selection_criteria, 
+          numPages: numberOfPages, 
+          range: range, 
+          shownStatus: req.params.status, 
+          order_by: orderBy, 
+          tsquery: req.query.tsquery, 
+          tag: req.query.tag, 
+          users: req.body.users, 
+          userId: req.body.user.user_id 
+      }
+      
+      res.render('citations/show', renderObj)
+      
      }))))
 }
 
