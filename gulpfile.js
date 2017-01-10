@@ -42,7 +42,7 @@ const nodemonConfig = {
 
 gulp.task('default', () => {
   runSequence(
-    ['lint'],
+    //['lint'],
     ['nodemon'],
     ['scss'],
     ['watch']

@@ -1,0 +1,127 @@
+ <li class = "{{ shownStatus }}">
+	 <div class="collapsible-header">
+	    <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
+			<div class = "row">
+				<div class = "col s12">
+			 		<p>
+			 			<span class = "authors">{{ study.citation.authors | replace(", ",", ") }}&nbsp;</span>
+			 		</p>
+			 		<h3 class = "title">
+						{{ study.citation.title }}
+					</h3>
+					<p>
+						<span class = "journal"> {{ study.citation.journal_name }}</span>
+						<span class = "year">({{ study.citation.pub_year }})</span>
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<div class="waves-effect waves-light chip">
+						<span>&#43; ADD TAG</span>
+					</div>
+					<div class="waves-effect waves-light chip">						
+						<span>ADD FULL TEXT</span>
+					</div>	
+				</div>
+				
+			</div>
+			<!-- <div class = "row">
+				<input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
+				<input type = "hidden" name = "action" class = "action" value="included" />
+					{% if shownStatus == 'pending' %}
+		  			<div class="col s12">
+		  			    <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include</button>
+		  			    <button class="btn waves-effect waves-light grey btn-small skip-btn" type="button">Skip</button>
+						<div class = "exclusions">
+							<a href="#" class = "btn-small btn wases-effect red doexclude">Exclude</a>
+							<div class = "editexclusions" style="display:none;">
+		  			        	<ul>
+									{% for selection in selectionCriteria %}
+			  	                  	<li>
+										<input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" />
+										<label for="{{ selection.label }}{{ study.id }}">{{ selection.label }}</label>
+									</li>
+			  			        	{% endfor %}
+								</ul>
+								<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+							</div>
+						</div>
+		  			</div>
+				  	{% endif %}
+					{% if shownStatus != 'pending' %}
+				  	<ul class="collection screens">
+						{% for screen in study.citation.screenings %}
+					   	<li class = "{{ screen.status }}">
+						    {% if userId == screen.user_id %}
+							    <div class = "screenuser active">{{ users[screen.user_id] }}</div>
+							<div class = "dropdown" style="display:none;">
+								<ul>
+									<li><a href = "#" class = "remove"><i class="tiny material-icons">restore</i>remove</a></li>
+									<li><a href = "#" class = "switch"><i class="tiny material-icons">repeat</i>switch</a></li>
+									{% if screen.status == "excluded" %}
+									<li><a href = "#" class = "edit"><i class="tiny material-icons">repeat</i>edit</a></li>
+									{% endif %}
+								</ul>
+							</div>
+							<div class = "removing" style="display:none;">
+								Upon removing this screening, this citation will be returned to your <strong>screen</strong> list. <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+							</div>
+							<div class = "switching" style="display:none;">
+								Upon removing this screening, citation will be returned to your screen list.
+							</div>
+							<div class = "editexclusions" style="display:none;">
+			  			    	<ul>
+									{% for selection in selectionCriteria %}
+			  	                	<li>									   
+										<input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" {% if screen.status == "excluded" %}
+									   	{% if screen.exclude_reasons | containsElement(selection.label) %}
+											checked="checked"
+									   	{% endif %}
+									  	{% endif %} />
+									  <label for="{{ selection.label }}{{ study.id }}">{{ selection.label }}</label>
+								  	</li>
+				  			        {% endfor %}
+								</ul>
+								<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+							</div>
+							{% if screen.status == "excluded" %}
+							<div class = "editinclusion" style="display:none;">
+								<span>Change your screening for this citation to <strong>include</strong> this citation?</span>
+								<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+							</div>
+							{% endif %}					
+							
+							{% else %}
+						    <div class = "screenuser">{{ users[screen.user_id] }}</div>
+							{% endif %}
+
+					   		{% if screen.status == 'excluded' %}
+			     	   		<ul>
+							   {% for reason in screen.exclude_reasons %}
+							   <li> <i class="tiny material-icons">thumb_down</i>{{ reason }}</li>
+							   {% endfor %}
+				   	   		</ul>
+							{% endif %}					
+						</li>
+					 	{% endfor %}
+					</ul>
+					{% endif %}
+			</div> -->
+		</form>
+	</div>
+	<div class="collapsible-body">		 
+		<div class="row">
+			<div class="col s12">
+				<p class = "abstract">{{ study.citation.abstract }}</p>
+				<p>
+					<span class = "keywords">
+						<span class = "keyword-title">Keywords: </span> {{ study.citation.keywords | replace(",",", ") }}
+					</span>
+				</p>
+				<input type = "hidden" class = "startTags" value = "{{ study.tags }}" >
+				<div class="chips"></div>
+			</div> 
+		</div>
+	</div>
+</li>

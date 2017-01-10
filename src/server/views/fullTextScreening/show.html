@@ -13,6 +13,17 @@
 	</div>
 
 	{% include './partials/nav.html' %}	
+	{% include './partials/filters.html' %}
 
+	<div class="reviews-list">
+		<ul class="collapsible popout" data-collapsible="accordion">
+			{% include '../shared/notifications.html' %}
+			{% for study in studies %}
+        		{% include './partials/fullText-listing.html' %}
+      		{% endfor %}
+		</ul>
+	</div>
 </div>
+{% include './partials/page-listing.html' %}
+
 {% endblock %}

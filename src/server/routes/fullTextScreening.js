@@ -6,7 +6,6 @@ const api = require('./api')
 router.get('/', api.populateBodyWithDefaults, showTextScreens);
 
 function showTextScreens(req, res, next) {	
-	// console.log(req.body);	
 
 	let pageNum = req.params.page;
 	if (pageNum === undefined) {
@@ -22,7 +21,7 @@ function showTextScreens(req, res, next) {
 		() => api.citations
 				.get(req.body, pageNum, req.params.status, req.query.tsquery, orderBy, req.query.tag)				
 				.then((citations) => {
-					let numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100),
+					let numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 50),
        					range = pageRange(pageNum, numberOfPages);
 
 					const ftxtObj = {						
@@ -42,6 +41,7 @@ function showTextScreens(req, res, next) {
 					};
 
 					console.log(req.body.progress.fulltext_screening);
+					console.log(citations.length);
 
 					res.render('fullTextScreening/show', ftxtObj);
 				})
@@ -89,3 +89,4 @@ function pageRange (pageNum, numPages) {
 }
 
 module.exports = router
+
