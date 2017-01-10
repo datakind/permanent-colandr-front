@@ -1,4 +1,4 @@
- 
+{{ export | safe }} 
    <li class = "{{ shownStatus }}">
      <div class="collapsible-header">
          <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
@@ -99,8 +99,8 @@
      <div class="collapsible-body">		 
 	<div class="row">
       <div class="col s12">
-	<p class = "abstract">{{ study.citation.abstract }}</p>
-	<p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords | replace(",",", ") }} </span></p>
+	<p class = "abstract">{{ study.citation.abstract | safe }}</p>
+	<p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
 	<input type = "hidden" class = "startTags" value = "{{ study.tags }}" >
     <div class="chips"></div>
 	</div> 

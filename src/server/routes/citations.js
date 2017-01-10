@@ -114,9 +114,67 @@ function showCitations (req, res, next) {
        console.log('users %s', req.body.users)
        var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100)
        var range = pageRange(pageNum, numberOfPages)
+       processStudies(citations, req)
        const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id }
        res.render('citations/show', renderObj)
      }))))
+}
+
+function getKeyTerms (req) {
+  console.log('getting key terms')
+  var keyTerms = req.body.plan.keyterms
+  var dictionary = {}
+  for (var i = 0; i < keyTerms.length; i++) {
+    dictionary[keyTerms[i].term] = true
+    var synonyms = keyTerms[i].synonyms
+    for (var j = 0; j < synonyms.length; j++) {
+      dictionary[synonyms[j]] = true
+    }
+  }
+  console.log(dictionary)
+  console.log('get key terms')
+  return dictionary
+}
+
+function processStudies (studies, req) {
+  var keyTerms = getKeyTerms(req)
+  console.log('processing studies')
+  for (var i = 0; i < studies.length; i++) {
+    processCitation(studies[i].citation, keyTerms)
+    console.log('processed study')
+  }
+}
+
+function processCitation (citation, keyTerms) {
+  console.log('processing study')
+  if (citation == null || citation.abstract == null) {
+    return citation
+  }
+  citation.abstract = processText(citation.abstract, keyTerms)
+  if (citation.keywords != null) {
+    citation.keywords = processText(citation.keywords.toString(), keyTerms)
+    citation.keywords = citation.keywords.toString().replace(',', ', ')
+  }
+  // console.log(newAbstract)
+  return citation
+}
+
+function processText (wholeText, keyTerms) {
+  if (wholeText == null) {
+    return wholeText
+  }
+  // console.log(abstract)
+  var text = wholeText
+  var lowerText = text.toLowerCase()
+  for (var keyTerm in keyTerms) {
+    console.log(keyTerm)
+    var index = lowerText.indexOf(keyTerm)
+    if (index >= 0) {
+      text = text.substring(0, index) + '<span class = "keyterm">' + text.substring(index, index + keyTerm.length) + '</span>' + text.substring(index + keyTerm.length)
+      lowerText = text.toLowerCase()
+    }
+  }
+  return text
 }
 
 function pageRange (pageNum, numPages) {
