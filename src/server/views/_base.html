@@ -382,6 +382,21 @@
 					  
 				  });
 				  
+				  $('#filters .highlights').click(function(e){
+  					  e.stopPropagation();
+					  e.preventDefault();
+					  var keyTerms = $('.reviews-list .collapsible-body .keyterm')
+					  var jthis = $(this)
+				  	  if(jthis.is('.highlightsoff')) {
+				  	  	keyTerms.css('font-weight', 'bold')
+						jthis.text("Highlights_On")
+				  	  } else {
+				  	  	keyTerms.css('font-weight', 'normal')
+						jthis.text("Highlights_Off")
+				  	  }
+					  $(this).toggleClass('highlightson').toggleClass('highlightsoff')					  
+				  });
+				  				  
 				});
 				</script>
 
