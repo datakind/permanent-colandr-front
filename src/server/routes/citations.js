@@ -131,9 +131,12 @@ function getKeyTerms (req) {
       dictionary[synonyms[j]] = true
     }
   }
-  console.log(dictionary)
+  var terms = Object.keys(dictionary).sort(function (a, b) {
+    return b.length - a.length
+  })
+  console.log(terms)
   console.log('get key terms')
-  return dictionary
+  return terms
 }
 
 function processStudies (studies, req) {
@@ -141,12 +144,12 @@ function processStudies (studies, req) {
   console.log('processing studies')
   for (var i = 0; i < studies.length; i++) {
     processCitation(studies[i].citation, keyTerms)
-    console.log('processed study')
+    // console.log('processed study')
   }
 }
 
 function processCitation (citation, keyTerms) {
-  console.log('processing study')
+  // console.log('processing study')
   if (citation == null || citation.abstract == null) {
     return citation
   }
@@ -166,12 +169,14 @@ function processText (wholeText, keyTerms) {
   // console.log(abstract)
   var text = wholeText
   var lowerText = text.toLowerCase()
-  for (var keyTerm in keyTerms) {
-    console.log(keyTerm)
+  for (var i in keyTerms) {
+    var keyTerm = keyTerms[i]
+    // console.log(keyTerm)
     var index = lowerText.indexOf(keyTerm)
-    if (index >= 0) {
+    while (index >= 0) {
       text = text.substring(0, index) + '<span class = "keyterm">' + text.substring(index, index + keyTerm.length) + '</span>' + text.substring(index + keyTerm.length)
       lowerText = text.toLowerCase()
+      index = lowerText.indexOf(keyTerm, index + 24 + 7 + keyTerm.length + 1)
     }
   }
   return text
