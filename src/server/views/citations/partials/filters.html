@@ -11,10 +11,10 @@
 		<div class = "col s1">or</div>
 	    <div class="input-field inline col s2">
 	      <select name = "tag" class="browser-default">
-	        <option value="" selected>Tag</option>
-	        <option value="tag1">Tag 1</option>
-	        <option value="tag2">Tag 2</option>
-	        <option value="tag3">Tag 3</option>
+	        <option value="" selected>Filter by tag:</option>
+			{% for tag in tags %}
+	        <option value="{{ tag }}">{{ tag }}</option>
+			{% endfor %}
 	      </select>
 	    </div>
 	    <div class="col s1">&nbsp;</div>

@@ -78,6 +78,14 @@ function getProgress (req, next) {
     })
 }
 
+function getTags (req, next) {
+  api.citations.getTags(req.body)
+    .then(tags => {
+      req.body.tags = tags
+      next()
+    })
+}
+
 function getPlan (req, next) {
   api.plans.get(req.body)
     .then(plan => {
@@ -109,15 +117,16 @@ function showCitations (req, res, next) {
   }
   console.log(orderBy)
   getProgress(req, p => getPlan(req,
-    n => attachUsers(req, o => api.citations.get(req.body, pageNum, req.params.status, req.query.tsquery, orderBy, req.query.tag)
-     .then(citations => {
-       console.log('users %s', req.body.users)
-       var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100)
-       var range = pageRange(pageNum, numberOfPages)
-       processStudies(citations, req)
-       const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id }
-       res.render('citations/show', renderObj)
-     }))))
+    n => attachUsers(req, o => getTags(req, p =>
+      api.citations.get(req.body, pageNum, req.params.status, req.query.tsquery, orderBy, req.query.tag)
+       .then(citations => {
+         console.log('users %s', req.body.users)
+         var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100)
+         var range = pageRange(pageNum, numberOfPages)
+         processStudies(citations, req)
+         const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id, tags: req.body.tags }
+         res.render('citations/show', renderObj)
+       })))))
 }
 
 function getKeyTerms (req) {

@@ -1,6 +1,10 @@
 /* global $ */
 
 $(document).ready(function () {
+  $('form#filters select').change(function () {
+    console.log('select changed')
+    this.form.submit()
+  })
   $('select').material_select()
   $('.chips').each(function (index) {
     var chip = $(this)
@@ -8,7 +12,8 @@ $(document).ready(function () {
     var objects = []
     if (tagsString.length > 0) {
       try {
-        var tags = $.parseJSON(tagsString)
+        console.log('tag string:' + tagsString)
+        var tags = tagsString.split(',')
         for (var tag in tags) {
           objects.push({
             tag: tags[tag]

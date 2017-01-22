@@ -62,19 +62,23 @@ function deleteCitation (body) {
 }
 
 function addTags (citationId, body) {
-  const putOpts = { method: 'PUT' }
   const { user, tags } = body
   var currentTags = tags
-  console.log(citationId)
   console.log(currentTags)
-  console.log('tags %s', JSON.stringify(currentTags))
+  const putOpts = { method: 'PUT', body: { tags: currentTags } }
+  console.log(citationId)
   const turi = `/studies/${citationId}`
   let treq = send(turi, user, putOpts)
-  let tform = treq.form()
-  tform.append('tags', JSON.stringify(currentTags))
   return treq
 }
 
+function getTags (body) {
+  const { user, reviewId } = body
+  const uri = `/studies/tags?review_id=${reviewId}`
+  let req = send(uri, user)
+  return req
+}
+
 module.exports = {
-  get, post, addTags, deleteCitation
+  get, post, getTags, addTags, deleteCitation
 }
