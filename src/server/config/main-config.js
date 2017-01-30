@@ -52,10 +52,4 @@ module.exports.init = function (app, express) {
     resave: true,
     saveUninitialized: true
   }))
-
-  // assign user information to the locals if possible
-  app.use((req, res, next) => {
-    app.locals.currentUser = req.session.user ? req.session.user : null
-    next()
-  })
 }

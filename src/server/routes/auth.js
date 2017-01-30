@@ -27,7 +27,7 @@ function signin (req, res, next) {
       next()
     })
     .catch(err => {
-      console.log(err)
+      console.log('Login failed: ' + err)
       req.flash('error', 'Could not login with the provided email and password')
       res.redirect('/signin#signin')
     })
