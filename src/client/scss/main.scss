@@ -60,7 +60,10 @@
 			line-height:23px;
 			margin:0;
 		}
-		span {
+		.keyterm {
+			font-weight:bold;
+		}
+		span.authors, span.journal, span.year {
 			color:gray;
 			font-size:12px;
 		}

@@ -11,6 +11,7 @@ module.exports.init = function (app) {
   const teamsRoutes = require('../routes/teams')
   const plansRoutes = require('../routes/plans')
   const citationsRoutes = require('../routes/citations')
+  const fulltextRoutes = require('../routes/fulltext')
 
   // *** register routes *** //
   app.use('/', routes)
@@ -21,4 +22,5 @@ module.exports.init = function (app) {
   app.use('/reviews/:reviewId/team', teamsRoutes)
   app.use('/reviews/:reviewId/plan', plansRoutes)
   app.use('/reviews/:reviewId/citations', citationsRoutes)
+  app.use('/reviews/:reviewId/fulltext', fulltextRoutes)
 }

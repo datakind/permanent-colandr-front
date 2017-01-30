@@ -1,0 +1,40 @@
+<li class="{{ shownStatus }}">
+<div class="collapsible-header">
+  {# TODO
+  <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
+  #}
+    <div class="row">
+      <div class="col s12">
+        <p><span class="authors">{{ study.citation.authors }}&nbsp;</span></p>
+        <h3 class="title">{{ study.citation.title | safe}}</h3>
+        <p><span class="journal">{{ study.citation.journal_name }}</span>
+           <span class="year">({{ study.citation.pub_year }})</span>
+         </p>
+       </div>
+    </div>
+  {#
+    <div class="row">
+      <input type="hidden" name="citationId" class="citationId" value="{{ study.id }}" />
+      <input type="hidden" name="action" class="action" value="included" />
+      {% if shownStatus == 'pending' %}
+      {% include './pending.html' %}
+      {% else %}
+      {% include './nonpending.html' %}
+      {% endif %}
+    </div>
+  </form>
+  #}
+</div>
+{#
+<div class="collapsible-body">
+  <div class="row">
+    <div class="col s12">
+      <p class="abstract">{{ study.citation.abstract | safe }}</p>
+      <p><span class="keywords"><span class="keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
+      <input type="hidden" class="startTags" value="{{ study.tags }}" >
+      <div class="chips"></div>
+    </div>
+  </div>
+</div>
+#}
+</li>
