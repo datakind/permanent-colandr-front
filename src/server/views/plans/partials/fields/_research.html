@@ -1,11 +1,14 @@
 <li class="question-wrap">
-  <input id="research_questions_{{ loop.index }}"
-    type="text"
-    class="validate"
-    name="research_questions[]"
-    value="{{ question }}"
-    required>
-  <a class="btn-floating waves-effect waves-light red remove-field-button">
-    <i class="material-icons">remove</i>
-  </a>
+  <div class="research-question-wrap">
+    <div class="research-question-text input-field">
+      <textarea class="materialize-textarea validate"
+                name="research_questions[]"
+                length="300"
+                required>{{ question }}</textarea>
+      <label>Question {{ loop.index }}</label>
+    </div>
+    <a class="btn-floating waves-effect waves-light red research-question-remove">
+      <i class="material-icons">remove</i>
+    </a>
+  </div>
 </li>

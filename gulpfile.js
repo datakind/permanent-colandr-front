@@ -7,6 +7,7 @@ const runSequence = require('run-sequence')
 const nodemon = require('gulp-nodemon')
 const plumber = require('gulp-plumber')
 const sass = require('gulp-sass')
+const child_process = require('child_process')
 
 // *** config *** //
 
@@ -36,6 +37,11 @@ const nodemonConfig = {
   env: {
     NODE_ENV: process.env.NODE_ENV || 'development'
   }
+}
+
+function precompileTemplates () {
+  console.log("Precompiling nunjucks templates to src/client/js/templates.js")
+  child_process.execSync('bin/nunjucks-precompile src/server/views > src/client/js/templates.js')
 }
 
 // *** default task *** //
@@ -70,6 +76,7 @@ gulp.task('styles', () => {
 })
 
 gulp.task('views', () => {
+  precompileTemplates()
   return gulp.src(paths.views)
     .pipe(plumber())
 })
@@ -80,6 +87,7 @@ gulp.task('nodemon', () => {
 
 gulp.task('watch', () => {
   gulp.watch(paths.views, ['views'])
+      .on('ready', precompileTemplates)
   gulp.watch(paths.scss, ['scss'])
   gulp.watch(paths.scripts, ['lint'])
   gulp.watch(paths.css, ['styles'])

@@ -1,10 +1,20 @@
-/* global $ */
+/* global $, document, nunjucks, Materialize */
 
 (function () {
   $(function () {
     $('[id^="add-field-"]').on('click', appendQ)
-    $('form').on('click', '.remove-field-button', removeQ)
+    $('form').on('click', '.research-question-remove', removeQuestion)
     $('form').on('change', '[id^="data_extraction_form_field_type_"]', updateDataExtractionField)
+
+    // Prevent submission of bad research question
+    $('#form-research-questions').submit(function (ev) {
+      let invalidEls = $(this).find('.invalid')
+      if (invalidEls.length > 0) {
+        ev.preventDefault()
+        invalidEls.parent().effect('highlight', {}, 3000)
+        Materialize.toast('Research questions form contains invalid entries!', 3000, 'red')
+      }
+    })
   })
 
   function appendQ (e) {
@@ -13,7 +23,7 @@
     var section = $el.attr('id').replace('add-field-', '')
     switch (section) {
       case 'research-questions':
-        newResearchQuestionField()
+        addQuestion()
         break
       case 'keyterms':
         newKeytermField()
@@ -30,25 +40,27 @@
     }
   }
 
-  function removeQ (e) {
-    e.preventDefault()
-    $(this).closest('.question-wrap').remove()
+  /**
+   * Adds a question to the list of research questions by cloning the templates.
+   */
+  function addQuestion () {
+    var questionList = document.querySelector('#form-research-questions > ul')
+    var templ = nunjucks.render('plans/partials/fields/_research.html', {
+      loop: {
+        index: questionList.children.length + 1
+      }
+    })
+    var el = $.parseHTML($.trim(templ))[0]
+
+    questionList.appendChild(el)
   }
 
-  function newResearchQuestionField () {
-    var $form = $('#form-research-questions')
-    var idNum = $form.find('li').length + 1
-    var $li = $('<li class="question-wrap"></li>')
-    var $input = $('<input/>')
-      .attr('id', 'research_questions_' + idNum)
-      .attr('type', 'text')
-      .attr('class', 'validate')
-      .attr('name', 'research_questions[]')
-      .attr('required', '')
-
-    var $removeBtn = newRemoveButton()
-    $li.append($input).append($removeBtn)
-    $form.find('ol').append($li)
+  /**
+   * Removes the question from the list of research questions.
+   */
+  function removeQuestion (e) {
+    e.preventDefault() // Prevents following the <a> link
+    $(this).closest('.question-wrap').remove()
   }
 
   function newKeytermField () {

@@ -5,7 +5,7 @@ const api = require('./api')
 router.get('/',
   api.populateBodyWithDefaults,
   index)
-router.put('/:id',
+router.put('/',
   api.populateBodyWithDefaults,
   parseLists,
   update)
@@ -23,7 +23,7 @@ function update (req, res, next) {
   const section = req.body.fields.replace(/_/g, '-')
 
   api.plans.update(req.body)
-    .then(plan => res.redirect(`/reviews/${plan.review_id}/plan#${section}-a`))
+    .then(plan => res.redirect(`/reviews/${plan.id}/plan#${section}-a`))
     .catch(api.handleError(next))
 }
 

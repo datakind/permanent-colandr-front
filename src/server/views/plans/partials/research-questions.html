@@ -4,15 +4,14 @@
     <div class="section-header card-panel z-depth-0 grey lighten-3">
       <h2>Research Questions</h2>
     </div>
-    <form action="/reviews/{{ plan.review_id }}/plan/{{ plan.id }}?_method=PUT"
+    <form action="?_method=PUT"
       method="POST"
-      class="input-field"
       id="form-research-questions">
-      <ol>
+      <ul>
         {% for question in plan.research_questions %}
           {% include './fields/_research.html' %}
         {% endfor %}
-      </ol>
+      </ul>
 
       <button id="add-field-research-questions"
         class="btn btn-large z-depth-0 green lighten-2">

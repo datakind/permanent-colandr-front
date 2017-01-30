@@ -4,9 +4,8 @@
     <div class="section-header card-panel z-depth-0 grey lighten-3">
       <h2>PICO</h2>
     </div>
-    <form action="/reviews/{{ plan.review_id }}/plan/{{ plan.id }}?_method=PUT"
-      method="POST"
-      class="input-field">
+    <form action="?_method=PUT"
+          method="POST">
       {% set field = 'population' %}
       {% include './fields/_pico.html' %}
 
