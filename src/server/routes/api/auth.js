@@ -1,7 +1,10 @@
 const { send } = require('./helpers')
 const Promise = require('bluebird')
+const dateformat = require('dateformat')
 const jwt = require('jsonwebtoken')
 Promise.promisifyAll(jwt)
+
+const kRefreshAfterSec = 300
 
 function signin (body) {
   let { email, password } = body
@@ -14,6 +17,7 @@ function signin (body) {
       sendImmediately: false
     }
   })
+  .then(user => Object.assign(user, { lastRefreshed: Date.now() }))
 }
 
 function signup (body) {
@@ -26,10 +30,37 @@ function signup (body) {
   })
 }
 
+function datestr (timestamp) {
+  return dateformat(new Date(timestamp), 'isoDateTime')
+}
+
+function tokenDesc (token) {
+  let decoded = jwt.decode(token, {complete: true})
+  let expiresAt = decoded.header.exp * 1000
+  return `Token id=${decoded.payload.id} exp ${datestr(expiresAt)}`
+}
+
 function _verify (user) {
-  let token = user && user.token
-  return jwt.verifyAsync(token, process.env.JWT_SECRET_KEY)
-  .then(payload => ({ token: token, user_id: payload.id }))
+  return Promise.try(() => {
+    if (user.lastRefreshed && Date.now() > user.lastRefreshed + kRefreshAfterSec * 1000) {
+      // It's been a while since the token was issued; let's refresh it.
+      console.log('Refreshing old token: %s', tokenDesc(user.token))
+      return send('/authtoken', user)
+      .then(user => Object.assign(user, { lastRefreshed: Date.now() }))
+      .catch(err => {
+        console.log('Refresh failed: %s', err)
+        return user
+      })
+    } else {
+      return user
+    }
+  })
+  .then(user => {
+    console.log('Verifying auth token: %s obtained at %s', tokenDesc(user.token),
+      datestr(user.lastRefreshed))
+    return jwt.verifyAsync(user.token, process.env.JWT_SECRET_KEY)
+    .then(payload => Object.assign({}, user, { user_id: payload.id }))
+  })
 }
 
 function devAutoSignin (next) {
@@ -49,8 +80,8 @@ function devAutoSignin (next) {
 }
 
 function authenticate (req, res, next) {
-  let { user } = req.session
   return Promise.try(() => {
+    let { user } = req.session
     if (user && user.token) {
       return _verify(user)
     }
@@ -60,10 +91,9 @@ function authenticate (req, res, next) {
     throw new Error('You must be logged in to reach this page.')
   })
   .then(
-    userInfo => {
-      // TODO: Refresh token
-      req.session.user = userInfo
-      res.locals.currentUser = userInfo
+    user => {
+      req.session.user = user
+      res.locals.currentUser = user
       next()
     },
     err => {

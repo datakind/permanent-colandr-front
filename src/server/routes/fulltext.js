@@ -1,7 +1,6 @@
 const bluebird = require('bluebird')
 const _ = require('lodash')
-const express = require('express')
-const router = express.Router({ mergeParams: true })
+const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 const { send } = require('./api/helpers')
 const keyterms = require('./keyterms')
@@ -43,7 +42,7 @@ function showStudies (req, res) {
   }
 
   return bluebird.join(
-    api.progress.get(req.body, 'True', 'fulltext_screening'),
+    api.progress.get(req.body, true, 'fulltext_screening'),
     api.plans.get(req.body),
     api.users.getTeam(user, req.body),
     api.citations.getTags(req.body, pageNum),

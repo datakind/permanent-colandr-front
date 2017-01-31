@@ -10,21 +10,22 @@ module.exports.init = function (app) {
     next(err)
   })
 
-  // development error handler (will print stacktrace)
-  if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-      res.status(err.status || 500).send({
-        message: err.message,
-        error: err
-      })
-    })
-  }
+  let development = (app.get('env') === 'development')
 
   // production error handler (no stacktraces leaked to user)
   app.use(function (err, req, res, next) {
-    res.status(err.status || 500).send({
-      message: err.message,
-      error: {}
-    })
+    if (err.statusCode === 401) {
+      console.log('Error processing request:', err.toString())
+      req.session.user = null
+      req.flash('error', (err.error || err).message)
+      res.redirect('/signin#signin')
+    } else {
+      res.status(err.status || 500)
+      .send({
+        message: err.message,
+        // Show stacktraces in development but don't leak to user in production.
+        error: development ? err : {}
+      })
+    }
   })
 }

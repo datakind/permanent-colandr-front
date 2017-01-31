@@ -9,8 +9,8 @@ module.exports = {
   imports: require('./imports'),
   handleError: (cb) => {
     return (err) => {
-      console.error('Error:', err)
-      cb()
+      console.error('Error:', err.message)
+      cb(err)
     }
   },
   populateBodyWithDefaults: (req, res, next) => {
