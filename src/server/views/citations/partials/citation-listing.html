@@ -5,7 +5,7 @@
 		<div class = "col s12">
 		 <p>  <span class = "authors">{{ study.citation.authors | replace(", ",", ") }}&nbsp;</span>	</p>
 		 <h3 class = "title">
-				  {{ study.citation.title }}
+				  {{ study.citation.title | safe }}
 		</h3>
 			<p><span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">({{ study.citation.pub_year }})</span></p></div>
 		  </div>

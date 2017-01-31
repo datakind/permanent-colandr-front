@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router({ mergeParams: true })
 const api = require('./api')
 const { send } = require('./api/helpers')
+const keyterms = require('./keyterms')
 
 router.get('/', api.populateBodyWithDefaults, showStudies)
 router.get('/:status', api.populateBodyWithDefaults, showStudies)
@@ -54,9 +55,9 @@ function showStudies (req, res) {
       let firstNavPage = _.clamp(pageNum - 5, 1, numPages)
       let lastNavPage = _.clamp(firstNavPage + 9, 1, numPages)
 
-      let keytermsRE = getKeytermsRE(plan.keyterms)
+      let keytermsRE = keyterms.getKeytermsRE(plan.keyterms)
       for (let study of studies) {
-        markKeywordsCitation(study.citation, keytermsRE)
+        keyterms.markKeywordsCitation(study.citation, keytermsRE)
       }
 
       res.render('fulltext/show', {
@@ -79,34 +80,6 @@ function showStudies (req, res) {
       })
     }
   )
-}
-
-function getKeytermsRE (keyterms) {
-  // Collect all keyterms and synonyms.
-  let termSet = new Set()
-  for (let term of keyterms) {
-    termSet.add(term.term)
-    for (let syn of term.synonyms) {
-      termSet.add(syn)
-    }
-  }
-
-  // Convert to an array, sorted by decreasing length.
-  let sortedTerms = Array.from(termSet).sort((a, b) => (b.length - a.length))
-  let escapedTerms = sortedTerms.map(term => _.escapeRegExp(term))
-  return new RegExp(escapedTerms.join('|'), 'gi')
-}
-
-function markKeywordsCitation (citation, keytermsRE) {
-  if (citation) {
-    citation.title = markKeywords(citation.title, keytermsRE)
-    citation.abstract = markKeywords(citation.abstract, keytermsRE)
-    citation.keywords = citation.keywords && citation.keywords.map(k => markKeywords(k, keytermsRE))
-  }
-}
-
-function markKeywords (text, keytermsRE) {
-  return text && text.replace(keytermsRE, '<span class="keyterm">$&</span>')
 }
 
 module.exports = router

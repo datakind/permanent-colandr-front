@@ -27,9 +27,18 @@
 	}
 }
 
+.reviews-list.hide-highlights {
+  .keyterm {
+    font-weight: normal;
+  }
+}
+
 .reviews-list {
 	margin-top:5px;
 	
+  .keyterm {
+    font-weight:bold;
+  }
 	
 	.btn-small {
 	    height: 24px;
@@ -59,9 +68,6 @@
 			font-size:20px;
 			line-height:23px;
 			margin:0;
-		}
-		.keyterm {
-			font-weight:bold;
 		}
 		span.authors, span.journal, span.year {
 			color:gray;
@@ -129,9 +135,6 @@
 		}
 	}
 	.collapsible-body {
-		.keyterm {
-			font-weight:bold;
-		}
 		p.abstract {
 			font-size:13px;
 		}

@@ -349,15 +349,8 @@ $(document).ready(function () {
   $('#filters .highlights').click(function (e) {
     e.stopPropagation()
     e.preventDefault()
-    var keyTerms = $('.reviews-list .collapsible-body .keyterm')
-    var jthis = $(this)
-    if (jthis.is('.highlightsoff')) {
-      keyTerms.css('font-weight', 'bold')
-      jthis.text('Highlights_On')
-    } else {
-      keyTerms.css('font-weight', 'normal')
-      jthis.text('Highlights_Off')
-    }
     $(this).toggleClass('highlightson').toggleClass('highlightsoff')
+    $(this).text($(this).hasClass('highlightson') ? 'Highlights_On' : 'Highlights_Off')
+    $('.reviews-list').toggleClass('hide-highlights')
   })
 })
