@@ -27,9 +27,76 @@
 
     <hr>
 
-    {% include './partials/planning.html' %}
-    {% include './partials/citation-screening.html' %}
-    {% include './partials/full-text-screening.html' %}
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-3 z-depth-0">
+        <div class="col offset-s1 s10">
+          <a href="/reviews/{{ review.id }}/plan">
+            <h2>Planning</h2>
+          </a>
+          <div class="review-row">
+            {% for item in plan %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/plan#{{ item.route }}-a">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }}
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-3 z-depth-0">
+        <div class="col offset-s1 s10">
+          <div class="row valign-wrapper">
+            <div class="col s8">
+              <a href="/reviews/{{ review.id }}/citations">
+                <h2>Citation Screening</h2>
+              </a>
+            </div>
+            <div class="col s4">
+              <a class="btn right valign" href="/reviews/{{ review.id }}/citations/import" style="z-index: 1;">Import</a>
+            </div>
+          </div>
+          <div class="review-row">
+            {% for item in progress %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/citations/{{ item.route }}">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }} ({{ item.citation_count }})
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-3 z-depth-0">
+        <div class="col offset-s1 s10">
+          <a href="/reviews/{{ review.id }}/fulltext">
+            <h2>Full-text Screening</h2>
+          </a>
+          <div class="review-row">
+            {% for item in progress %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/fulltext/{{ item.route }}">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }} ({{ item.fulltext_count }})
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 {% endblock %}

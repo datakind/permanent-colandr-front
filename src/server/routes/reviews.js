@@ -1,3 +1,4 @@
+const Promise = require('bluebird')
 const express = require('express')
 const router = express.Router()
 const api = require('./api')
@@ -24,9 +25,32 @@ function newReview (req, res, next) {
 }
 
 function show (req, res, next) {
-  api.reviews.get(req.session.user, req.params.id)
-    .then(review => res.render('reviews/show', { review }))
-    .catch(api.handleError(next))
+  return Promise.join(
+    api.reviews.get(req.session.user, req.params.id),
+    api.progress.get({reviewId: req.params.id, user: req.session.user}, true),
+    (review, progress) => {
+      let planDisplay = [
+        {title: 'objective', route: 'objective'},
+        {title: 'questions', route: 'research-questions'},
+        {title: 'pico', route: 'pico'},
+        {title: 'key terms', route: 'keyterms'},
+        {title: 'selection criteria', route: 'selection-criteria'},
+        {title: 'extraction form', route: 'data-extraction-form'}]
+      let progressDisplay = [
+        {title: 'unscreened', route: 'pending'},
+        {title: 'awaiting', route: 'awaiting_coscreener'},
+        {title: 'conflict', route: 'conflict'},
+        {title: 'excluded', route: 'excluded'},
+        {title: 'included', route: 'included'}
+      ]
+      progressDisplay.forEach(item => {
+        item.citation_count = progress.citation_screening[item.route]
+        item.fulltext_count = progress.fulltext_screening[item.route]
+      })
+      res.render('reviews/show', {review: review, progress: progressDisplay, plan: planDisplay})
+    }
+  )
+  .catch(api.handleError(next))
 }
 
 function settings (req, res, next) {
