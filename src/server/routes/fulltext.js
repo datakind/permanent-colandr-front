@@ -1,11 +1,15 @@
 const bluebird = require('bluebird')
+const path = require('path')
 const _ = require('lodash')
+const request = require('request')
 const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 const { send } = require('./api/helpers')
 const keyterms = require('./keyterms')
 
 router.get('/', api.populateBodyWithDefaults, showStudies)
+router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
+router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
 router.get('/:status', api.populateBodyWithDefaults, showStudies)
 router.get('/:status/:page', api.populateBodyWithDefaults, showStudies)
 
@@ -79,6 +83,36 @@ function showStudies (req, res) {
       })
     }
   )
+}
+
+function apiGetOneStudy (user, id) {
+  let fields = 'id,citation.title,fulltext_status,fulltext.filename,fulltext.original_filename,fulltext.screenings'
+  return send(`/studies/${id}`, user, { qs: { fields: fields } })
+}
+
+function showFullText (req, res) {
+  const { reviewId, user } = req.body
+  return apiGetOneStudy(user, req.params.id)
+  .then(study => {
+    res.render('fulltext/review', {
+      reviewId: reviewId,
+      study: study,
+      pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
+    })
+  })
+}
+
+function showPDF (req, res) {
+  const { user } = req.body
+  let options = {
+    uri: path.dirname(process.env.API_URL) + `/fulltexts/${req.params.id}/upload`,
+    auth: { user: user.token }
+  }
+  // Unlike other routes, this uses request library to stream the response from the backend to the
+  // browser, without downloading it into memory first.
+  res.type('pdf')
+  let stream = request.get(options)
+  stream.pipe(res)
 }
 
 module.exports = router

@@ -47,6 +47,7 @@ module.exports.init = function (app, express) {
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(flash())
   app.use(express.static(path.join(__dirname, '..', '..', 'client')))
+  app.use('/pdfjs', express.static(path.join(__dirname, '..', '..', '..', 'third-party', 'pdfjs-dist')))
   app.use(session({
     secret: process.env.SESSION_SECRET_KEY,
     resave: true,

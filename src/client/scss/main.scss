@@ -199,3 +199,13 @@
 		}
 	}
 }
+
+.fulltext-title {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+
+  .material-icons, .icon-text {
+    vertical-align: middle;
+  }
+}
