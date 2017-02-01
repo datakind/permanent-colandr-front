@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css">
+{% endblock %}
+
+{% block content %}
+{% set pageType = 'extraction' %}
+<div class="reviews reviews-page container">
+  <div class="row">
+    <div class="col s12">
+      <h1>
+        <a href="/reviews/{{ reviewId }}">
+          <i class="small material-icons">fast_rewind</i>
+        </a>
+        Data Extraction
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s6">
+      <ul class="tabs">
+        <li class="tab col s2"><a {% if status == "not_started" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/not_started">screen [{{ counts.not_started }}]</a></li>
+        <li class="tab col s2"><a {% if status == "incomplete" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/incomplete">awaiting [{{ counts.incomplete }}]</a></li>
+        <li class="tab col s2"><a {% if status == "complete" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/complete">in conflict [{{ counts.complete }}]</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class='reviews-list'>
+    <ul class="collapsible popout" data-collapsible="accordion">
+    {% for study in studies %}
+    {% include '../citations/partials/citation-listing.html' %}
+    {% endfor %}
+    </ul>
+  </div>
+
+  {% set fromPage = 0 if page-9 < 0 else page-9 %}
+  {% set toPage = numPages if fromPage+10 > numPages-1 else fromPage+10 %}
+  <div class='row card-panel grey lighten-3 z-depth-0'>
+    <ul class='pagination'>
+      {% if page > 0 %}
+      <li class='waves-effect'>
+        <a href='?page={{ page - 1 }}'><i class="material-icons">chevron_left</i></a></li>
+      {% else %}
+      <li class='disabled'><a><i class="material-icons">chevron_left</i></a></li>
+      {% endif %}
+
+      {% for i in range(fromPage, toPage) %}
+      <li class="{{ 'active' if i == page else 'waves-effect'}}"><a href="?page={{i}}">{{i+1}}</a></li>
+      {% endfor %}
+
+      {% if page < numPages - 1 %}
+      <li class='waves-effect'>
+        <a href='?page={{ page + 1 }}'><i class="material-icons">chevron_right</i></a></li>
+      {% else %}
+      <li class='disabled'><a><i class="material-icons">chevron_right</i></a></li>
+      {% endif %}
+    </ul>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- <script type="text/javascript" src="/js/plan.js"></script> -->
+{% endblock %}
