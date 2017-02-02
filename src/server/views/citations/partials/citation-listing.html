@@ -9,7 +9,7 @@
           </h3>
           <p><span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">({{ study.citation.pub_year }})</span></p></div>
       </div>
-      {% if (pageType === 'citations') %}
+      {% block buttons %}
       <div class = "row">
         <input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
         <input type = "hidden" name = "action" class = "action" value="included" />
@@ -19,11 +19,7 @@
         {% include './nonpending.html' %}
         {% endif %}
       </div>
-      {% elif (pageType === 'extraction') %}
-      <div class='row'>
-        <a class='btn waves-effect waves-light btn-small grey'>Review Tags</a>
-      </div>
-      {% endif %}
+      {% endblock %}
     </form>
   </div>
   <div class="collapsible-body">
