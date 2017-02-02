@@ -7,6 +7,7 @@ module.exports = {
   users: require('./users'),
   plans: require('./plans'),
   imports: require('./imports'),
+  fulltext: require('./fulltext'),
   handleError: (cb) => {
     return (err) => {
       console.error('Error:', err.message)
