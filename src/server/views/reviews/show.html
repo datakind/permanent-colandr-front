@@ -97,6 +97,27 @@
       </div>
     </div>
 
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-3 z-depth-0">
+        <div class="col offset-s1 s10">
+          <a href="/reviews/{{ review.id }}/extraction">
+            <h2>Data Extraction</h2>
+          </a>
+          <div class="review-row">
+            {% for item in extractProgress %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/extraction/{{ item.route }}">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }} ({{ item.count }})
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 {% endblock %}

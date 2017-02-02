@@ -47,7 +47,17 @@ function show (req, res, next) {
         item.citation_count = progress.citation_screening[item.route]
         item.fulltext_count = progress.fulltext_screening[item.route]
       })
-      res.render('reviews/show', {review: review, progress: progressDisplay, plan: planDisplay})
+      let extractProgress = [
+        { title: 'not started', route: 'not_started', count: progress.data_extraction.not_started },
+        { title: 'incomplete', route: 'incomplete', count: progress.data_extraction.started },
+        { title: 'complete', route: 'complete', count: progress.data_extraction.finished }
+      ]
+      res.render('reviews/show', {
+        review: review,
+        progress: progressDisplay,
+        plan: planDisplay,
+        extractProgress
+      })
     }
   )
   .catch(api.handleError(next))
