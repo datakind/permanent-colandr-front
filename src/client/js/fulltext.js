@@ -99,28 +99,26 @@ $(document).ready(function () {
     e.stopPropagation()
     e.preventDefault()
     var form = $(this).closest('form')
-    var serialized = form.serialize()
-    console.log(serialized)
+    var studyId = $(this).closest('.fulltext-li').attr('data-study-id')
     var action = form.find('.action')
     $.ajax({
       url: '/reviews/{{ reviewId }}/fulltext/screenings/delete',
       context: document.body,
       method: 'POST',
       type: 'POST',
-      data: serialized,
-      error: function (jqXHR, textStatus, errorThrown) {
+      data: { studyId: studyId },
+      error: (jqXHR, textStatus, errorThrown) => {
         action.val('included')
         // alert(errorThrown)
         $('.removing').each(function (index) {
           $(this).attr('style', 'display:none')
         })
       },
-      success: function (data, textStatus, jqXHR) {
-        console.log(data)
+      success: (data, textStatus, jqXHR) => {
         $('.removing').each(function (index) {
           $(this).attr('style', 'display:none')
         })
-        form.closest('li').slideUp()
+        $(this).closest('.fulltext-li').slideUp()
       }
     })
   })
@@ -156,17 +154,13 @@ $(document).ready(function () {
     var form = $(this).closest('form')
     var action = form.find('.action')
     action.val('included')
-    // var li = form.closest('li')
-    var serialized = form.serialize()
-    var url = '/reviews/{{ reviewId }}/fulltext/screenings/change'
-    console.log(url)
-    console.log(serialized)
+    var studyId = $(this).closest('.fulltext-li').attr('data-study-id')
     $.ajax({
-      url: url,
+      url: '/reviews/{{ reviewId }}/fulltext/screenings/change',
       context: document.body,
       method: 'POST',
       type: 'POST',
-      data: serialized,
+      data: { studyId: studyId },
       error: function (jqXHR, textStatus, errorThrown) {
         // alert(errorThrown)
         $('.editinclusion').each(function (index) {
@@ -174,7 +168,6 @@ $(document).ready(function () {
         })
       },
       success: function (data, textStatus, jqXHR) {
-        console.log(data)
         $('.editinclusion').each(function (index) {
           $(this).attr('style', 'display:none')
         })

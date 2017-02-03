@@ -118,12 +118,13 @@ function screenFulltexts (req, res, next) {
 function changeFulltext (req, res, next) {
   api.fulltext.deleteFulltext(req.body)
   .then(d => api.fulltext.post(req.body))
-  .then(data => res.json(data))
+  .then(() => res.end())
 }
 
 function deleteFulltext (req, res, next) {
+  console.warn('REQ BODY', req.body)
   api.fulltext.deleteFulltext(req.body)
-  .then(data => res.json(data))
+  .then(() => res.end())
 }
 
 function uploadFulltext (req, res, next) {
