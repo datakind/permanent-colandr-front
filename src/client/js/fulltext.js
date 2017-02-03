@@ -150,11 +150,10 @@ $(document).ready(function () {
   $('.editinclusion a.ok').click(function (e) {
     e.stopPropagation()
     e.preventDefault()
-    console.log('JSON Request')
     var form = $(this).closest('form')
+    var studyId = $(this).closest('.fulltext-li').attr('data-study-id')
     var action = form.find('.action')
     action.val('included')
-    var studyId = $(this).closest('.fulltext-li').attr('data-study-id')
     $.ajax({
       url: '/reviews/{{ reviewId }}/fulltext/screenings/change',
       context: document.body,
@@ -181,10 +180,11 @@ $(document).ready(function () {
     e.stopPropagation()
     e.preventDefault()
     console.log('JSON Request')
-    var form = $(this).closest('form')
+    var form = $(this).closest('.fulltext-selection-form')
     var action = form.find('.action')
     console.log(action)
     action.val('excluded')
+    console.warn('FORM!!!!')
     console.log(form)
     var serialized = form.serialize()
     console.log(serialized)

@@ -40,12 +40,15 @@
           Upon removing this screening, citation will be returned to your screen list.
         </div>
         <div class = "editexclusions" style="display:none;">
-          <ul>
-          {% for selection in selectionCriteria %}
-          {% include './partials/selection-criteria.html' %}
-          {% endfor %}
-          </ul>
-          <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+          <form class="fulltext-selection-form" action="/reviews/{{ reviewId }}/fulltext/screenings/{{ shownStatus }}/{{ page }}" method="post">
+              <input type = "hidden" name = "studyId" class = "studyId" value="{{ study.id }}" />
+              <ul>
+              {% for selection in selectionCriteria %}
+              {% include './partials/selection-criteria.html' %}
+              {% endfor %}
+              </ul>
+            <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+          </form>
         </div>
         {% if screen.status == "excluded" %}
         <div class = "editinclusion" style="display:none;">

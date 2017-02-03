@@ -14,6 +14,7 @@ function create (body, { uploaded_file: [file] }) {
 }
 
 function post (body) {
+  console.warn('POST BODY', body)
   const { user, studyId, criteria, action } = body
   const opts = { method: 'POST' }
   const uri = `/fulltexts/${studyId}/screenings`
