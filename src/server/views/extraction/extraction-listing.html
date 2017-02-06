@@ -2,6 +2,8 @@
 
 {% block buttons %}
 <div class='row'>
-  <a class='btn waves-effect waves-light btn-small grey'>Review Tags</a>
+  {% if study.fulltext.filename %}
+  <a class='btn waves-effect waves-light btn-small grey review-btn' href="/reviews/1/extraction/tagreview/{{ study.id }}">Review Tags</a>
+  {% endif %}
 </div>
 {% endblock %}

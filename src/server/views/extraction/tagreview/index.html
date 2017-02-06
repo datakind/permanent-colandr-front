@@ -2,6 +2,7 @@
 
 {% block css %}
   <link rel="stylesheet" href="/css/reviews.css">
+  <link rel="stylesheet" href="/css/extraction.css">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +11,7 @@
   <div class="row">
     <div class="col s12">
       <h1>
-        <a href="/reviews/{{ reviewId }}">
+        <a href="/reviews/{{ reviewId }}/extraction">
           <i class="small material-icons">fast_rewind</i>
         </a>
         Data Extraction - Tag Review
@@ -19,50 +20,38 @@
   </div>
 
   <div class="row">
-    <div class="col s6">
-      <ul class="tabs">
-        <li class="tab col s2"><a {% if status == "not_started" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/not_started">screen [{{ counts.not_started }}]</a></li>
-        <li class="tab col s2"><a {% if status == "incomplete" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/incomplete">awaiting [{{ counts.incomplete }}]</a></li>
-        <li class="tab col s2"><a {% if status == "complete" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/complete">in conflict [{{ counts.complete }}]</a></li>
-      </ul>
+  {% for key, sentences in tags %}
+    <div class="tagreview-listing" data-status="pending">
+      <div class="tagreview-header grey">
+        <div class="tagreview-title">Sentences related to {{ key }}</div>
+        <div class="tagreview-status">Under Review</div>
+      </div>
+      <div class="tagreview-body">
+        <div class="tagreview-data">
+        {% for item in sentences %}
+          <div class="tagreview-confidence">{{ loop.index }}. Confidence: {{ (item.confidence * 100) | round }}%</div>
+          <div class="tagreview-sentence">{{ item.sentence }}</div>
+        {% endfor %}
+        </div>
+        <div class="tagreview-options">
+          <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">
+            Accept
+          </button>
+          <button class="btn waves-effect waves-light grey btn-small skip-btn" type="button">
+            Skip
+          </button>
+          <button class="btn waves-effect waves-light red btn-small reject-btn" type="button">
+            Reject
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class='reviews-list'>
-    <ul class="collapsible popout" data-collapsible="accordion">
-    {% for study in studies %}
-    {% include './extraction-listing.html' %}
-    {% endfor %}
-    </ul>
-  </div>
-
-  {% set fromPage = 0 if page-9 < 0 else page-9 %}
-  {% set toPage = numPages if fromPage+10 > numPages-1 else fromPage+10 %}
-  <div class='row card-panel grey lighten-3 z-depth-0'>
-    <ul class='pagination'>
-      {% if page > 0 %}
-      <li class='waves-effect'>
-        <a href='?page={{ page - 1 }}'><i class="material-icons">chevron_left</i></a></li>
-      {% else %}
-      <li class='disabled'><a><i class="material-icons">chevron_left</i></a></li>
-      {% endif %}
-
-      {% for i in range(fromPage, toPage) %}
-      <li class="{{ 'active' if i == page else 'waves-effect'}}"><a href="?page={{i}}">{{i+1}}</a></li>
-      {% endfor %}
-
-      {% if page < numPages - 1 %}
-      <li class='waves-effect'>
-        <a href='?page={{ page + 1 }}'><i class="material-icons">chevron_right</i></a></li>
-      {% else %}
-      <li class='disabled'><a><i class="material-icons">chevron_right</i></a></li>
-      {% endif %}
-    </ul>
+  {% endfor %}
   </div>
 
 </div>
 {% endblock %}
 
 {% block scripts %}
-  <!-- <script type="text/javascript" src="/js/plan.js"></script> -->
+  <script type="text/javascript" src="/js/extraction.js"></script>
 {% endblock %}
