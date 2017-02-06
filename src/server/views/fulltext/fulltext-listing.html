@@ -1,40 +1,88 @@
-<li class="{{ shownStatus }}">
+<li class="fulltext-li {{ shownStatus }}" data-study-id="{{ study.id }}">
 <div class="collapsible-header">
-  {# TODO
-  <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
-  #}
-    <div class="row">
-      <div class="col s12">
-        <p><span class="authors">{{ study.citation.authors }}&nbsp;</span></p>
-        <h3 class="title">{{ study.citation.title | safe}}</h3>
-        <p><span class="journal">{{ study.citation.journal_name }}</span>
-           <span class="year">({{ study.citation.pub_year }})</span>
-         </p>
-       </div>
+  <div class="row">
+    <div class="col s12">
+      <p><span class="authors">{{ study.citation.authors | join("; ") }}&nbsp;</span></p>
+      <h3 class="title">{{ study.citation.title | safe}}</h3>
+      <p><span class="journal">{{ study.citation.journal_name }}</span>
+         <span class="year">({{ study.citation.pub_year }})</span>
+       </p>
     </div>
-  {#
-    <div class="row">
-      <input type="hidden" name="citationId" class="citationId" value="{{ study.id }}" />
-      <input type="hidden" name="action" class="action" value="included" />
-      {% if shownStatus == 'pending' %}
-      {% include './pending.html' %}
+  </div>
+  <div class="row">
+    {% if shownStatus == 'pending' %}
+    <div class="decision-form-box col s12">
+      {% if study.fulltext.filename %}
+      {% include './partials/fields/_include-form.html' %}
       {% else %}
-      {% include './nonpending.html' %}
+      {% include './partials/fields/_upload-form.html' %}
       {% endif %}
     </div>
-  </form>
-  #}
+    {% else %}
+    <ul class="collection screens">
+      {% for screen in study.fulltext.screenings %}
+      <li class = "{{ screen.status }}">
+        {% if userId == screen.user_id %}
+        <div class = "screenuser active">{{ users[screen.user_id] }}</div>
+        <div class = "dropdown" style="display:none;">
+          <ul>
+            <li><a href = "#" class = "remove"><i class="tiny material-icons">restore</i>remove</a></li>
+            <li><a href = "#" class = "switch"><i class="tiny material-icons">repeat</i>switch</a></li>
+            {% if screen.status == "excluded" %}
+            <li><a href = "#" class = "edit"><i class="tiny material-icons">repeat</i>edit</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        <div class = "removing" style="display:none;">
+          Upon removing this screening, this citation will be returned to your <strong>screen</strong> list. <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+        </div>
+        <div class = "switching" style="display:none;">
+          Upon removing this screening, citation will be returned to your screen list.
+        </div>
+        <div class = "editexclusions" style="display:none;">
+          <form class="fulltext-selection-form" action="/reviews/{{ reviewId }}/fulltext/screenings/{{ shownStatus }}/{{ page }}" method="post">
+              <input type = "hidden" name = "studyId" class = "studyId" value="{{ study.id }}" />
+              <ul>
+              {% for selection in selectionCriteria %}
+              {% include './partials/selection-criteria.html' %}
+              {% endfor %}
+              </ul>
+            <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+          </form>
+        </div>
+        {% if screen.status == "excluded" %}
+        <div class = "editinclusion" style="display:none;">
+          Change your screening for this citation to <strong>include</strong> this citation?
+          <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class = "screenuser">{{ users[screen.user_id] }}</div>
+        {% endif %}
+        {% if screen.status == 'excluded' %}
+        <ul>
+          {% for reason in screen.exclude_reasons %}
+          <li> <i class="tiny material-icons">thumb_down</i>{{ reason }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
 </div>
-{#
 <div class="collapsible-body">
   <div class="row">
     <div class="col s12">
-      <p class="abstract">{{ study.citation.abstract | safe }}</p>
-      <p><span class="keywords"><span class="keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
-      <input type="hidden" class="startTags" value="{{ study.tags }}" >
-      <div class="chips"></div>
+      <form>
+        <p class="abstract">{{ study.citation.abstract | safe }}</p>
+        <p><span class="keywords"><span class="keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
+        <input type="hidden" class="startTags" value="{{ study.tags }}" >
+        <input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
+        <div class="chips"></div>
+      </form>
     </div>
   </div>
 </div>
-#}
 </li>
