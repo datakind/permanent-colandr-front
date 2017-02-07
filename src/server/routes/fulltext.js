@@ -14,16 +14,17 @@ router.post('/upload', upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
 
 router.get('/', api.populateBodyWithDefaults, showFulltexts)
 router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
-router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
-router.get('/:status', api.populateBodyWithDefaults, showFulltexts)
-router.get('/:status/:page', api.populateBodyWithDefaults, showFulltexts)
 
-router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts,
-  showFulltexts)
+router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
+
 router.post('/screenings/submit', api.populateBodyWithDefaults, screenFulltext)
 router.post('/screenings/change', api.populateBodyWithDefaults, changeFulltext)
 router.post('/screenings/delete', api.populateBodyWithDefaults, deleteFulltext)
+router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
 router.post('/screenings', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
+
+router.get('/:status', api.populateBodyWithDefaults, showFulltexts)
+router.get('/:status/:page', api.populateBodyWithDefaults, showFulltexts)
 
 const kStatusList = [
   {status: 'pending', name: 'screen'},
