@@ -11,17 +11,20 @@ const keyterms = require('./keyterms')
 router.post('/upload', upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
   api.populateBodyWithDefaults,
   uploadFulltext)
+
 router.get('/', api.populateBodyWithDefaults, showFulltexts)
 router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
-router.get('/:status', api.populateBodyWithDefaults, showFulltexts)
-router.get('/:status/:page', api.populateBodyWithDefaults, showFulltexts)
+
 router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
-router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts,
-  showFulltexts)
+
 router.post('/screenings/submit', api.populateBodyWithDefaults, screenFulltext)
 router.post('/screenings/change', api.populateBodyWithDefaults, changeFulltext)
 router.post('/screenings/delete', api.populateBodyWithDefaults, deleteFulltext)
+router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
 router.post('/screenings', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
+
+router.get('/:status', api.populateBodyWithDefaults, showFulltexts)
+router.get('/:status/:page', api.populateBodyWithDefaults, showFulltexts)
 
 const kStatusList = [
   {status: 'pending', name: 'screen'},
@@ -101,34 +104,33 @@ function apiGetOneStudy (user, id) {
 }
 
 function showFulltexts (req, res) {
-  getContext(req, res).then(ctx => {
+  return getContext(req, res).then(ctx => {
     res.render('fulltext/show', ctx)
   })
 }
 
-function screenFulltext (req, res, next) {
-  api.fulltext.post(req.body).then(data => res.json(data))
+function screenFulltext (req, res) {
+  return api.fulltext.post(req.body).then(data => res.json(data))
 }
 
-function screenFulltexts (req, res, next) {
-  api.fulltext.post(req.body)
-  next()
+function screenFulltexts (req, res) {
+  return api.fulltext.post(req.body)
 }
 
 // TODO: This does not work
 function changeFulltext (req, res, next) {
-  api.fulltext.deleteFulltext(req.body)
+  return api.fulltext.deleteFulltext(req.body)
   .then(() => api.fulltext.post(req.body))
   .then(() => res.end())
 }
 
 function deleteFulltext (req, res, next) {
-  api.fulltext.deleteFulltext(req.body)
+  return api.fulltext.deleteFulltext(req.body)
   .then(() => res.end())
 }
 
 function uploadFulltext (req, res, next) {
-  Promise.join(api.fulltext.create(req.body, req.files), getContext(req, res),
+  return Promise.join(api.fulltext.create(req.body, req.files), getContext(req, res),
   (fileData, ctx) => {
     res.json(_.merge(ctx, { study:
       { id: req.body.studyId }

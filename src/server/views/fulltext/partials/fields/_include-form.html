@@ -1,7 +1,7 @@
 <form action="/reviews/{{ reviewId }}/fulltext/screenings/{{ shownStatus }}/{{ page }}" method="post">
   <input type="hidden" name="studyId" class="studyId" value="{{ study.id }}" />
   <input type="hidden" name="action" class="action" value="included" />
-  <a href="/reviews/{{ reviewId }}/fulltext/upload" class="btn waves-effect waves-light btn-small view-btn">View Full Text</a>
+  <a href="/reviews/{{ reviewId }}/fulltext/screening/{{ study.id }}" class="btn waves-effect waves-light btn-small view-btn">View Full Text</a>
   <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">
     Include
   </button>
