@@ -1,21 +1,31 @@
 @import "components/color";
 
 .reviews {
-  margin-top: 3rem;
+  margin-top: 2rem;
 
   h1 {
     font-size: 3rem;
     margin: 1rem 0;
+    &.review-name-header {
+      font-size: 2.4rem;
+    }
+  }
+
+  .row {
+    position: relative;
   }
 
   a h2 {
     color: color('grey', 'darken-3');
     font-size: 1.8rem;
     display: inline-block;
+    &.review-name {
+      margin:0;
+    }
 
     span {
       color: color('grey', 'base');
-      font-size: 1rem;
+      font-size: 1.2rem;
       margin: 0 0.5rem
     }
   }
@@ -36,6 +46,12 @@
   background: color('grey', 'lighten-4');
   color: color('grey', 'darken-3');
   margin-left: 0.5rem;
+}
+
+.review-main-col {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.75rem;
 }
 
 .review-row {
@@ -91,4 +107,18 @@
 .upload-status {
   display: inline-block;
   margin: 0 10px;
+}
+
+.row .col.review-header-btn-list {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.review-header-btn {
+  flex: 1 1 0;
+  margin: 4px;
 }
