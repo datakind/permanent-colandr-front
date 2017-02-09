@@ -1,6 +1,11 @@
 @import "components/color";
 @import "shared/nav";
 
+nav {
+  height: 50px;
+  line-height: 50px;
+}
+
 .colandr-color {
   @extend .indigo;
 }
@@ -35,17 +40,17 @@
 
 .reviews-list {
 	margin-top:5px;
-	
+
   .keyterm {
     font-weight:bold;
   }
-	
+
 	.btn-small {
 	    height: 24px;
 	    line-height: 24px;
 	    padding: 0 0.5rem;
 	}
-	
+
 	.collapsible-header {
 		.exclusions {
 		    float: right;
@@ -84,7 +89,7 @@
 			float:right;
 			width:170px;
 			color:#FFF;
-			
+
 			input {
 				background-color:#CC0000;
 				text-transform:uppercase;
@@ -208,4 +213,8 @@
   .material-icons, .icon-text {
     vertical-align: middle;
   }
+}
+
+.row {
+  margin-bottom: 10px;
 }
