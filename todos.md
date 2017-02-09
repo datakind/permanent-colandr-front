@@ -1,0 +1,29 @@
+- general comments
+    - there's *a lot* of whitespace and excess padding throughout the app, particularly in the vertical direction
+        - global nav bar should be thinner
+        - all screen titles should have less padding between global nav bar and their "underlines"
+        - gray background rectangles denoting certain clickable regions, logical groups, or headers should be lighter in color
+        - "back" icon to left of all screen titles should be a single left chevron, not double triangles
+- global nav
+    - lowercase "Colandr" text in upper left
+    - add icon of a colander to far upper left
+    - both text and icon should be clickable, sending user back to "home" screen
+    - add current user's username in upper right, make it a dropdown button with options: user (account) settings, sign out
+    - when user has clicked into a particular review, replace "colandr" text with the title of the review; if title is too long for the nav bar, cut it off with an ellipsis (this makes sense, right?)
+- ADD user (account) settings page
+    - add / update profile information: full name, institutional affiliation (NEEDS BACK-END WORK!)
+    - change email, password
+    - delete account
+- "my reviews" screen
+    - collaborators' usernames should be shown below review title (and, in the future, *clickable* to go to a user profile page)
+    - title should be left-aligned, with less padding all around
+    - remove settings gear icon
+    - date created font size should be slightly larger
+    - "new review" button should say "create review" — better to use clear action words
+- review overview screen
+    - new screen title: "review progress"
+    - move "import" button from citation screening card to above the screen title line
+    - add "export" button above the screen title line, alongside import and settings buttons; it will go to a dedicated screen for exporting review data
+- review settings screen (TODO: MOCK THIS UP)
+    - add local nav side-bar with items: "basic info", "team", and "status", and split associated content across each of these sub-screens
+    - basic info sub-screen should have a "save" button; if user clicks away without saving, changes are lost (this makes sense, right?)
