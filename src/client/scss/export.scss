@@ -1,0 +1,51 @@
+.center-col {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.export-primsa-btn {
+  float: left;
+}
+
+.export-csv-btn {
+  float: right;
+}
+
+.prisma-result-template li {
+  margin-left: 10px;
+}
+
+.prisma-list {
+  max-width: 40em;
+  padding: 0;
+  overflow-x: hidden;
+  list-style: none;
+}
+
+.prisma-list > .category > .prisma-name {
+  font-weight: bold;
+}
+
+.prisma-list .prisma-item:after {
+    float: left;
+    width: 0;
+    white-space: nowrap;
+    content:
+      ". . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . "
+      ". . . . . . . . . . . . . . . . . . . . ";
+}
+
+.prisma-name {
+  padding-right: 0.33em;
+  background: white;
+}
+
+.prisma-stat {
+  float: right;
+  padding-left: 0.33em;
+  background: white;
+  position: relative;
+  z-index: 1;
+}
