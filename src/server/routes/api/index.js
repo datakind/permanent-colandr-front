@@ -9,6 +9,7 @@ module.exports = {
   imports: require('./imports'),
   fulltext: require('./fulltext'),
   extraction: require('./extraction'),
+  export: require('./export'),
   handleError: (cb) => {
     return (err) => {
       console.error('Error:', err.message)

@@ -13,6 +13,7 @@ module.exports.init = function (app) {
   const citationsRoutes = require('../routes/citations')
   const fulltextRoutes = require('../routes/fulltext')
   const extractionRoutes = require('../routes/extraction')
+  const exportRoutes = require('../routes/export')
 
   // *** register routes *** //
   app.use('/', routes)
@@ -25,4 +26,5 @@ module.exports.init = function (app) {
   app.use('/reviews/:reviewId/citations', citationsRoutes)
   app.use('/reviews/:reviewId/fulltext', fulltextRoutes)
   app.use('/reviews/:reviewId/extraction', extractionRoutes)
+  app.use('/reviews/:reviewId/export', exportRoutes)
 }
