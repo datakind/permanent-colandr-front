@@ -1,0 +1,63 @@
+.tagreview-listing {
+  margin-bottom: 10px;
+}
+
+.tagreview-header {
+  height: 30px;
+  width: 100%;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.tagreview-title {
+  float: left;
+  display: inline;
+  font-weight: bold;
+}
+
+.tagreview-status {
+  float: right;
+  display: inline;
+  font-weight: bold;
+  color: white;
+}
+
+.tagreview-body {
+  display: flex;
+  border: 1px solid black;
+  border-top: 0;
+  padding: 20px;
+}
+
+.tagreview-confidence {
+  font-weight: bold;
+}
+
+.tagreview-sentence {
+  margin: 5px 5px 20px 5px;
+  border: 1px solid grey;
+  padding: 5px;
+  font-size: 0.9rem;
+  max-height: 100px;
+  overflow-y: scroll;
+}
+
+.tagreview-data {
+  flex: 1 1 70%;
+  height: 100%;
+}
+
+.tagreview-options {
+  flex: 1 1 20%;
+  min-width: 150px;
+  padding: 20px 0;
+  height: 100%
+}
+
+.tagreview-options {
+  .btn {
+    float: right;
+    width: 80%;
+    margin: 5px;
+  }
+}

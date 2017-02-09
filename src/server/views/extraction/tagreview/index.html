@@ -1,0 +1,56 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css">
+  <link rel="stylesheet" href="/css/extraction.css">
+{% endblock %}
+
+{% block content %}
+<div class="reviews reviews-page container">
+  <div class="row">
+    <div class="col s12">
+      <h1>
+        <a href="/reviews/{{ reviewId }}/extraction">
+          <i class="small material-icons">fast_rewind</i>
+        </a>
+        Data Extraction - Tag Review
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+  {% for key, sentences in tags %}
+    <div class="tagreview-listing" data-status="pending">
+      <div class="tagreview-header grey">
+        <div class="tagreview-title">Sentences related to {{ key }}</div>
+        <div class="tagreview-status">Under Review</div>
+      </div>
+      <div class="tagreview-body">
+        <div class="tagreview-data">
+        {% for item in sentences %}
+          <div class="tagreview-confidence">{{ loop.index }}. Confidence: {{ (item.confidence * 100) | round }}%</div>
+          <div class="tagreview-sentence">{{ item.sentence }}</div>
+        {% endfor %}
+        </div>
+        <div class="tagreview-options">
+          <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">
+            Accept
+          </button>
+          <button class="btn waves-effect waves-light grey btn-small skip-btn" type="button">
+            Skip
+          </button>
+          <button class="btn waves-effect waves-light red btn-small reject-btn" type="button">
+            Reject
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/extraction.js"></script>
+{% endblock %}
