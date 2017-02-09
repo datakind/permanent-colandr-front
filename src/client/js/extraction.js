@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, document */
 
 $(document).ready(function () {
   function _updateListing (listingSelect, color, status) {
@@ -42,5 +42,10 @@ $(document).ready(function () {
     } else if (status === 'skipped') {
       _unskip(listingSelect)
     }
+  })
+
+  $('.extract-buttons > a').click(function (ev) {
+    console.warn('extract-buttons')
+    ev.stopPropagation()
   })
 })

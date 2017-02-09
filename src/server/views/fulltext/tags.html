@@ -1,0 +1,70 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css" />
+  <style>
+    body { overflow: hidden }
+    #pdfdoc { position: fixed; width: 75%; }
+    .title-wrapper { margin: 20px auto; }
+    .tags-column-wrapper { overflow: scroll; }
+    .tags-column{ height: 100%; }
+    .fulltext-title { overflow: hidden; }
+
+
+    .add-tag-form {
+      position: relative;
+    }
+    .add-tag-form .input-field {
+      margin-right: 3rem;
+    }
+    .add-tag-form input {
+      margin: 0;
+    }
+    .add-tag-form .preloader-wrapper,
+    .add-tag-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+{# Listing of reviews #}
+{% include '../shared/notifications.html' %}
+<div class="title-wrapper row">
+  <div class="col s12 fulltext-title">
+    <a href="/reviews/{{ reviewId }}/extraction">
+      <i class="small material-icons">fast_rewind</i>
+    </a>
+    {{ study.citation.title }}
+  </div>
+</div>
+<div id="pdfdoc"></div>
+
+<div class='tags-column-wrapper row'>
+  <div class='tags-column col s3 offset-s9'>
+    <div class='row'>
+      <a class="btn-toggle-pdf waves-effect waves-light btn green">Toggle PDF</a>
+    </div>
+    {% include '../extraction/tag_list.html' %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/citations.js"></script>
+  <script type="text/javascript" src="/js/fulltext_tags.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
+
+  <script>
+    {# PDFObject decides whether to use the native PDF viewer or pdf.js (using the supplied viewer
+       url), and how to embed it into the page (e.g. <embed> or <iframe>).
+    #}
+    var pdfurl = "{{ pdf_url }}";
+    var bottomHeight = $(window).height() - $('#pdfdoc').offset().top;
+    $('#pdfdoc').height(bottomHeight)
+    $('.tags-column-wrapper').height(bottomHeight)
+    PDFObject.embed(pdfurl, "#pdfdoc", {PDFJS_URL: '/pdfjs/web/viewer.html'});
+  </script>
+{% endblock %}

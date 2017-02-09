@@ -1,0 +1,13 @@
+<div class='multi-chips'>
+  {% if field.field_type != 'select_many' and field.value %}
+  <div class='chip'><span>{{ field.value }}</span><i class="close material-icons">close</i></div>
+  {% else %}
+    {% if field.value.length > 0 %}
+      {% for value in field.value %}
+      <div class='chip'><span>{{ value }}</span><i class="close material-icons">close</i></div>
+      {% endfor %}
+    {% else %}
+      <div><em>No values set</em></div>
+    {% endif %}
+  {% endif %}
+</div>

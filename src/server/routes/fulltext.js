@@ -1,4 +1,4 @@
-const Promise = require('bluebird')
+const bluebird = require('bluebird')
 const _ = require('lodash')
 const path = require('path')
 const request = require('request')
@@ -12,9 +12,10 @@ router.post('/upload', upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
   api.populateBodyWithDefaults,
   uploadFulltext)
 
-router.get('/', api.populateBodyWithDefaults, showFulltexts)
+// Show PDF route
 router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
 
+// Screening routes
 router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
 
 router.post('/screenings/submit', api.populateBodyWithDefaults, screenFulltext)
@@ -23,6 +24,13 @@ router.post('/screenings/delete', api.populateBodyWithDefaults, deleteFulltext)
 router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
 router.post('/screenings', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
 
+// Label routes
+router.get('/tags/:id', api.populateBodyWithDefaults, showTags)
+
+router.post('/tags/:id', api.populateBodyWithDefaults, updateTags)
+
+// Main list route
+router.get('/', api.populateBodyWithDefaults, showFulltexts)
 router.get('/:status', api.populateBodyWithDefaults, showFulltexts)
 router.get('/:status/:page', api.populateBodyWithDefaults, showFulltexts)
 
@@ -58,7 +66,7 @@ function getContext (req, res) {
     per_page: kResultsPerPage
   }
 
-  return Promise.join(
+  return bluebird.join(
     api.progress.get(req.body, true, 'fulltext_screening'),
     api.plans.get(req.body),
     api.users.getTeam(user, req.body),
@@ -130,7 +138,7 @@ function deleteFulltext (req, res, next) {
 }
 
 function uploadFulltext (req, res, next) {
-  return Promise.join(api.fulltext.create(req.body, req.files), getContext(req, res),
+  return bluebird.join(api.fulltext.create(req.body, req.files), getContext(req, res),
   (fileData, ctx) => {
     res.json(_.merge(ctx, { study:
       { id: req.body.studyId }
@@ -148,6 +156,142 @@ function showFullText (req, res) {
       study: study,
       pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
     })
+  })
+}
+
+function showTags (req, res) {
+  const { reviewId, user } = req.body
+  return bluebird.join(
+    apiGetOneStudy(user, req.params.id),
+    send(`/reviews/${reviewId}/plan`, user, {
+      qs: { fields: 'data_extraction_form' }
+    }),
+    send(`/data_extractions/${req.params.id}`, user),
+    (study, plan, extract) => {
+      let fields = makeFieldsFromPlan(plan.data_extraction_form, extract)
+      res.render('fulltext/tags', {
+        reviewId: reviewId,
+        study: study,
+        fields: fields,
+        pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
+      })
+    }
+  )
+  .catch(err => {
+    console.log('err', err)
+  })
+}
+
+function updateTags (req, res, next) {
+  console.log('updateTags', req.body)
+
+  const { reviewId, user, action, label, value } = req.body
+  let fieldType
+
+  return bluebird.join(
+    send(`/reviews/${reviewId}/plan`, user, {
+      qs: { fields: 'data_extraction_form' }
+    }),
+    send(`/data_extractions/${req.params.id}`, user),
+    (plan, extract) => {
+      let planObj = _.find(plan.data_extraction_form, ['label', label])
+      if (!planObj) {
+        console.warn('Unable to find extracted tag in review plan!')
+        throw new Error('Unable to find extracted tag in review plan!')
+      }
+
+      fieldType = planObj.field_type
+      let currObj = _.find(extract.extracted_items, ['label', label])
+
+      let updValue
+      switch (planObj.field_type) {
+        case 'bool':
+          updValue = value === 'True'
+          break
+        case 'select_many':
+          updValue = [value]
+          break
+        default:
+          updValue = value
+      }
+
+      if (action === 'UPDATE') {
+        if (currObj) {
+          // Update object in extracted_items with new values
+          currObj.value = fieldType === 'select_many' ? _.union(currObj.value, updValue) : updValue
+        } else {
+          // Insert new object into extracted_items
+          extract.extracted_items.push({
+            label,
+            value: updValue
+          })
+        }
+
+        console.warn('new extracted items', extract.extracted_items)
+        return send(`/data_extractions/${req.params.id}`, user, {
+          method: 'PUT',
+          body: extract.extracted_items
+        })
+      } else if (action === 'DELETE') {
+        console.warn('deleting the object')
+        if (fieldType !== 'select_many') {
+          return send(`/data_extractions/${req.params.id}`, user, {
+            method: 'DELETE',
+            qs: {
+              labels: label
+            }
+          })
+        }
+
+        _.pull(currObj.value, value)
+        if (currObj.value.length > 0) {
+          // If there're still values in the array, update
+          return send(`/data_extractions/${req.params.id}`, user, {
+            method: 'PUT',
+            body: extract.extracted_items
+          })
+        } else {
+          // Otherwise, remove the label altogether
+          return send(`/data_extractions/${req.params.id}`, user, {
+            method: 'DELETE',
+            qs: {
+              labels: label
+            }
+          })
+        }
+      } else {
+        res.status(500).send({ error: 'Unknown action received from client!' })
+      }
+    }
+  )
+  .then(() => {
+    if (fieldType === 'select_one' || fieldType === 'select_many') {
+      return send(`/data_extractions/${req.params.id}`, user)
+        .then(extract => {
+          let updLabel = _.find(extract.extracted_items, ['label', label])
+          let updValue = (updLabel && updLabel.value) || []
+          updValue = Array.isArray(updValue) ? updValue : [updValue]
+          res.send({ multi: {
+            value: updValue
+          } })
+        })
+    } else {
+      res.sendStatus(200)
+    }
+  })
+  .catch(err => {
+    console.warn('error:', err)
+    res.status(400).send(`Unable to set value for ${label}!`)
+  })
+}
+
+function makeFieldsFromPlan (planFields, extract) {
+  return planFields.map(field => {
+    let extractField = _.find(extract.extracted_items, ['label', field.label])
+    if (extractField) {
+      field.value = extractField.value
+    }
+    return field
   })
 }
 

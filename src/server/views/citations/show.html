@@ -23,15 +23,15 @@
     {% include './partials/nav.html' %}
     {% include './partials/filters.html' %}
     <div class="reviews-list">
-			    <ul class="collapsible popout" data-collapsible="accordion">
+      <ul class="collapsible popout" data-collapsible="accordion">
       {% include '../shared/notifications.html' %}
       {% for study in studies %}
-        {% include './partials/citation-listing.html' %}
+      {% include './partials/citation-listing.html' %}
       {% endfor %}
-  </ul>
-    </div>
+    </ul>
   </div>
-            {% include './partials/page-listing.html' %}
+</div>
+{% include './partials/page-listing.html' %}
 
 {% endblock %}
 
