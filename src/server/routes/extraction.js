@@ -18,7 +18,7 @@ function render (req, res) {
   let status = req.params.status || 'not_started'
   let page = Number(req.query.page) || 0
 
-  Promise.join(
+  return Promise.join(
     api.progress.get({ reviewId, user }, true),
     send('/studies', user, { qs: {
       review_id: reviewId,
