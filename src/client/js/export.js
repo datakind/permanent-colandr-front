@@ -10,6 +10,7 @@ $(document).ready(function () {
       type: 'GET',
       contentType: 'application/json',
       success: function (data, textStatus, jqXHR) {
+        // This adds a filter function to the nunjucks environment used to render _prisma-result.
         var env = nunjucks.configure('export/partials/')
         env.addFilter('values', obj => Object.keys(obj).map(key => obj[key]))
         var templ = nunjucks.render('export/partials/_prisma-result.html', data)
