@@ -1,5 +1,4 @@
 const Promise = require('bluebird')
-const _ = require('lodash')
 const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 const { send } = require('./api/helpers')
@@ -51,20 +50,24 @@ function renderTagReview (req, res) {
   Promise.join(
     api.extraction.getExtractedItems(req.body.user, studyId),
     api.extraction.getMetadata(studyId, 'biome'), // TODO: Use alternate call to retrieve all items.
-    (accepted, metadata) => {
+    send(`/studies/${studyId}`, req.body.user, { qs: { fields: 'citation.title' } }),
+    (accepted, metadata, study) => {
       let extracted = accepted.extracted_items
       let tags = {}
       metadata.forEach(item => {
+        console.warn('item', item)
         let accepted = extracted.find(ex => (ex.label === item.metaData) &&
           Array.isArray(ex.value) && ex.value.includes(item.value))
         if (!accepted) {
-          let tag = `${_.capitalize(item.metaData)}: ${item.value}`
+          let tag = `${item.metaData}: ${item.value}`
           tags[tag] = tags[tag] || []
           tags[tag].push(item)
         }
       })
       res.render('extraction/tagreview/index', {
         reviewId,
+        studyId,
+        studyTitle: study.citation.title,
         tags
       })
     }

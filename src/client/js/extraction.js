@@ -1,4 +1,4 @@
-/* global $, document */
+/* global $, document, Materialize */
 
 $(document).ready(function () {
   function _updateListing (listingSelect, color, status) {
@@ -22,16 +22,29 @@ $(document).ready(function () {
     e.stopPropagation()
   })
 
-  $('.include-btn').click(function () {
-    _updateListing($(this).closest('.tagreview-listing'), 'green', 'accepted')
-  })
+  $('.tag-review-form').click(function (ev) {
+    ev.preventDefault()
 
-  $('.skip-btn').click(function () {
-    _skip($(this).closest('.tagreview-listing'))
-  })
+    var label = this.elements.label.value
+    var value = this.elements.value.value
 
-  $('.reject-btn').click(function () {
-    _updateListing($(this).closest('.tagreview-listing'), 'red', 'rejected')
+    switch (ev.target.name) {
+      case 'accept':
+        $.post(this.action, { action: 'UPDATE', label: label, value: value })
+          .done(() => {
+            _updateListing($(this).closest('.tagreview-listing'), 'green', 'accepted')
+          })
+          .fail(e => {
+            Materialize.toast(e.responseText, 5000, 'red')
+          })
+        break
+      case 'skip':
+        _skip($(this).closest('.tagreview-listing'))
+        break
+      case 'reject':
+        _updateListing($(this).closest('.tagreview-listing'), 'red', 'rejected')
+        break
+    }
   })
 
   $('.tagreview-header').click(function () {

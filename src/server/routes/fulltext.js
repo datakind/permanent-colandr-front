@@ -280,8 +280,7 @@ function updateTags (req, res, next) {
     }
   })
   .catch(err => {
-    console.warn('error:', err)
-    res.status(400).send(`Unable to set value for ${label}!`)
+    res.status(err.statusCode).send(err.error.message || `Unable to set value for ${label}!`)
   })
 }
 
