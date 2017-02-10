@@ -16,19 +16,18 @@
     position: relative;
   }
 
-  a h2 {
-    color: color('grey', 'darken-3');
+  .review-title-link {
     font-size: 1.8rem;
     display: inline-block;
     &.review-name {
-      margin:0;
+      margin: 0;
     }
+  }
 
-    span {
-      color: color('grey', 'base');
-      font-size: 1.2rem;
-      margin: 0 0.5rem
-    }
+  .review-title-date {
+    color: color('grey', 'base');
+    font-size: 1.2rem;
+    margin: 0 0.5rem
   }
 }
 

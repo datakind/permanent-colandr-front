@@ -14,9 +14,17 @@ router.delete('/:id', del)
 // reviews routes
 
 function index (req, res, next) {
-  api.reviews.get(req.session.user)
-    .then(reviews => res.render('reviews/index', { reviews }))
-    .catch(api.handleError(next))
+  return Promise.map(api.reviews.get(req.session.user), review => {
+    return api.teams.get(req.session.user, review.id)
+    .then(team => {
+      review.team = team.filter(member => member.id !== req.session.user.user_id)
+      return review
+    })
+  })
+  .then(reviews => {
+    res.render('reviews/index', { reviews })
+  })
+  .catch(api.handleError(next))
 }
 
 function newReview (req, res, next) {
