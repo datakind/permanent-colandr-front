@@ -1,8 +1,13 @@
+const Promise = require('bluebird')
+const _ = require('lodash')
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 const upload = require('multer')()
 const api = require('./api')
+const { send } = require('./api/helpers')
 const keyterms = require('./keyterms')
+
+const kResultsPerPage = 100
 
 router.get('/import',
   api.populateBodyWithDefaults,
@@ -71,75 +76,69 @@ function screenCitations (req, res, next) {
   next()
 }
 
-function getProgress (req, next) {
-  api.progress.get(req.body, 'True')
-    .then(progress => {
-      req.body.progress = progress
-      next()
-    })
-}
-
-function getTags (req, next) {
-  api.citations.getTags(req.body)
-    .then(tags => {
-      req.body.tags = tags
-      next()
-    })
-}
-
-function getPlan (req, next) {
-  api.plans.get(req.body)
-    .then(plan => {
-      req.body.plan = plan
-      next()
-    })
-}
-
-function attachUsers (req, next) {
-  api.users.getTeam(req.body.user, req.body)
-    .then(users => {
-      var userMap = {}
-      for (var i = 0; i < users.length; i++) {
-        userMap[users[i].id] = users[i].name
-      }
-      req.body.users = userMap
-      next()
-    })
+function apiGetStudies (user, apiParams) {
+  return send('/studies', user, { qs: apiParams })
 }
 
 function showCitations (req, res, next) {
-  var pageNum = req.params.page
-  if (pageNum === undefined) {
-    pageNum = 1
-  }
-  var orderBy = req.query.order_by
-  if (orderBy === undefined) {
-    orderBy = 'relevance'
-  }
-  console.log(orderBy)
-  getProgress(req, p => getPlan(req,
-    n => attachUsers(req, o => getTags(req, p =>
-      api.citations.get(req.body, pageNum, req.params.status, req.query.tsquery, orderBy, req.query.tag)
-       .then(citations => {
-         console.log('users %s', req.body.users)
-         var numberOfPages = Math.ceil(req.body.progress.citation_screening[req.params.status] / 100)
-         var range = pageRange(pageNum, numberOfPages)
-         let keytermsRE = keyterms.getKeytermsRE(req.body.plan.keyterms)
-         for (let study of citations) {
-           keyterms.markKeywordsCitation(study.citation, keytermsRE)
-         }
-         const renderObj = { reviewId: req.body.reviewId, studies: citations, page: pageNum, citationProgress: req.body.progress.citation_screening, selectionCriteria: req.body.plan.selection_criteria, numPages: numberOfPages, range: range, shownStatus: req.params.status, order_by: orderBy, tsquery: req.query.tsquery, tag: req.query.tag, users: req.body.users, userId: req.body.user.user_id, tags: req.body.tags }
-         res.render('citations/show', renderObj)
-       })))))
-}
+  const { reviewId, user } = req.body
+  let shownStatus = req.params.status || 'pending'
+  let pageNum = parseInt(req.params.page) || 1
+  let orderBy = req.query.order_by || 'relevance'
 
-function pageRange (pageNum, numPages) {
-  var endpoint = Math.min(Math.max(parseInt(pageNum) + 5, 11), numPages)
-  var pageNav = []
-  for (var i = Math.max(parseInt(pageNum) - 5, 1); i < endpoint; i++) {
-    pageNav.push(i)
+  let apiParams = {
+    review_id: reviewId,
+    fields: 'id,citation.title,citation.authors,citation.journal_name,citation.pub_year,' +
+      'citation.abstract,citation.keywords,citation.screenings,citation_status,tags',
+    citation_status: shownStatus,
+    tag: req.query.tag || undefined,
+    tsquery: req.query.tsquery || undefined,
+    order_by: orderBy,
+    // order_dir can be 'ASC' or 'DESC'; assume the default is the choice that makes sense.
+    page: pageNum - 1,
+    per_page: kResultsPerPage
   }
-  return pageNav
+
+  return Promise.join(
+    api.reviews.getName(user, reviewId),
+    api.progress.get(req.body, true, 'citation_screening'),
+    api.plans.get(req.body),
+    api.users.getTeam(user, req.body),
+    api.citations.getTags(req.body, pageNum),
+    apiGetStudies(user, apiParams),
+    (reviewName, progress, plan, users, tags, studies) => {
+      let userMap = _.fromPairs(users.map(u => [u.id, u.name]))
+      let countResults = progress.citation_screening[shownStatus] || 0
+      let numPages = Math.max(Math.ceil(countResults / kResultsPerPage), 1)
+      let firstNavPage = _.clamp(pageNum - 5, 1, numPages)
+      let lastNavPage = _.clamp(firstNavPage + 9, 1, numPages)
+
+      let keytermsRE = keyterms.getKeytermsRE(plan.keyterms)
+      for (let study of studies) {
+        keyterms.markKeywordsCitation(study.citation, keytermsRE)
+      }
+
+      let context = {
+        reviewId: reviewId,
+        reviewName: reviewName,
+        studies: studies,
+        page: pageNum,
+        numPages: numPages,
+        range: _.range(firstNavPage, lastNavPage + 1),
+        citationProgress: progress.citation_screening,
+        selectionCriteria: plan.selection_criteria,
+        shownStatus: shownStatus,
+        order_by: orderBy,
+        tsquery: req.query.tsquery,
+        tag: req.query.tag,
+        users: userMap,
+        userId: user.user_id,
+        tags: tags,
+        urlPageBase: `/reviews/${reviewId}/citations/${shownStatus}`
+      }
+      res.render('citations/show', context)
+    }
+  )
 }
 
 function importPage (req, res, next) {

@@ -18,6 +18,7 @@ function render (req, res) {
   let page = Number(req.query.page) || 0
 
   return Promise.join(
+    api.reviews.getName(user, reviewId),
     api.progress.get({ reviewId, user }, true),
     send('/studies', user, { qs: {
       review_id: reviewId,
@@ -25,7 +26,7 @@ function render (req, res) {
       page,
       per_page: kResultsPerPage
     } }),
-    (progress, studies) => {
+    (reviewName, progress, studies) => {
       let counts = {
         not_started: progress.data_extraction.not_started,
         incomplete: progress.data_extraction.started,
@@ -33,6 +34,7 @@ function render (req, res) {
       }
       let numPages = Math.ceil(counts[status] / kResultsPerPage) || 1
       res.render('extraction/index', {
+        reviewName,
         reviewId,
         status,
         studies,
@@ -44,14 +46,15 @@ function render (req, res) {
 }
 
 function renderTagReview (req, res) {
-  const reviewId = req.body.reviewId
+  const { reviewId, user } = req.body
   const studyId = req.params.studyId
 
-  Promise.join(
-    api.extraction.getExtractedItems(req.body.user, studyId),
+  return Promise.join(
+    api.reviews.getName(user, reviewId),
+    api.extraction.getExtractedItems(user, studyId),
     api.extraction.getMetadata(studyId, 'biome'), // TODO: Use alternate call to retrieve all items.
-    send(`/studies/${studyId}`, req.body.user, { qs: { fields: 'citation.title' } }),
-    (accepted, metadata, study) => {
+    send(`/studies/${studyId}`, user, { qs: { fields: 'citation.title' } }),
+    (reviewName, accepted, metadata, study) => {
       let extracted = accepted.extracted_items
       let tags = {}
       metadata.forEach(item => {
@@ -65,6 +68,7 @@ function renderTagReview (req, res) {
         }
       })
       res.render('extraction/tagreview/index', {
+        reviewName,
         reviewId,
         studyId,
         studyTitle: study.citation.title,

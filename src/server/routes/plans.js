@@ -1,3 +1,4 @@
+const Promise = require('bluebird')
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 const api = require('./api')
@@ -13,9 +14,19 @@ router.put('/',
 // plans routes
 
 function index (req, res, next) {
-  api.plans.get(req.body)
-    .then(plan => res.render('plans/index', { plan }))
-    .catch(api.handleError(next))
+  const { reviewId, user } = req.body
+  return Promise.join(
+    api.reviews.getName(user, reviewId),
+    api.plans.get(req.body),
+    (reviewName, plan) => {
+      res.render('plans/index', {
+        reviewName,
+        reviewId,
+        plan
+      })
+    }
+  )
+  .catch(api.handleError(next))
 }
 
 function update (req, res, next) {

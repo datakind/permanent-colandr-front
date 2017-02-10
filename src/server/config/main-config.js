@@ -53,4 +53,10 @@ module.exports.init = function (app, express) {
     resave: true,
     saveUninitialized: true
   }))
+
+  // Make sure the session user is always available to templates.
+  app.use(function (req, res, next) {
+    res.locals.currentUser = req.session.user
+    next()
+  })
 }

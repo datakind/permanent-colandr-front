@@ -5,6 +5,11 @@ function get (user, id) {
   return send(uri, user)
 }
 
+function getName (user, reviewId) {
+  return send(`/reviews/${reviewId}`, user, {qs: {fields: 'name'}})
+  .then(data => data.name)
+}
+
 function create (user, body) {
   return send('/reviews', user, { method: 'POST', body })
 }
@@ -21,5 +26,5 @@ function del (user, id) {
 }
 
 module.exports = {
-  get, create, update, del
+  get, getName, create, update, del
 }

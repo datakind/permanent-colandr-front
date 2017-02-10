@@ -26,6 +26,7 @@ function signup (body) {
 
   return send('/register', '', {
     method: 'POST',
+    auth: null,
     body: { name, email, password }
   })
 }
@@ -38,6 +39,11 @@ function tokenDesc (token) {
   let decoded = jwt.decode(token, {complete: true})
   let expiresAt = decoded.header.exp * 1000
   return `Token id=${decoded.payload.id} exp ${datestr(expiresAt)}`
+}
+
+function fillUserInfo (user) {
+  return send(`/users/${user.user_id}`, user, { qs: { fields: 'name,email' } })
+  .then(info => Object.assign(user, { name: info.name, email: info.email }))
 }
 
 function _verify (user) {
@@ -61,6 +67,7 @@ function _verify (user) {
     return jwt.verifyAsync(user.token, process.env.JWT_SECRET_KEY)
     .then(payload => Object.assign({}, user, { user_id: payload.id }))
   })
+  .then(user => user.name ? user : fillUserInfo(user))
 }
 
 function devAutoSignin (next) {

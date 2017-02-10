@@ -64,14 +64,19 @@ function show (req, res, next) {
 }
 
 function settings (req, res, next) {
-  let requests = [
+  return Promise.join(
     api.reviews.get(req.session.user, req.params.id),
-    api.teams.get(req.session.user, req.params.id)
-  ]
-
-  Promise.all(requests)
-    .then(([review, team]) => res.render('reviews/settings', { review, team }))
-    .catch(api.handleError(next))
+    api.teams.get(req.session.user, req.params.id),
+    (review, team) => {
+      res.render('reviews/settings', {
+        reviewId: review.id,
+        reviewName: review.name,
+        review,
+        team
+      })
+    }
+  )
+  .catch(api.handleError(next))
 }
 
 function create (req, res, next) {

@@ -1,3 +1,13 @@
 .brand-logo {
   font-weight: 300;
+  width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-logo-img {
+  width: 37px;
+  height: 37px;
+  vertical-align: middle;
+  margin-top: -6px;
 }

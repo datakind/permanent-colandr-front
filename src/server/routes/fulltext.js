@@ -67,12 +67,13 @@ function getContext (req, res) {
   }
 
   return bluebird.join(
+    api.reviews.getName(user, reviewId),
     api.progress.get(req.body, true, 'fulltext_screening'),
     api.plans.get(req.body),
     api.users.getTeam(user, req.body),
     api.citations.getTags(req.body, pageNum),
     apiGetStudies(user, apiParams),
-    (progress, plan, users, tags, studies) => {
+    (reviewName, progress, plan, users, tags, studies) => {
       let userMap = _.fromPairs(users.map(u => [u.id, u.name]))
       let countResults = progress.fulltext_screening[shownStatus] || 0
       let numPages = Math.max(Math.ceil(countResults / kResultsPerPage), 1)
@@ -86,6 +87,7 @@ function getContext (req, res) {
 
       return {
         reviewId: reviewId,
+        reviewName: reviewName,
         studies: studies,
         page: pageNum,
         numPages: numPages,
@@ -149,23 +151,25 @@ function uploadFulltext (req, res, next) {
 
 function showFullText (req, res) {
   const { reviewId, user } = req.body
-  return apiGetOneStudy(user, req.params.id)
-  .then(study => {
-    res.render('fulltext/review', {
-      reviewId: reviewId,
-      study: study,
-      pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
-    })
-  })
+  return bluebird.join(
+    api.reviews.getName(user, reviewId),
+    apiGetOneStudy(user, req.params.id),
+    (reviewName, study) => {
+      res.render('fulltext/review', {
+        reviewId: reviewId,
+        reviewName: reviewName,
+        study: study,
+        pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
+      })
+    }
+  )
 }
 
 function showTags (req, res) {
   const { reviewId, user } = req.body
   return bluebird.join(
     apiGetOneStudy(user, req.params.id),
-    send(`/reviews/${reviewId}/plan`, user, {
-      qs: { fields: 'data_extraction_form' }
-    }),
+    send(`/reviews/${reviewId}/plan`, user, { qs: { fields: 'data_extraction_form' } }),
     send(`/data_extractions/${req.params.id}`, user),
     (study, plan, extract) => {
       let fields = makeFieldsFromPlan(plan.data_extraction_form, extract)
@@ -177,9 +181,6 @@ function showTags (req, res) {
       })
     }
   )
-  .catch(err => {
-    console.log('err', err)
-  })
 }
 
 function updateTags (req, res, next) {

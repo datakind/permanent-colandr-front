@@ -14,8 +14,8 @@ module.exports.init = function (app) {
 
   // production error handler (no stacktraces leaked to user)
   app.use(function (err, req, res, next) {
+    console.log('Error processing request:', err.toString())
     if (err.statusCode === 401) {
-      console.log('Error processing request:', err.toString())
       req.session.user = null
       req.flash('error', (err.error || err).message)
       res.redirect('/signin#signin')

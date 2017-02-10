@@ -7,10 +7,14 @@ router.get('/prisma',
   getPrisma)
 
 function render (req, res) {
-  const { reviewId } = req.body
+  const { reviewId, user } = req.body
 
-  res.render('export/index', {
-    reviewId
+  api.reviews.getName(user, reviewId)
+  .then(reviewName => {
+    res.render('export/index', {
+      reviewId,
+      reviewName
+    })
   })
 }
 
