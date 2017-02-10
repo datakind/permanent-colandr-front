@@ -13,14 +13,17 @@
           <a href="/reviews">
             <i class="small material-icons">chevron_left</i>
           </a>
-          {{ review.name }}
+          Review progress
         </h1>
       </div>
-      <div class="col s4 review-header-btn-list">
+      <div class="col s2 review-header-btn-list">
         <a href="/reviews/{{ review.id }}/settings">
           <button class="btn right review-header-btn">Settings</button>
         </a>
         <a class="btn right review-header-btn" href="/reviews/{{ review.id }}/citations/import" style="z-index: 1;">Import</a>
+        <a class="btn right review-header-btn" href="/reviews/{{ review.id }}/export">
+          Export
+        </a>
       </div>
     </div>
 
@@ -106,16 +109,6 @@
               </div>
             {% endfor %}
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row review-step">
-      <div class="row card-panel grey lighten-3 z-depth-0">
-        <div class="col offset-s1 s10">
-          <a href="/reviews/{{ review.id }}/export">
-            <h2>Export</h2>
-          </a>
         </div>
       </div>
     </div>
