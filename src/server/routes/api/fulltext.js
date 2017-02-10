@@ -1,14 +1,15 @@
 const { send } = require('./helpers')
 
-function create (body, { uploaded_file: [file] }) {
+function create (body, files) {
   const { studyId, user } = body
-  const opts = { method: 'POST' }
-  let request = send(`/fulltexts/${studyId}/upload`, user, opts)
+  let fileInfo = files.uploaded_file[0]
+  let request = send(`/fulltexts/${studyId}/upload`, user, {
+    method: 'POST'
+  })
   let form = request.form()
-  form.append('id', studyId)
-  form.append('uploaded_file', file.buffer.toString(), {
-    filename: file.originalname,
-    contentType: file.mimetype
+  form.append('uploaded_file', fileInfo.buffer, {
+    filename: fileInfo.originalname,
+    contentType: fileInfo.mimetype
   })
   return request
 }

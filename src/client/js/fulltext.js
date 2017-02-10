@@ -221,6 +221,10 @@ $(document).ready(function () {
     // $(this).parent().parent().children('.editexclusions').attr('style', 'display:block')
   })
 
+  $('.decision-form-box').click(function (ev) {
+    ev.stopPropagation()
+  })
+
   $('.decision-form-box').on('click', '.include-btn', function (e) {
     e.stopPropagation()
     e.preventDefault()

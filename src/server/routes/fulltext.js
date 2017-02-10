@@ -140,13 +140,15 @@ function deleteFulltext (req, res, next) {
 }
 
 function uploadFulltext (req, res, next) {
-  return bluebird.join(api.fulltext.create(req.body, req.files), getContext(req, res),
-  (fileData, ctx) => {
-    res.json(_.merge(ctx, { study:
-      { id: req.body.studyId }
-    }))
-  })
-  .catch(api.handleError(next))
+  return bluebird.join(
+    api.fulltext.create(req.body, req.files),
+    getContext(req, res),
+    (fileData, ctx) => {
+      res.json(_.merge(ctx, { study:
+        { id: req.body.studyId }
+      }))
+    })
+    .catch(api.handleError(next))
 }
 
 function showFullText (req, res) {
