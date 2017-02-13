@@ -44,8 +44,12 @@ function signup (req, res, next) {
       res.redirect('/signin#signin')
     })
     .catch(err => {
-      console.log(err)
-      req.flash('error', 'Could not register with the provided information')
+      console.log('Signup failed: ' + err)
+      let detail = ''
+      if (err.error && /already exists/.test(err.error.message)) {
+        detail = ': user already exists'
+      }
+      req.flash('error', 'Could not register with the provided information' + detail)
       res.redirect('/signin#signup')
     })
 }

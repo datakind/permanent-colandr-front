@@ -15,6 +15,7 @@ function getUserInfo (req, res) {
   .then(userInfo => res.render('user/index', { user: userInfo }))
 }
 
+// If we have updated user info, make sure the user's session reflects it.
 function updateSession (req, res, user, newUserInfo) {
   Object.assign(user, _.pick(newUserInfo, ['name', 'email']))
   req.session.user = user
@@ -37,6 +38,7 @@ function updateInfo (req, res) {
 function updatePassword (req, res) {
   let user = req.session.user
   return bluebird.try(() => {
+    // Verify that the two copies of the password match.
     if (!req.body.password || req.body.password !== req.body.password_dup) {
       throw new Error('Passwords don\'t match')
     }
@@ -50,6 +52,7 @@ function updatePassword (req, res) {
       body: _.pick(req.body, ['password'])
     })
     .catch(err => {
+      // If password update failed, pass along the error details to the user.
       let details = ''
       try {
         details = ': ' + err.error.messages.password.join('\n')
@@ -58,6 +61,7 @@ function updatePassword (req, res) {
     })
   })
   .then(userInfo => {
+    // If we successfully updated the user, make sure the session state is up-to-date.
     updateSession(req, res, user, userInfo)
     req.flash('success', 'Password updated.')
   })
@@ -68,9 +72,10 @@ function updatePassword (req, res) {
 function deleteUser (req, res) {
   let user = req.session.user
   return send(`/users/${user.user_id}`, user, { method: 'DELETE' })
+  // Clear out the session once the user is deleted.
+  .then(() => bluebird.fromCallback(cb => req.session.regenerate(cb)))
   .then(() => {
-    req.session.destroy()
-    req.flash(`User ${user.name} deleted`)
+    req.flash('error', `User ${user.name} deleted`)
     res.redirect('/signin')
   })
 }
