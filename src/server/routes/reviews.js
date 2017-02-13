@@ -61,6 +61,8 @@ function show (req, res, next) {
         { title: 'complete', route: 'complete', count: progress.data_extraction.finished }
       ]
       res.render('reviews/show', {
+        reviewId: review.id,
+        reviewName: review.name,
         review: review,
         progress: progressDisplay,
         plan: planDisplay,
