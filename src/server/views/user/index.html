@@ -1,0 +1,88 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="row">
+<div class="col s8 offset-s2">
+  <h3>Account Info</h3>
+  {% include '../shared/notifications.html' %}
+  <div class="card-panel">
+    <form action="/user/update-info" method="POST">
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="name" name="name" type="text" class="validate" value="{{ user.name }}">
+          <label for="name" class="active">Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="email" name="email" type="email" class="validate" value="{{ user.email }}">
+          <label for="email" class="active">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button class="btn waves-effect waves-light" type="submit">
+            Update Info
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-panel">
+    <form action="/user/update-password" method="POST">
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="password_old" name="password_old" type="password" class="validate">
+          <label for="password_old">Old password</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input id="password" name="password" type="password" class="validate">
+          <label for="password">New password</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="password_dup" name="password_dup" type="password" class="validate">
+          <label for="password_dup">Repeat new password</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button class="btn waves-effect waves-light" type="submit">
+            Update Password
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-panel">
+    <form action="/user/delete-user" method="POST">
+      <div class="row">
+        <div class="col s12">
+          <a class="modal-trigger waves-effect waves-light btn red" href="#delete-confirm">Delete Account</a>
+        </div>
+      </div>
+
+      <div id="delete-confirm" class="modal">
+        <div class="modal-content">
+          <h4>Delete account</h4>
+          <p>Are you sure you want to permanently delete your account?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn waves-effect waves-light red left" type="submit">
+            Delete Permanently
+          </button>
+          <a href="#" class="modal-action modal-close waves-effect waves-light btn">Cancel</a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/common.js"></script>
+{% endblock %}

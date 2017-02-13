@@ -14,12 +14,14 @@ module.exports.init = function (app) {
   const fulltextRoutes = require('../routes/fulltext')
   const extractionRoutes = require('../routes/extraction')
   const exportRoutes = require('../routes/export')
+  const userRoutes = require('../routes/user')
 
   // *** register routes *** //
   app.use('/', routes)
   app.use('/', authRoutes)
 
   app.use(auth.authenticate)
+  app.use('/user', userRoutes)
   app.use('/reviews', reviewsRoutes)
   app.use('/reviews/:reviewId/team', teamsRoutes)
   app.use('/reviews/:reviewId/plan', plansRoutes)
