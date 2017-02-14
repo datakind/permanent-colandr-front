@@ -6,6 +6,7 @@ const { send } = require('./api/helpers')
 router.get('/', api.populateBodyWithDefaults, render)
 router.get('/tagreview', api.populateBodyWithDefaults, renderTagReview)
 router.get('/tagreview/:studyId', api.populateBodyWithDefaults, renderTagReview)
+router.get('/finalize/:studyId', api.populateBodyWithDefaults, finalizeStudy)
 router.get('/:status', api.populateBodyWithDefaults, render)
 router.get('/:status/:page', api.populateBodyWithDefaults, render)
 
@@ -29,8 +30,8 @@ function render (req, res) {
     (reviewName, progress, studies) => {
       let counts = {
         not_started: progress.data_extraction.not_started,
-        incomplete: progress.data_extraction.started,
-        complete: progress.data_extraction.finished
+        started: progress.data_extraction.started,
+        finished: progress.data_extraction.finished
       }
       let numPages = Math.ceil(counts[status] / kResultsPerPage) || 1
       res.render('extraction/index', {
@@ -76,6 +77,22 @@ function renderTagReview (req, res) {
       })
     }
   )
+}
+
+function finalizeStudy (req, res) {
+  const { reviewId, user } = req.body
+  const studyId = req.params.studyId
+
+  return send(`/studies/${studyId}`, user, {
+    method: 'PUT',
+    body: {
+      data_extraction_status: 'finished'
+    }
+  })
+  .then(() => {
+    res.redirect(`/reviews/${reviewId}/extraction`)
+  })
+  .catch(err => req.flash('error', err.message))
 }
 
 module.exports = router

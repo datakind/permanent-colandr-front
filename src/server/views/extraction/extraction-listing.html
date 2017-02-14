@@ -3,7 +3,7 @@
 {% block buttons %}
 <div class='row extract-buttons'>
   {% if study.fulltext.filename %}
-  <a class='btn waves-effect waves-light btn-small grey review-btn' href="/reviews/1/extraction/tagreview/{{ study.id }}">Review Tags</a>
+  <a class='btn waves-effect waves-light btn-small grey review-btn' href="/reviews/{{ reviewId }}/extraction/tagreview/{{ study.id }}">Review Tags</a>
   {% endif %}
   <a href='/reviews/{{ reviewId }}/fulltext/tags/{{ study.id }}'
     class='btn waves-effect waves-light btn-small blue'>Tag Summary</a>

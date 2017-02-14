@@ -199,7 +199,7 @@ function updateTags (req, res, next) {
     (plan, extract) => {
       let planObj = _.find(plan.data_extraction_form, ['label', label])
       if (!planObj) {
-        console.warn('Unable to find extracted tag in review plan!')
+        console.warn('Unable to find extracted tag in review plan!', plan.data_extraction_form)
         throw new Error('Unable to find extracted tag in review plan!')
       }
 

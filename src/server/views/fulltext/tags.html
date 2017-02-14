@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="/css/reviews.css" />
   <style>
     body { overflow: hidden }
-    #pdfdoc { position: fixed; width: 75%; }
+    #pdfdoc { position: fixed; width: 65%; }
     .title-wrapper { margin: 20px auto; }
     .tags-column-wrapper { overflow: scroll; }
     .tags-column{ height: 100%; }
@@ -43,9 +43,11 @@
 <div id="pdfdoc"></div>
 
 <div class='tags-column-wrapper row'>
-  <div class='tags-column col s3 offset-s9'>
+  <div class='tags-column col s4 offset-s8'>
     <div class='row'>
-      <a class="btn-toggle-pdf waves-effect waves-light btn green">Toggle PDF</a>
+      <a class="btn-toggle-pdf waves-effect waves-light btn blue">Toggle PDF</a>
+      <a href='/reviews/{{ reviewId }}/extraction/finalize/{{ study.id }}'
+         class="btn-finish-tags waves-effect waves-light btn green">Finalize</a>
     </div>
     {% include '../extraction/tag_list.html' %}
   </div>
