@@ -10,7 +10,7 @@
 
         {% if field.field_type == 'select_one' or field.field_type == 'select_many' %}
         <div class='input-field'>
-          <select name='{{ field.label }}'>
+          <select name='{{ field.label }}' {{ isDisabled }}>
             <option value="" disabled selected>Select</option>
             {% for value in field.allowed_values %}
             <option value='{{ value }}'>{{ value }}</option>
@@ -20,12 +20,12 @@
         {% else %}
         <div class='input-field'>
           {% if field.field_type == 'int' %}
-          <input name='{{ field.label }}' type='number' min='0' step='1'  class='validate' required />
+          <input name='{{ field.label }}' type='number' min='0' step='1'  class='validate' required {{ isDisabled }}/>
           {% elif field.field_type == 'float' %}
-          <input name='{{ field.label }}' type='number' step='any' class='validate' required />
+          <input name='{{ field.label }}' type='number' step='any' class='validate' required {{ isDisabled }}/>
           {% elif field.field_type == 'bool' %}
           <div class='input-field'>
-            <select name='{{ field.label }}'>
+            <select name='{{ field.label }}' {{ isDisabled }}>
               {% if field.value %}
               <option value=""></option>
               <option value='True' selected='{{ field.value }}'>True</option>
@@ -38,19 +38,21 @@
             </select>
           </div>
           {% elif field.field_type == 'date' %}
-          <input name='{{ field.label }}' type="date" class="datepicker" required />
+          <input name='{{ field.label }}' type="date" class="datepicker" required {{ isDisabled }} />
           {% else %}
-          <input name='{{ field.label }}' type='text' required />
+          <input name='{{ field.label }}' type='text' required {{ isDisabled }} />
           {% endif %}
         </div>
         {% endif %}
 
-        {% if field.field_type == 'select_many' %}
-        <button class="add-tag-btn btn btn-floating blue" type='submit'><i class="material-icons">add</i></button>
-        {% elif field.value %}
-        <button class="add-tag-btn btn btn-floating blue" type='submit'><i class="material-icons">update</i></button>
-        {% else %}
-        <button class="add-tag-btn btn btn-floating blue" type='submit'><i class="material-icons">save</i></button>
+        {% if not isDisabled %}
+          {% if field.field_type == 'select_many' %}
+          <button class="add-tag-btn btn btn-floating blue" type='submit'><i class="material-icons">add</i></button>
+          {% elif field.value %}
+          <button class="add-tag-btn btn btn-floating blue" type='submit'><i class="material-icons">update</i></button>
+          {% else %}
+          <button class="add-tag-btn btn btn-floating blue" type='submit'><i class="material-icons">save</i></button>
+          {% endif %}
         {% endif %}
 
         <div class="preloader-wrapper small" style="display: none">

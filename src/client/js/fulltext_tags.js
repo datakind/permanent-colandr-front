@@ -2,13 +2,10 @@
 
 $(document).ready(function () {
   $('form.add-tag-form').on('submit', function (ev) {
-    console.warn('submit')
     ev.preventDefault()
 
     var label = this.elements.label.value
     var value = this.elements[label].value
-
-    console.warn('label, value', label, value)
 
     updateField('UPDATE', this, label, value)
     .then(() => {
@@ -20,8 +17,8 @@ $(document).ready(function () {
     ev.preventDefault()
 
     $('#pdfdoc').toggle()
-    $('.tags-column').toggleClass('offset-s9')
-    $('.tags-column').toggleClass('s3')
+    $('.tags-column').toggleClass('offset-s8')
+    $('.tags-column').toggleClass('s4')
     $('.tags-column').toggleClass('s12')
   })
 
@@ -29,7 +26,6 @@ $(document).ready(function () {
 
   function initChipClose () {
     $('form.add-tag-form i.close').on('click', function (ev) {
-      console.warn('delete')
       ev.stopPropagation()
       ev.preventDefault()
 
@@ -38,7 +34,6 @@ $(document).ready(function () {
       var value = this.previousSibling.textContent
 
       updateField('DELETE', form, label, value)
-      console.warn('label, value', label, value)
     })
   }
 
@@ -53,7 +48,6 @@ $(document).ready(function () {
 
     return $.post(form.action, { action: action, label: label, value: value })
       .done(data => {
-        console.warn('data', data.multi)
         if (data.multi) {
           updateChips(label, data.multi.value)
         } else {
@@ -80,7 +74,6 @@ $(document).ready(function () {
   }
 
   function updateChips (label, value) {
-    console.warn('updateChips', label, value)
     var multiForm = document.querySelector(`.field-form-${label} .multi-chips`)
     var templ = nunjucks.render('extraction/multi-chips.html', {
       field: {

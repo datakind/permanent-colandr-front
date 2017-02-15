@@ -2,10 +2,12 @@
 
 {% block buttons %}
 <div class='row extract-buttons'>
+  {{ study.metadataCount }}
   {% if study.fulltext.filename %}
-  <a class='btn waves-effect waves-light btn-small grey review-btn' href="/reviews/{{ reviewId }}/extraction/tagreview/{{ study.id }}">Review Tags</a>
-  {% endif %}
+  <a class='btn waves-effect waves-light btn-small grey review-btn' href="/reviews/{{ reviewId }}/extraction/tagreview/{{ study.id }}">Review Labels</a>
+  {% else %}
   <a href='/reviews/{{ reviewId }}/fulltext/tags/{{ study.id }}'
-    class='btn waves-effect waves-light btn-small blue'>Tag Summary</a>
+    class='btn waves-effect waves-light btn-small blue'>Label Summary</a>
+  {% endif %}
 </div>
 {% endblock %}

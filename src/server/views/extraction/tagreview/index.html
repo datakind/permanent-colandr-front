@@ -13,7 +13,7 @@
         <a href="/reviews/{{ reviewId }}/extraction">
           <i class="small material-icons">fast_rewind</i>
         </a>
-        Data Extraction - Tag Review
+        Data Extraction - Label Review
       </h1>
     </div>
   </div>
@@ -23,12 +23,12 @@
       <h5>{{ studyTitle }}</h5>
     </div>
     <div class='col s3'>
-      <a href='/reviews/{{ reviewId }}/fulltext/tags/{{ studyId }}' class='btn btn-small blue'>Tag summary</a>
+      <a href='/reviews/{{ reviewId }}/fulltext/tags/{{ studyId }}' class='btn btn-small blue'>Label summary</a>
     </div>
   </div>
 
   <div class="row">
-  {% for key, sentences in tags %}
+  {% for key, sentences in labels %}
   {% set label = key.split(':')[0].trim() %}
   {% set value = key.split(':')[1].trim() %}
     <div class="tagreview-listing" data-status="pending">

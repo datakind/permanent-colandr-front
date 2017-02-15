@@ -109,7 +109,7 @@ function getContext (req, res) {
 }
 
 function apiGetOneStudy (user, id) {
-  let fields = 'id,citation.title,fulltext_status,fulltext.filename,fulltext.original_filename,fulltext.screenings'
+  let fields = 'id,citation.title,fulltext_status,fulltext.filename,fulltext.original_filename,fulltext.screenings,data_extraction_status'
   return send(`/studies/${id}`, user, { qs: { fields: fields } })
 }
 
@@ -169,16 +169,20 @@ function showFullText (req, res) {
 
 function showTags (req, res) {
   const { reviewId, user } = req.body
+  let studyId = req.params.id
+
   return bluebird.join(
     apiGetOneStudy(user, req.params.id),
     send(`/reviews/${reviewId}/plan`, user, { qs: { fields: 'data_extraction_form' } }),
-    send(`/data_extractions/${req.params.id}`, user),
-    (study, plan, extract) => {
+    send(`/data_extractions/${studyId}`, user),
+    api.extraction.getSuggestedLabels(user, studyId),
+    (study, plan, extract, labels) => {
       let fields = makeFieldsFromPlan(plan.data_extraction_form, extract)
       res.render('fulltext/tags', {
-        reviewId: reviewId,
-        study: study,
-        fields: fields,
+        reviewId,
+        study,
+        fields,
+        labelCount: Object.keys(labels).length,
         pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
       })
     }

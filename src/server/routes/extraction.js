@@ -7,6 +7,7 @@ router.get('/', api.populateBodyWithDefaults, render)
 router.get('/tagreview', api.populateBodyWithDefaults, renderTagReview)
 router.get('/tagreview/:studyId', api.populateBodyWithDefaults, renderTagReview)
 router.get('/finalize/:studyId', api.populateBodyWithDefaults, finalizeStudy)
+router.get('/reopen/:studyId', api.populateBodyWithDefaults, reopenStudy)
 router.get('/:status', api.populateBodyWithDefaults, render)
 router.get('/:status/:page', api.populateBodyWithDefaults, render)
 
@@ -34,7 +35,8 @@ function render (req, res) {
         finished: progress.data_extraction.finished
       }
       let numPages = Math.ceil(counts[status] / kResultsPerPage) || 1
-      res.render('extraction/index', {
+
+      return res.render('extraction/index', {
         reviewName,
         reviewId,
         status,
@@ -52,29 +54,20 @@ function renderTagReview (req, res) {
 
   return Promise.join(
     api.reviews.getName(user, reviewId),
-    api.extraction.getExtractedItems(user, studyId),
-    api.extraction.getMetadata(studyId, 'biome'), // TODO: Use alternate call to retrieve all items.
-    send(`/studies/${studyId}`, user, { qs: { fields: 'citation.title' } }),
-    (reviewName, accepted, metadata, study) => {
-      let extracted = accepted.extracted_items
-      let tags = {}
-      metadata.forEach(item => {
-        console.warn('item', item)
-        let accepted = extracted.find(ex => (ex.label === item.metaData) &&
-          Array.isArray(ex.value) && ex.value.includes(item.value))
-        if (!accepted) {
-          let tag = `${item.metaData}: ${item.value}`
-          tags[tag] = tags[tag] || []
-          tags[tag].push(item)
-        }
-      })
-      res.render('extraction/tagreview/index', {
-        reviewName,
-        reviewId,
-        studyId,
-        studyTitle: study.citation.title,
-        tags
-      })
+    api.extraction.getSuggestedLabels(user, studyId),
+    send(`/studies/${studyId}`, user, { qs: { fields: 'citation.title,data_extraction_status' } }),
+    (reviewName, labels, study) => {
+      if (Object.keys(labels).length > 0 && study.data_extraction_status !== 'finished') {
+        res.render('extraction/tagreview/index', {
+          reviewName,
+          reviewId,
+          studyId,
+          studyTitle: study.citation.title,
+          labels
+        })
+      } else {
+        res.redirect(`../../fulltext/tags/${studyId}`)
+      }
     }
   )
 }
@@ -91,6 +84,22 @@ function finalizeStudy (req, res) {
   })
   .then(() => {
     res.redirect(`/reviews/${reviewId}/extraction`)
+  })
+  .catch(err => req.flash('error', err.message))
+}
+
+function reopenStudy (req, res) {
+  const { reviewId, user } = req.body
+  const studyId = req.params.studyId
+
+  return send(`/studies/${studyId}`, user, {
+    method: 'PUT',
+    body: {
+      data_extraction_status: 'started'
+    }
+  })
+  .then(() => {
+    res.redirect(`/reviews/${reviewId}/fulltext/tags/${studyId}`)
   })
   .catch(err => req.flash('error', err.message))
 }

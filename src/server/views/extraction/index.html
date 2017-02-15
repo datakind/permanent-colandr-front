@@ -21,9 +21,9 @@
   <div class="row">
     <div class="col s6">
       <ul class="tabs">
-        <li class="tab col s2"><a {% if status == "not_started" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/not_started">screen [{{ counts.not_started }}]</a></li>
-        <li class="tab col s2"><a {% if status == "incomplete" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/incomplete">in progress [{{ counts.incomplete }}]</a></li>
-        <li class="tab col s2"><a {% if status == "finished" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/finished">finished [{{ counts.finished }}]</a></li>
+        <li class="tab col s2"><a {% if status == "not_started" %} class="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/not_started">screen [{{ counts.not_started }}]</a></li>
+        <li class="tab col s2"><a {% if status == "started" %} class="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/started">in progress [{{ counts.started }}]</a></li>
+        <li class="tab col s2"><a {% if status == "finished" %} class="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/extraction/finished">finished [{{ counts.finished }}]</a></li>
       </ul>
     </div>
   </div>

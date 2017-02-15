@@ -57,8 +57,8 @@ function show (req, res, next) {
       })
       let extractProgress = [
         { title: 'not started', route: 'not_started', count: progress.data_extraction.not_started },
-        { title: 'incomplete', route: 'incomplete', count: progress.data_extraction.started },
-        { title: 'complete', route: 'complete', count: progress.data_extraction.finished }
+        { title: 'started', route: 'started', count: progress.data_extraction.started },
+        { title: 'finished', route: 'finished', count: progress.data_extraction.finished }
       ]
       res.render('reviews/show', {
         reviewId: review.id,
