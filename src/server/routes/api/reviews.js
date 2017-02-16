@@ -1,8 +1,8 @@
 const { send } = require('./helpers')
 
-function get (user, id) {
+function get (user, id, params) {
   const uri = (id) ? `/reviews/${id}` : '/reviews'
-  return send(uri, user)
+  return send(uri, user, { qs: params })
 }
 
 function getName (user, reviewId) {
