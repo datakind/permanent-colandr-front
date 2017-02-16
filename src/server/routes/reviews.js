@@ -1,6 +1,5 @@
 const Promise = require('bluebird')
-const express = require('express')
-const router = express.Router()
+const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 
 router.get('/', index)
@@ -13,18 +12,16 @@ router.delete('/:id', del)
 
 // reviews routes
 
-function index (req, res, next) {
-  return Promise.map(api.reviews.get(req.session.user), review => {
+function index (req, res) {
+  return Promise.map(api.reviews.get(req.session.user, null, req.query), review => {
     return api.teams.get(req.session.user, review.id)
     .then(team => {
       review.team = team.filter(member => member.id !== req.session.user.user_id)
       return review
     })
   })
-  .then(reviews => {
-    res.render('reviews/index', { reviews })
-  })
-  .catch(api.handleError(next))
+  .catch(err => req.flash('error', err.message))
+  .then(reviews => res.render('reviews/index', { reviews }))
 }
 
 function newReview (req, res, next) {
