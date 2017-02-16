@@ -158,7 +158,8 @@ nav {
 		}
 	}
 	.screens {
-		margin:0 10px 10px;
+    z-index: 99;
+		margin: 0 10px 10px;
 		li {
 			display:inline;
 		}
