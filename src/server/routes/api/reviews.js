@@ -1,8 +1,13 @@
 const { send } = require('./helpers')
 
-function get (user, id) {
+function get (user, id, params) {
   const uri = (id) ? `/reviews/${id}` : '/reviews'
-  return send(uri, user)
+  return send(uri, user, { qs: params })
+}
+
+function getName (user, reviewId) {
+  return send(`/reviews/${reviewId}`, user, {qs: {fields: 'name'}})
+  .then(data => data.name)
 }
 
 function create (user, body) {
@@ -21,5 +26,5 @@ function del (user, id) {
 }
 
 module.exports = {
-  get, create, update, del
+  get, getName, create, update, del
 }

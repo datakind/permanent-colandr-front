@@ -1,0 +1,8 @@
+<li>
+  <input type = "checkbox" name = "criteria[{{ selection.label }}]" id="{{ selection.label }}{{ study.id }}" {% if screen.status == "excluded" %}
+   {% if screen.exclude_reasons | containsElement(selection.label) %}
+	 checked="checked"
+   {% endif %}
+  {% endif %} />
+  <label for="{{ selection.label }}{{ study.id }}">{{ selection.label }}</label>
+</li>

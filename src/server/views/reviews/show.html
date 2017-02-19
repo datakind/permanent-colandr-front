@@ -8,27 +8,111 @@
 
   <div class="reviews review-page container">
     <div class="row">
-      <div class="col s10">
-        <h1>
+      <div class="col s8">
+        <h1 class="review-name-header">
           <a href="/reviews">
-            <i class="small material-icons">fast_rewind</i>
+            <i class="small material-icons">chevron_left</i>
           </a>
-          {{ review.name }}
+          <span>Review progress</span>
         </h1>
       </div>
-      <div class="col s2">
-        <p>
-          <a href="/reviews/{{ review.id }}/settings">
-            <button class="btn btn-large right z-depth-0">Settings</button>
-          </a>
-        </p>
+      <div class="col s2 review-header-btn-list">
+        <a href="/reviews/{{ review.id }}/settings">
+          <button class="btn right review-header-btn">Settings</button>
+        </a>
+        <a class="btn right review-header-btn" href="/reviews/{{ review.id }}/citations/import" style="z-index: 1;">Import</a>
+        <a class="btn right review-header-btn" href="/reviews/{{ review.id }}/export">
+          Export
+        </a>
       </div>
     </div>
 
     <hr>
 
-    {% include './partials/planning.html' %}
-    {% include './partials/citation-screening.html' %}
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-4 z-depth-0">
+        <div class="review-main-col">
+          <a href="/reviews/{{ review.id }}/plan">
+            <h2>Planning</h2>
+          </a>
+          <div class="review-row">
+            {% for item in plan %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/plan#{{ item.route }}-a">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }}
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-4 z-depth-0">
+        <div class="review-main-col">
+          <a href="/reviews/{{ review.id }}/citations">
+            <h2>Citation Screening</h2>
+          </a>
+          <div class="review-row">
+            {% for item in progress %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/citations/{{ item.route }}">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }} ({{ item.citation_count }})
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-4 z-depth-0">
+        <div class="review-main-col">
+          <a href="/reviews/{{ review.id }}/fulltext">
+            <h2>Full-text Screening</h2>
+          </a>
+          <div class="review-row">
+            {% for item in progress %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/fulltext/{{ item.route }}">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }} ({{ item.fulltext_count }})
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row review-step">
+      <div class="row card-panel grey lighten-4 z-depth-0">
+        <div class="review-main-col">
+          <a href="/reviews/{{ review.id }}/extraction">
+            <h2>Data Extraction</h2>
+          </a>
+          <div class="review-row">
+            {% for item in extractProgress %}
+              <div class="review-col shade-{{ loop.index }}">
+                <a href="/reviews/{{ review.id }}/extraction/{{ item.route }}">
+                  <p class="review-col-text flow-text white-text center-align">
+                    {{ item.title }} ({{ item.count }})
+                  </p>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 {% endblock %}

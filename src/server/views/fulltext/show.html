@@ -1,0 +1,92 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css">
+{% endblock %}
+
+{% block content %}
+  <div class="reviews reviews-page container">
+    <h1>
+      <a href="/reviews/{{ reviewId }}">
+        <i class="small material-icons">chevron_left</i>
+      </a>
+      Full-text Screening
+    </h1>
+
+{# Nav bar #}
+<div class="row">
+  <div class="col s12">
+    <ul class="tabs">
+      {% for s in statusList %}
+        <li class="tab col s3"><a {% if s.status == shownStatus %} class="active" {% endif %}
+          target="_self" href="/reviews/{{ reviewId }}/fulltext/{{ s.status }}">{{ s.name }} [{{ progress[s.status] }}]</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{# Controls and filters #}
+<div class="row" id="filters">
+  <form id="filters" action="{{ urlPageBase }}">
+    <div class="col s4">
+      <a class="waves-effect waves-light btn highlightson highlights">Highlights_ON</a>
+    </div>
+
+    <div class="input-field col s3">
+      <i class="material-icons prefix">search</i>
+      <input id="search" name="tsquery" type="text" value="{{ tsquery }}" size="10">
+      <label for"search">Filter by:</label>
+    </div>
+
+    <div class="col s1">
+      or
+    </div>
+
+    <div class="col s2">
+      <select name="tag" class="browser-default">
+        <option value="" selected>Tag:</option>
+        {% for tag in tags %}
+        <option value="{{ tag }}">{{ tag }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col s2">
+      <select name="order_by" class="browser-default">
+        <option value="relevance" {% if order_by == "relevance" %} selected {% endif %}>Relevance</option>
+        <option value="recency" {% if order_by == "recency" %} selected {% endif %}>Recently Added</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+{# Listing of reviews #}
+<div class="reviews-list">
+  <ul class="collapsible popout" data-collapsible="accordion">
+    {% include '../shared/notifications.html' %}
+    {% for study in studies %}
+    {% include './fulltext-listing.html' %}
+    {% endfor %}
+  </ul>
+</div>
+
+{# Pagination #}
+<div class="row card-panel grey lighten-3 z-depth-0">
+  <div class="col offset-s1 s10">
+    <ul class="pagination">
+      <li class="waves-effect {% if page == 1 %}disabled{% endif %}"><a href="{{ urlPageBase }}/1"><i class="material-icons">chevron_left</i></a></li>
+      {% for i in range %}
+      <li class="waves-effect {% if i == page %}active{% endif %}"><a href="{{ urlPageBase }}/{{ i }}">{{i}}</a></li>
+      {% endfor %}
+      <li class="waves-effect {% if page == numPages %}disabled{% endif %}"><a href="{{ urlPageBase }}/{{ numPages }}"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/fulltext.js"></script>
+{% endblock %}

@@ -26,6 +26,13 @@ module.exports.init = function (app, express) {
     autoescape: true
   })
   nunjucksEnv.addFilter('date', require('nunjucks-date-filter'))
+  nunjucksEnv.addFilter('containsElement', function (array, value) {
+    console.log(array)
+    console.log(value)
+    if (array.indexOf(value) > -1) return true
+    else return false
+  })
+
   app.set('view engine', 'html')
 
   // *** app middleware *** //
@@ -40,15 +47,16 @@ module.exports.init = function (app, express) {
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(flash())
   app.use(express.static(path.join(__dirname, '..', '..', 'client')))
+  app.use('/pdfjs', express.static(path.join(__dirname, '..', '..', '..', 'third-party', 'pdfjs-dist')))
   app.use(session({
     secret: process.env.SESSION_SECRET_KEY,
     resave: true,
     saveUninitialized: true
   }))
 
-  // assign user information to the locals if possible
-  app.use((req, res, next) => {
-    app.locals.currentUser = req.session.user ? req.session.user : null
+  // Make sure the session user is always available to templates.
+  app.use(function (req, res, next) {
+    res.locals.currentUser = req.session.user
     next()
   })
 }

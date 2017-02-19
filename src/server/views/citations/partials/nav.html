@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col s12">
+    <ul class="tabs">
+      <li class="tab col s3"><a {% if shownStatus == "pending" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/citations/pending">screen [{{ citationProgress.pending }}]</a></li>
+      <li class="tab col s3"><a {% if shownStatus == "awaiting_coscreener" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/citations/awaiting_coscreener">awaiting [{{ citationProgress.awaiting_coscreener }}]</a></li>
+      <li class="tab col s3"><a {% if shownStatus == "conflict" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/citations/conflict">in conflict [{{ citationProgress.conflict }}]</a></li>
+      <li class="tab col s3"><a  {% if shownStatus == "excluded" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/citations/excluded">excluded [{{ citationProgress.excluded }}]</a></li>
+      <li class="tab col s3"><a {% if shownStatus == "included" %} class ="active" {% endif %} target="_self" href="/reviews/{{ reviewId }}/citations/included">included [{{ citationProgress.included }}]</a></li>
+    </ul>
+  </div>
+</div>

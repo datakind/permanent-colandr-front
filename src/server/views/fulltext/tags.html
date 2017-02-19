@@ -1,0 +1,95 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css" />
+  <style>
+    body { overflow: hidden }
+    #pdfdoc { position: fixed; width: 65%; }
+    .title-wrapper { margin: 20px auto; }
+    .tags-column-wrapper { overflow: scroll; }
+    .tags-column{ height: 100%; }
+    .fulltext-title { overflow: hidden; }
+
+
+    .add-tag-form {
+      position: relative;
+    }
+    .add-tag-form .input-field {
+      margin-right: 3rem;
+    }
+    .add-tag-form input {
+      margin: 0;
+    }
+    .add-tag-form .preloader-wrapper,
+    .add-tag-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .nav-wrapper.breadcrumb-nav {
+      padding: 0 1rem;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+{# Listing of reviews #}
+{% include '../shared/notifications.html' %}
+{% set isDisabled = 'disabled' if study.data_extraction_status == 'finished' else '' %}
+<div class='row'>
+  <nav>
+    <div class="nav-wrapper breadcrumb-nav blue lighten-2">
+      <div class="col s12">
+        <a href="/reviews/{{ reviewId }}/" class="breadcrumb">Review</a>
+        <a href="/reviews/{{ reviewId }}/extraction" class="breadcrumb">Extract</a>
+        {% if not isDisabled and labelCount > 0 %}
+        <a href='/reviews/{{ reviewId }}/extraction/tagreview/{{ study.id }}' class="breadcrumb">Review Labels</a>
+        {% endif %}
+        <a class="breadcrumb">Label Summary</a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="title-wrapper row">
+  <div class="col s12 fulltext-title">
+    {{ study.citation.title }}
+  </div>
+</div>
+
+<div id="pdfdoc"></div>
+
+<div class='tags-column-wrapper row'>
+  <div class='tags-column col s4 offset-s8'>
+    <div class='row'>
+      <a class="btn-toggle-pdf waves-effect waves-light btn blue">Toggle PDF</a>
+      {% if isDisabled %}
+      <a href='/reviews/{{ reviewId }}/extraction/reopen/{{ study.id }}'
+         class="btn-finish-tags waves-effect waves-light btn red">Reopen</a>
+      {% else %}
+      <a href='/reviews/{{ reviewId }}/extraction/finalize/{{ study.id }}'
+         class="btn-finish-tags waves-effect waves-light btn green">Finalize</a>
+      {% endif %}
+    </div>
+    {% include '../extraction/tag_list.html' %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/citations.js"></script>
+  <script type="text/javascript" src="/js/fulltext_tags.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
+
+  <script>
+    {# PDFObject decides whether to use the native PDF viewer or pdf.js (using the supplied viewer
+       url), and how to embed it into the page (e.g. <embed> or <iframe>).
+    #}
+    var pdfurl = "{{ pdf_url }}";
+    var bottomHeight = $(window).height() - $('#pdfdoc').offset().top;
+    $('#pdfdoc').height(bottomHeight)
+    $('.tags-column-wrapper').height(bottomHeight)
+    PDFObject.embed(pdfurl, "#pdfdoc", {PDFJS_URL: '/pdfjs/web/viewer.html'});
+  </script>
+{% endblock %}

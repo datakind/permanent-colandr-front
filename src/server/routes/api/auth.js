@@ -1,5 +1,10 @@
 const { send } = require('./helpers')
+const Promise = require('bluebird')
+const dateformat = require('dateformat')
 const jwt = require('jsonwebtoken')
+Promise.promisifyAll(jwt)
+
+const kRefreshAfterSec = 300
 
 function signin (body) {
   let { email, password } = body
@@ -12,6 +17,7 @@ function signin (body) {
       sendImmediately: false
     }
   })
+  .then(user => Object.assign(user, { lastRefreshed: Date.now() }))
 }
 
 function signup (body) {
@@ -20,39 +26,88 @@ function signup (body) {
 
   return send('/register', '', {
     method: 'POST',
+    auth: null,
     body: { name, email, password }
   })
 }
 
-function authenticate (req, res, next) {
-  // TODO: Remove)
-  if (process.env.NODE_ENV === 'development') {
-    signin({
-      email: process.env.APP_LOGIN_EMAIL,
-      password: process.env.APP_LOGIN_PASSWORD
-    }).then(token => {
-      req.session.user = token
-      next()
-    })
-  } else {
-    let { user } = req.session
-    if (!user || !user.token) {
-      req.flash('error', 'You must be logged in to reach that page.')
-      res.redirect('/signin#signin')
-    } else {
-      jwt.verify(user.token, process.env.JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return Promise.reject(err)
+function datestr (timestamp) {
+  return dateformat(new Date(timestamp), 'isoDateTime')
+}
 
-        // TODO: Refresh token
-        req.session.user = {
-          token: user.token,
-          user_id: userInfo.id
-        }
+function tokenDesc (token) {
+  let decoded = jwt.decode(token, {complete: true})
+  let expiresAt = decoded.header.exp * 1000
+  return `Token id=${decoded.payload.id} exp ${datestr(expiresAt)}`
+}
 
-        next()
+function fillUserInfo (user) {
+  return send(`/users/${user.user_id}`, user, { qs: { fields: 'name,email' } })
+  .then(info => Object.assign(user, { name: info.name, email: info.email }))
+}
+
+function _verify (user) {
+  return Promise.try(() => {
+    if (user.lastRefreshed && Date.now() > user.lastRefreshed + kRefreshAfterSec * 1000) {
+      // It's been a while since the token was issued; let's refresh it.
+      console.log('Refreshing old token: %s', tokenDesc(user.token))
+      return send('/authtoken', user)
+      .then(user => Object.assign(user, { lastRefreshed: Date.now() }))
+      .catch(err => {
+        console.log('Refresh failed: %s', err)
+        return user
       })
+    } else {
+      return user
     }
-  }
+  })
+  .then(user => {
+    console.log('Verifying auth token: %s obtained at %s', tokenDesc(user.token),
+      datestr(user.lastRefreshed))
+    return jwt.verifyAsync(user.token, process.env.JWT_SECRET_KEY)
+    .then(payload => Object.assign({}, user, { user_id: payload.id }))
+  })
+  .then(user => user.name ? user : fillUserInfo(user))
+}
+
+function devAutoSignin (next) {
+  // Log in automatically with configured login.
+  return signin({
+    email: process.env.APP_LOGIN_EMAIL,
+    password: process.env.APP_LOGIN_PASSWORD
+  })
+  .then(devuser => {
+    console.log('DEVELOPMENT user token', devuser.token)
+    return _verify(devuser)
+  })
+  .catch(err => {
+    console.log('DEVELOPMENT auto-login failed')
+    throw new Error('Development auto-login failed: ' + err.message)
+  })
+}
+
+function authenticate (req, res, next) {
+  return Promise.try(() => {
+    let { user } = req.session
+    if (user && user.token) {
+      return _verify(user)
+    }
+    if (process.env.NODE_ENV === 'development') {
+      return devAutoSignin()
+    }
+    throw new Error('You must be logged in to reach this page.')
+  })
+  .then(
+    user => {
+      req.session.user = user
+      res.locals.currentUser = user
+      next()
+    },
+    err => {
+      req.flash('error', err.message)
+      res.redirect('/signin#signin')
+    }
+  )
 }
 
 module.exports = {

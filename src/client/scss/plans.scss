@@ -6,10 +6,29 @@
   position: relative;
 }
 
+.research-question-wrap {
+  display: flex;
+}
+
+.research-question-text {
+  flex-grow: 1;
+
+  textarea {
+    margin: 0;
+    padding: .8rem 0 .4rem 0;
+  }
+}
+
+
+.research-question-index,
+.research-question-remove {
+  margin: 1.8rem 1rem 1rem 1rem;
+}
+
 .remove-field-button {
   position: absolute;
   top: 0;
-  right: 0
+  right: 0;
 }
 
 .boolean-search-query span {

@@ -1,6 +1,11 @@
 @import "components/color";
 @import "shared/nav";
 
+nav {
+  height: 50px;
+  line-height: 50px;
+}
+
 .colandr-color {
   @extend .indigo;
 }
@@ -12,4 +17,205 @@
     font-size: 2rem;
     margin: 0;
   }
+}
+
+#filters {
+	margin-bottom:0;
+	.input-field {
+		margin-top:0;
+	}
+	.col.s1 {
+		text-align:center;
+	}
+	.highlightsoff {
+		background-color:red;
+	}
+}
+
+.reviews-list.hide-highlights {
+  .keyterm {
+    font-weight: normal;
+  }
+}
+
+.reviews-list {
+	margin-top:5px;
+
+  .keyterm {
+    font-weight:bold;
+  }
+
+	.btn-small {
+	    height: 24px;
+	    line-height: 24px;
+	    padding: 0 0.5rem;
+	}
+
+	.collapsible-header {
+		.exclusions {
+		    float: right;
+		    display: block;
+		    position: relative;
+			.editexclusions {
+				top:33px;
+				right:0;
+				left:inherit;
+				z-index:1000;
+			}
+		}
+		.row {
+			margin-bottom:0;
+			.collection.screens {
+				overflow:visible;
+			}
+		}
+		h3 {
+			font-size:20px;
+			line-height:23px;
+			margin:0;
+		}
+		span.authors, span.journal, span.year {
+			color:gray;
+			font-size:12px;
+		}
+		span.journal {
+			font-style:italic;
+		}
+		p {
+			margin:0;
+			padding:0;
+		}
+		div.selectbox {
+			float:right;
+			width:170px;
+			color:#FFF;
+
+			input {
+				background-color:#CC0000;
+				text-transform:uppercase;
+				text-align:center;
+				margin-top:10px;
+				height:24px;
+				line-height:24px;
+				box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+			}
+			input:hover {
+				box-shadow:0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+			}
+		}
+		.dropdown {
+			position:absolute;
+			top:26px;
+			left:3px;
+			background-color:#fff;
+			border:1px solid #000;
+			li {
+				display:block;
+			}
+			box-shadow:0px -1px 13px 0px rgba(50, 50, 50, 0.76);
+		}
+		.editexclusions {
+			width: 240px;
+		}
+		.removing, .editexclusions, .editinclusion {
+			position:absolute;
+			top:26px;
+			left:3px;
+			background-color:#fff;
+			border:1px solid #000;
+			li {
+				display:block;
+			}
+			line-height:16px;
+			font-size:15px;
+			padding:10px;
+			label {
+				color:#000;
+			}
+			box-shadow:0px -1px 13px 0px rgba(50, 50, 50, 0.76);
+		}
+		.removing, .editinclusion {
+			text-align:center;
+			width:170px;
+		}
+	}
+	.collapsible-body {
+		p.abstract {
+			font-size:13px;
+		}
+		span.keyword-title {
+			font-weight:bold;
+		}
+		p {
+			padding:25px 20px 0;
+		}
+		div.chips {
+			margin:25px 20px 20px;
+			min-height:0;
+			input {
+				margin:0;
+			}
+		}
+	}
+	.screens {
+    z-index: 99;
+		margin: 0 10px 10px;
+		li {
+			display:inline;
+		}
+		li i.tiny {
+			font-size:15px;
+			margin:0 3px;
+			display:inline;
+			float:none;
+		}
+   		div.screenuser.active {
+   	    	padding-right: 25px;
+   	    	background-repeat: no-repeat;
+   	    	background-image: url(/images/down-small.png);
+   	    	background-position: right;
+			box-shadow:0px -1px 13px 0px rgba(50, 50, 50, 0.76);
+   		}
+		div.screenuser {
+			display:inline-block;
+			padding: 0 10px;
+			margin: 0 0 0 3px;
+			color:white;
+			border:1px solid #000;
+			line-height:24px;
+			float:left;
+		}
+		ul {
+			float:left;
+			li {
+				margin:0 10px;
+				vertical-align:top;
+			}
+		}
+
+		.included {
+			div.screenuser {
+				background-color:#6AA84F;
+			}
+		}
+		.excluded {
+			div.screenuser {
+				background-color:#C00;
+			}
+		}
+	}
+}
+
+.fulltext-title {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+
+  .material-icons, .icon-text {
+    vertical-align: middle;
+  }
+}
+
+.row {
+  margin-bottom: 10px;
 }

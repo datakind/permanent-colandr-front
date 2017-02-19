@@ -1,0 +1,73 @@
+{% extends "_base.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/reviews.css">
+  <link rel="stylesheet" href="/css/extraction.css">
+{% endblock %}
+
+{% block content %}
+<div class="reviews reviews-page container">
+  <div class="row">
+    <div class="col s12">
+      <h1>
+        <a href="/reviews/{{ reviewId }}/extraction">
+          <i class="small material-icons">fast_rewind</i>
+        </a>
+        Data Extraction - Label Review
+      </h1>
+    </div>
+  </div>
+
+  <div class='row'>
+    <div class='col s9'>
+      <h5>{{ studyTitle }}</h5>
+    </div>
+    <div class='col s3'>
+      <a href='/reviews/{{ reviewId }}/fulltext/tags/{{ studyId }}' class='btn btn-small blue'>Label summary</a>
+    </div>
+  </div>
+
+  <div class="row">
+  {% for key, sentences in labels %}
+  {% set label = key.split(':')[0].trim() %}
+  {% set value = key.split(':')[1].trim() %}
+    <div class="tagreview-listing" data-status="pending">
+      <div class="tagreview-header grey">
+        <div class="tagreview-title">Sentences related to {{ key }}</div>
+        <div class="tagreview-status">Under Review</div>
+      </div>
+      <div class="tagreview-body">
+        <div class="tagreview-data">
+        {% for item in sentences %}
+          <div class="tagreview-confidence">{{ loop.index }}. Confidence: {{ (item.confidence * 100) | round }}%</div>
+          <div class="tagreview-sentence">{{ item.sentence }}</div>
+        {% endfor %}
+        </div>
+
+          <div class="tagreview-options">
+            <form class='tag-review-form' method='POST' action='/reviews/{{ reviewId }}/fulltext/tags/{{ studyId }}'>
+            <input type='hidden' name='label' value='{{ label }}' />
+            <input type='hidden' name='value' value='{{ value }}' />
+            <button class="btn waves-effect waves-light green btn-small include-btn" name='accept' type="submit">
+              Accept
+            </button>
+            <button class="btn waves-effect waves-light grey btn-small skip-btn" name='skip' type="button">
+              Skip
+            </button>
+            <button class="btn waves-effect waves-light red btn-small reject-btn" name='reject' type="button">
+              Reject
+            </button>
+            </form>
+          </div>
+
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="/js/extraction.js"></script>
+{% endblock %}

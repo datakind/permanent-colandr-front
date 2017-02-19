@@ -1,0 +1,28 @@
+  <div class="row" id = "filters">
+    <form id = "filters" action = "/reviews/{{ reviewId }}/citations/{{ shownStatus }}/{{ page }}">
+	<div class="col s4">
+		<a class="waves-effect waves-light btn highlightson highlights">Highlights_ON</a>
+	</div>
+        <div class="input-field col s2">
+          <i class="material-icons prefix tiny">search</i>
+          <input id="search" name="tsquery" type="text" value = "{{ tsquery }}">
+          <label for="search"><i class="material-icons">&nbsp;</i></label>
+        </div>
+		<div class = "col s1">or</div>
+	    <div class="input-field inline col s2">
+	      <select name = "tag" class="browser-default">
+	        <option value="" selected>Filter by tag:</option>
+			{% for tag in tags %}
+	        <option value="{{ tag }}">{{ tag }}</option>
+			{% endfor %}
+	      </select>
+	    </div>
+	    <div class="col s1">&nbsp;</div>
+	    <div class="input-field col s2">
+	      <select name = "order_by" class = "browser-default">
+	        <option value="relevance" {% if order_by == "relevance" %} selected {% endif %}>Relevance</option>
+	        <option value="recency" {% if order_by == "recency" %} selected {% endif %}>Recently Added</option>
+	      </select>
+	    </div>
+	</form>
+  </div>

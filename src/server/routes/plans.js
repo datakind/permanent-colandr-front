@@ -1,3 +1,4 @@
+const Promise = require('bluebird')
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 const api = require('./api')
@@ -5,7 +6,7 @@ const api = require('./api')
 router.get('/',
   api.populateBodyWithDefaults,
   index)
-router.put('/:id',
+router.put('/',
   api.populateBodyWithDefaults,
   parseLists,
   update)
@@ -13,9 +14,19 @@ router.put('/:id',
 // plans routes
 
 function index (req, res, next) {
-  api.plans.get(req.body)
-    .then(plan => res.render('plans/index', { plan }))
-    .catch(api.handleError(next))
+  const { reviewId, user } = req.body
+  return Promise.join(
+    api.reviews.getName(user, reviewId),
+    api.plans.get(req.body),
+    (reviewName, plan) => {
+      res.render('plans/index', {
+        reviewName,
+        reviewId,
+        plan
+      })
+    }
+  )
+  .catch(api.handleError(next))
 }
 
 function update (req, res, next) {
@@ -23,7 +34,7 @@ function update (req, res, next) {
   const section = req.body.fields.replace(/_/g, '-')
 
   api.plans.update(req.body)
-    .then(plan => res.redirect(`/reviews/${plan.review_id}/plan#${section}-a`))
+    .then(plan => res.redirect(`/reviews/${plan.id}/plan#${section}-a`))
     .catch(api.handleError(next))
 }
 

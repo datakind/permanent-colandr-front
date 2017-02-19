@@ -1,9 +1,32 @@
 <nav class="colandr-color z-depth-0">
   <div class="nav-wrapper container">
-    <a href="#" class="brand-logo">Colandr</a>
+    <div class="brand-logo">
+      <a href="/reviews">
+        <img class="brand-logo-img" src="/images/colandr.png">
+      </a>
+      {% if reviewId and reviewName %}
+        &nbsp;&#8250;&nbsp;
+        <a href="/reviews/{{ reviewId }}">{{ reviewName }}</a>
+      {% else %}
+        <a href="/">colandr</a>
+      {% endif %}
+    </div>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
       {% if currentUser %}
-        <li><a href="/logout">Logout</a></li>
+        <li>
+          <a class='dropdown-button' href='#'
+            data-activates='user-dropdown'
+            data-beloworigin="true"
+            data-constrainwidth="false"
+            data-alignment="right"
+            data-induration="100"
+            data-outduration="100"
+            >{{ currentUser.name }} &#9660;</a>
+          <ul id='user-dropdown' class='dropdown-content'>
+            <li><a href="/user">Account Settings</a></li>
+            <li><a href="/logout">Sign Out</a></li>
+          </ul>
+        </li>
       {% else %}
         <li><a href="/signin">Signin</a></li>
       {% endif %}

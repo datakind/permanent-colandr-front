@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const Promise = require('bluebird')
+const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 
 router.get('/', index)
@@ -12,10 +12,16 @@ router.delete('/:id', del)
 
 // reviews routes
 
-function index (req, res, next) {
-  api.reviews.get(req.session.user)
-    .then(reviews => res.render('reviews/index', { reviews }))
-    .catch(api.handleError(next))
+function index (req, res) {
+  return Promise.map(api.reviews.get(req.session.user, null, req.query), review => {
+    return api.teams.get(req.session.user, review.id)
+    .then(team => {
+      review.team = team.filter(member => member.id !== req.session.user.user_id)
+      return review
+    })
+  })
+  .catch(err => req.flash('error', err.message))
+  .then(reviews => res.render('reviews/index', { reviews }))
 }
 
 function newReview (req, res, next) {
@@ -24,20 +30,60 @@ function newReview (req, res, next) {
 }
 
 function show (req, res, next) {
-  api.reviews.get(req.session.user, req.params.id)
-    .then(review => res.render('reviews/show', { review }))
-    .catch(api.handleError(next))
+  return Promise.join(
+    api.reviews.get(req.session.user, req.params.id),
+    api.progress.get({reviewId: req.params.id, user: req.session.user}, true),
+    (review, progress) => {
+      let planDisplay = [
+        {title: 'objective', route: 'objective'},
+        {title: 'questions', route: 'research-questions'},
+        {title: 'pico', route: 'pico'},
+        {title: 'key terms', route: 'keyterms'},
+        {title: 'selection criteria', route: 'selection-criteria'},
+        {title: 'extraction form', route: 'data-extraction-form'}]
+      let progressDisplay = [
+        {title: 'unscreened', route: 'pending'},
+        {title: 'awaiting', route: 'awaiting_coscreener'},
+        {title: 'conflict', route: 'conflict'},
+        {title: 'excluded', route: 'excluded'},
+        {title: 'included', route: 'included'}
+      ]
+      progressDisplay.forEach(item => {
+        item.citation_count = progress.citation_screening[item.route]
+        item.fulltext_count = progress.fulltext_screening[item.route]
+      })
+      let extractProgress = [
+        { title: 'not started', route: 'not_started', count: progress.data_extraction.not_started },
+        { title: 'started', route: 'started', count: progress.data_extraction.started },
+        { title: 'finished', route: 'finished', count: progress.data_extraction.finished }
+      ]
+      res.render('reviews/show', {
+        reviewId: review.id,
+        reviewName: review.name,
+        review: review,
+        progress: progressDisplay,
+        plan: planDisplay,
+        extractProgress
+      })
+    }
+  )
+  .catch(api.handleError(next))
 }
 
 function settings (req, res, next) {
-  let requests = [
+  return Promise.join(
     api.reviews.get(req.session.user, req.params.id),
-    api.teams.get(req.session.user, req.params.id)
-  ]
-
-  Promise.all(requests)
-    .then(([review, team]) => res.render('reviews/settings', { review, team }))
-    .catch(api.handleError(next))
+    api.teams.get(req.session.user, req.params.id),
+    (review, team) => {
+      res.render('reviews/settings', {
+        reviewId: review.id,
+        reviewName: review.name,
+        review,
+        team
+      })
+    }
+  )
+  .catch(api.handleError(next))
 }
 
 function create (req, res, next) {

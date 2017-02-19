@@ -1,0 +1,17 @@
+			  			<div class="col s12">
+			  			    <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include
+			  			    </button>
+			  			    <button class="btn waves-effect waves-light grey btn-small skip-btn" type="button" >Skip
+			  			    </button>
+							<div class = "exclusions">
+							<a href="#" class = "btn-small btn wases-effect red doexclude">Exclude</a>
+							<div class = "editexclusions" style="display:none;">
+			  			        <ul>
+								{% for selection in selectionCriteria %}
+							        {% include './selection-criteria.html' %}
+			  			        {% endfor %}
+								</ul>
+								<a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
+							</div>
+						</div>
+			  			</div>

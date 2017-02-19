@@ -1,14 +1,19 @@
 module.exports = {
   auth: require('./auth'),
   reviews: require('./reviews'),
+  progress: require('./progress'),
+  citations: require('./citations'),
   teams: require('./teams'),
   users: require('./users'),
   plans: require('./plans'),
   imports: require('./imports'),
+  fulltext: require('./fulltext'),
+  extraction: require('./extraction'),
+  export: require('./export'),
   handleError: (cb) => {
     return (err) => {
-      console.error('Error:', err)
-      cb()
+      console.error('Error:', err.message)
+      cb(err)
     }
   },
   populateBodyWithDefaults: (req, res, next) => {

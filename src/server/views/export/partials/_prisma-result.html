@@ -1,0 +1,65 @@
+<div class="prisma-result-template">
+  <ul class="prisma-list">
+    <li class="category prisma-item">
+      <span class="prisma-name">Total studies</span>
+      <span class="prisma-stat">{{ num_studies_by_source | values | sum }}</span>
+    </li>
+    <li>
+      <ul>
+        {% for source, count in num_studies_by_source %}
+        <li class="prisma-item">
+          <span class="prisma-name">{{ source }}</span>
+          <span class="prisma-stat">{{ count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+    <li class="category prisma-item">
+      <span class="prisma-name">Unique studies</span>
+      <span class="prisma-stat">{{ num_unique_studies }}</span>
+    </li>
+    <li class="category prisma-item">
+      <span class="prisma-name">Screened citations</span>
+      <span class="prisma-stat">{{ num_screened_citations }}</span>
+    </li>
+    <li>
+      <ul>
+        <li class="prisma-item">
+          <span class="prisma-name">Excluded citations</span>
+          <span class="prisma-stat">{{ num_excluded_citations }}</span>
+        </li>
+      </ul>
+    </li>
+    <li class="category prisma-item">
+      <span class="prisma-name">Screened fulltexts</span>
+      <span class="prisma-stat">{{ num_screened_fulltexts }}</span>
+    </li>
+    <li>
+      <ul>
+        <li class="prisma-item">
+          <span class="prisma-name">Excluded fulltexts</span>
+          <span class="prisma-stat">{{ num_excluded_fulltexts }}</span>
+        </li>
+      </ul>
+    </li>
+    <li class="category prisma-item">
+      <span class="prisma-name">Studies with data extracted</span>
+      <span class="prisma-stat">{{ num_studies_data_extracted }}</span>
+    </li>
+    <br>
+    <li>
+      <span class="prisma-name">Exclusions by reason</span>
+      <span class="prisma-stat"></span>
+    </li>
+    <li>
+      <ul>
+        {% for reason, count in exclude_reason_counts %}
+        <li class="prisma-item">
+          <span class="prisma-name">{{ reason }}</span>
+          <span class="prisma-stat">{{ count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+  </ul>
+</div>

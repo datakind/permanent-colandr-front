@@ -1,0 +1,2 @@
+# Ignore the nunjucks precompiled templates file
+src/client/js/templates.js

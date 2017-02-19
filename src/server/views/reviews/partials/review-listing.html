@@ -1,13 +1,20 @@
-<a href="/reviews/{{ review.id }}">
-  <div class="row card-panel grey lighten-3 z-depth-0">
-    <div class="col offset-s1 s10">
-      <h2 class="review-name">
-        {{ review.name }}
-        <span>
-          {{ review.created_at | date('YYYY-MM-DD') }}
-        </span>
-        <i class="small material-icons right">settings</i>
-      </h2>
+<div class="row card-panel grey lighten-3 z-depth-0">
+  <div class="col s10">
+    <div>
+      <a class='review-title-link' href="/reviews/{{ review.id }}">{{ review.name }}</a>
+      <span class='review-title-date'>
+        {{ review.created_at | date('YYYY-MM-DD') }}
+      </span>
+    </div>
+    <div>
+      {% for member in review.team -%}
+        {{ ', ' if loop.index > 1 else '' }}
+        {% if member.is_owner -%}
+        <strong>{{ member.name }}</strong>
+        {%- else %}
+        <span>{{ member.name }}</span>
+        {%- endif %}
+      {%- endfor %}
     </div>
   </div>
-</a>
+</div>
