@@ -157,9 +157,24 @@ nav {
 			}
 		}
 	}
+	.screens:after {
+	    visibility: hidden; 
+	    display: block; 
+	    height: 0; 
+	    clear: both;
+		content:".";
+	}
 	.screens {
-    z-index: 99;
+    	z-index: 99;
 		margin: 0 10px 10px;
+		li.included {
+			float:left;
+			position:relative;
+		}
+		li.excluded {
+			float:left;
+			position:relative;
+		}
 		li {
 			display:inline;
 		}
