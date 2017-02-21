@@ -22,18 +22,21 @@
               type="text"
               class="validate"
               name="data_extraction_form[{{ loop.index }}][label]"
-              value="{{ field.label }}">
+              value="{{ field.label }}"
+              {{ 'readonly' if not isOwner }}>
           </div>
           <div class="col s3 input-field">
             <input id="data_extraction_form_description_{{ loop.index }}"
               type="text"
               class="validate"
               name="data_extraction_form[{{ loop.index }}][description]"
-              value="{{ field.description }}">
+              value="{{ field.description }}"
+              {{ 'readonly' if not isOwner }}>
           </div>
           <div class="col s3 input-field">
             <select id="data_extraction_form_field_type_{{ loop.index }}"
               class="browser-default"
+              {{ 'disabled' if not isOwner }}
               name="data_extraction_form[{{ loop.index }}][field_type]">
               <option value="">-- Select An Option --</option>
               <option value="str"
@@ -71,21 +74,26 @@
               <input id="data_extraction_form_allowed_values_{{ loop.index }}"
                 class="validate"
                 name="data_extraction_form[{{ loop.index }}][allowed_values]"
-                value="{{ field.allowed_values }}">
+                value="{{ field.allowed_values }}"
+                {{ 'readonly' if not isOwner }}>
             {% endif %}
+            {% if isOwner %}
             <a class="btn-floating waves-effect waves-light red remove-field-button">
               <i class="material-icons">remove</i>
             </a>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
 
+      {% if isOwner %}
       <button id="add-field-data-extraction-form"
         class="btn btn-large z-depth-0 green lighten-2">
         <i class="material-icons left">add</i>
         Add Item
       </button>
-      <button type="submit" class="btn btn-large z-depth-0">
+      {% endif %}
+      <button type="submit" class="btn btn-large z-depth-0" {{ 'disabled' if not isOwner }}>
         Save
       </button>
     </form>

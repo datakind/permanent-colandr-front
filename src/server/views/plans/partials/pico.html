@@ -17,9 +17,7 @@
 
       {% set field = 'outcome' %}
       {% include './fields/_pico.html' %}
-      <button type="submit" class="btn btn-large z-depth-0">
-        Save
-      </button>
+      <button type="submit" class="btn btn-large z-depth-0" {{ 'disabled' if not isOwner }}>Save</button>
     </form>
   </div>
 </div>

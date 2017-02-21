@@ -4,7 +4,8 @@
       type="text"
       class="validate"
       name="keyterms[{{ loop.index }}][term]"
-      value="{{ keyterm.term }}">
+      value="{{ keyterm.term }}"
+      {{ 'readonly' if not isOwner }}>
   </div>
 
   <div class="col s4 input-field">
@@ -12,7 +13,8 @@
       type="text"
       class="validate"
       name="keyterms[{{ loop.index }}][synonyms]"
-      value="{{ keyterm.synonyms }}">
+      value="{{ keyterm.synonyms }}"
+      {{ 'readonly' if not isOwner }}>
   </div>
 
   <div class="col s4 input-field">
@@ -20,9 +22,13 @@
       type="text"
       class="validate"
       name="keyterms[{{ loop.index }}][group]"
-      value="{{ keyterm.group }}">
+      value="{{ keyterm.group }}"
+      {{ 'readonly' if not isOwner }}>
+
+    {% if isOwner %}
     <a class="btn-floating waves-effect waves-light red remove-field-button">
       <i class="material-icons">remove</i>
     </a>
+    {% endif %}
   </div>
 </div>

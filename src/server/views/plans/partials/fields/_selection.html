@@ -4,7 +4,8 @@
       type="text"
       class="validate"
       name="selection_criteria[{{ loop.index }}][label]"
-      value="{{ criteria.label }}">
+      value="{{ criteria.label }}"
+      {{ 'readonly' if not isOwner }}>
     <label for="selection_criteria[{{ loop.index }}][label]">
       Label
     </label>
@@ -14,12 +15,16 @@
       type="text"
       class="validate"
       name="selection_criteria[{{ loop.index }}][description]"
-      value="{{ criteria.description }}">
-    <label for="selection_criteria[{{ loop.index }}][description]">
+      value="{{ criteria.description }}"
+      {{ 'readonly' if not isOwner }}>
+    <label for="selection_criteria[{{ loop.index }}][description]"
+           {{ 'readonly' if not isOwner }}>
       Description
     </label>
+    {% if isOwner %}
     <a class="btn-floating waves-effect waves-light red remove-field-button">
       <i class="material-icons">remove</i>
     </a>
+    {% endif %}
   </div>
 </div>
