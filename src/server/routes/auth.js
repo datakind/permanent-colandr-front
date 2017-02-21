@@ -41,6 +41,7 @@ function register (req, res, next) {
     res.redirect('/reviews')
   })
   .catch(err => {
+    console.log('Register failed: ' + err)
     req.flash('error', 'Could not register user with provided credentials')
     res.redirect('/signin#signin')
   })
