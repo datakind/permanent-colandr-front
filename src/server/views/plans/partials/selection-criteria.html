@@ -12,12 +12,14 @@
         {% include './fields/_selection.html' %}
       {% endfor %}
 
+      {% if isOwner %}
       <button id="add-field-selection-criteria"
         class="btn btn-large z-depth-0 green lighten-2">
         <i class="material-icons left">add</i>
         Add Item
       </button>
-      <button type="submit" class="btn btn-large z-depth-0">
+      {% endif %}
+      <button type="submit" class="btn btn-large z-depth-0" {{ 'disabled' if not isOwner }}>
         Save
       </button>
     </form>
