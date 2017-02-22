@@ -18,10 +18,6 @@ router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
 // Showing full-text route
 router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
 
-// Screening editing routes.
-router.post('/screenings/:studyId/submit', api.populateBodyWithDefaults, screenFulltext)
-router.post('/screenings/:studyId/delete', api.populateBodyWithDefaults, deleteFulltext)
-
 // Label routes
 router.get('/tags/:id', api.populateBodyWithDefaults, showTags)
 router.post('/tags/:id', api.populateBodyWithDefaults, updateTags)
@@ -113,36 +109,6 @@ function apiGetOneStudy (user, id) {
 function showFulltexts (req, res) {
   return getContext(req, res).then(ctx => {
     res.render('fulltext/show', ctx)
-  })
-}
-
-function screenFulltext (req, res) {
-  const { user } = req.body
-  const body = _.pick(req.body, ['status', 'exclude_reasons'])
-
-  // We try to PUT first (i.e. to modify existing screening). If that fails with 404, try POST
-  // instead to create a new screening. This avoids the need to always know whether there is an
-  // existing screening by the current user. (It would be nice if backend offered a single route.)
-  return send(`/fulltexts/${req.params.studyId}/screenings`, user, { method: 'PUT', body: body })
-  .catch(e => (e.statusCode === 404), e => {
-    return send(`/fulltexts/${req.params.studyId}/screenings`, user, { method: 'POST', body: body })
-  })
-  .then(data => { res.json(data) })
-  .catch(e => {
-    console.log(`screenFulltext ${req.params.studyId} failed: ${e}`)
-    res.status(e.statusCode)
-    res.json({ error: e.error.message || e.toString() })
-  })
-}
-
-function deleteFulltext (req, res) {
-  const { user } = req.body
-  return send(`/fulltexts/${req.params.studyId}/screenings`, user, { method: 'DELETE' })
-  .then(data => { res.json({ message: 'ok' }) })
-  .catch(e => {
-    console.log(`deleteFulltext ${req.params.studyId} failed: ${e}`)
-    res.status(e.statusCode)
-    res.json({ error: e.error.message || e.toString() })
   })
 }
 

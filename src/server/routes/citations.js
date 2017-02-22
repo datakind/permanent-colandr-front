@@ -24,64 +24,6 @@ router.get('/:status',
 router.get('/:status/:page',
   api.populateBodyWithDefaults,
   showCitations)
-router.post('/tags/:citationId',
-  api.populateBodyWithDefaults,
-  addTags)
-
-// Screening editing routes.
-router.post('/screenings/:studyId/submit', api.populateBodyWithDefaults, screenCitation)
-router.post('/screenings/:studyId/delete', api.populateBodyWithDefaults, deleteCitation)
-
-router.post('/screenings/:status/:page',
-  api.populateBodyWithDefaults,
-  screenCitations, showCitations)
-router.post('/screenings',
-  api.populateBodyWithDefaults,
-  screenCitations, showCitations)
-
-// TODO screenCitation and deleteCitation are near-exact duplicates of similar methods in fulltext
-// review
-function screenCitation (req, res) {
-  const { user } = req.body
-  const body = _.pick(req.body, ['status', 'exclude_reasons'])
-
-  // We try to PUT first (i.e. to modify existing screening). If that fails with 404, try POST
-  // instead to create a new screening. This avoids the need to always know whether there is an
-  // existing screening by the current user. (It would be nice if backend offered a single route.)
-  return send(`/citations/${req.params.studyId}/screenings`, user, { method: 'PUT', body: body })
-  .catch(e => (e.statusCode === 404), e => {
-    return send(`/citations/${req.params.studyId}/screenings`, user, { method: 'POST', body: body })
-  })
-  .then(data => { res.json(data) })
-  .catch(e => {
-    console.log(`screenCitation ${req.params.studyId} failed: ${e}`)
-    res.status(e.statusCode)
-    res.json({ error: e.error.message || e.toString() })
-  })
-}
-
-function deleteCitation (req, res) {
-  const { user } = req.body
-  return send(`/citations/${req.params.studyId}/screenings`, user, { method: 'DELETE' })
-  .then(data => { res.json({ message: 'ok' }) })
-  .catch(e => {
-    console.log(`deleteCitation ${req.params.studyId} failed: ${e}`)
-    res.status(e.statusCode)
-    res.json({ error: e.error.message || e.toString() })
-  })
-}
-
-function addTags (req, res, next) {
-  var citationId = req.params.citationId
-  api.citations.addTags(citationId, req.body).then(data =>
-    res.json(data)
-  )
-}
-
-function screenCitations (req, res, next) {
-  api.citations.post(req.body)
-  next()
-}
 
 function apiGetStudies (user, apiParams) {
   return send('/studies', user, { qs: apiParams })

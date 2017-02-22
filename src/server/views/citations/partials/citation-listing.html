@@ -1,16 +1,20 @@
-<li class="{{ shownStatus }}" data-submit-url="/reviews/{{ reviewId }}/citations/screenings/{{ study.id }}">
+<li class="{{ shownStatus }}"
+    data-study-url="/study/{{ study.id }}"
+    data-screening-type='{% block screening_type %}citation{% endblock %}'>
+
   <div class="collapsible-header">
-    <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
-      <div class="row">
-        <div class="col s12">
-          <p>  <span class="authors">{{ study.citation.authors | replace(", ",", ") }}&nbsp;</span>	</p>
-          <h3 class="title">
-            {{ study.citation.title | safe }}
-          </h3>
-          <p><span class="journal"> {{ study.citation.journal_name }} </span>	<span class="year">({{ study.citation.pub_year }})</span></p></div>
+    <div class="row">
+      <div class="col s12">
+        <p><span class="authors">{{ study.citation.authors or [] | join("; ") }}&nbsp;</span></p>
+        <h3 class="title">{{ study.citation.title | safe }}</h3>
+        <p><span class="journal">{{ study.citation.journal_name }}</span>
+           <span class="year">({{ study.citation.pub_year }})</span>
+        </p>
       </div>
-      {% block buttons %}
-      <div class="row">
+    </div>
+
+    {% block buttons %}
+      <div class="row screening_box">
         {% if shownStatus == 'pending' %}
           <div class="col s12">
             {% include "../../shared/pending_screening.html" %}
@@ -25,17 +29,16 @@
           </ul>
         {% endif %}
       </div>
-      {% endblock %}
-    </form>
+    {% endblock %}
   </div>
+
   <div class="collapsible-body">
     <div class="row">
       <div class="col s12">
         <p class="abstract">{{ study.citation.abstract | safe }}</p>
         <p><span class="keywords"><span class="keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
-        <input type="hidden" class="startTags" value="{{ study.tags }}" >
-        <div class="chips"></div>
-      </div> 
+        <div class="chips" data-tags="{{ study.tags | dump }}"></div>
+      </div>
     </div>
   </div>
 </li>
