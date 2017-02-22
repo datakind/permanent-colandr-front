@@ -1,18 +1,16 @@
-<li class = "{{ shownStatus }}">
+<li class="{{ shownStatus }}" data-submit-url="/reviews/{{ reviewId }}/citations/screenings/{{ study.id }}">
   <div class="collapsible-header">
     <form action="/reviews/{{ reviewId }}/citations/screenings/{{ shownStatus }}/{{ page }}" method="post">
-      <div class = "row">
-        <div class = "col s12">
-          <p>  <span class = "authors">{{ study.citation.authors | replace(", ",", ") }}&nbsp;</span>	</p>
-          <h3 class = "title">
+      <div class="row">
+        <div class="col s12">
+          <p>  <span class="authors">{{ study.citation.authors | replace(", ",", ") }}&nbsp;</span>	</p>
+          <h3 class="title">
             {{ study.citation.title | safe }}
           </h3>
-          <p><span class = "journal"> {{ study.citation.journal_name }} </span>	<span class = "year">({{ study.citation.pub_year }})</span></p></div>
+          <p><span class="journal"> {{ study.citation.journal_name }} </span>	<span class="year">({{ study.citation.pub_year }})</span></p></div>
       </div>
       {% block buttons %}
-      <div class = "row">
-        <input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
-        <input type = "hidden" name = "action" class = "action" value="included" />
+      <div class="row">
         {% if shownStatus == 'pending' %}
           <div class="col s12">
             {% include "../../shared/pending_screening.html" %}
@@ -20,8 +18,8 @@
         {% else %}
           <ul class="collection screens">
            {% for screen in study.citation.screenings %}
-             <li class = "{{ screen.status }}">
-             {% include '../../shared/active_user.html' %}
+             <li class="{{ screen.status }} user_screening">
+               {% include '../../shared/user_screening.html' %}
              </li>
            {% endfor %}
           </ul>
@@ -33,9 +31,9 @@
   <div class="collapsible-body">
     <div class="row">
       <div class="col s12">
-        <p class = "abstract">{{ study.citation.abstract | safe }}</p>
-        <p><span class = "keywords"><span class = "keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
-        <input type = "hidden" class = "startTags" value = "{{ study.tags }}" >
+        <p class="abstract">{{ study.citation.abstract | safe }}</p>
+        <p><span class="keywords"><span class="keyword-title">Keywords: </span> {{ study.citation.keywords | safe }} </span></p>
+        <input type="hidden" class="startTags" value="{{ study.tags }}" >
         <div class="chips"></div>
       </div> 
     </div>

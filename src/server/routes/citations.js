@@ -1,7 +1,6 @@
 const Promise = require('bluebird')
 const _ = require('lodash')
-const express = require('express')
-const router = express.Router({ mergeParams: true })
+const router = require('express-promise-router')({ mergeParams: true })
 const upload = require('multer')()
 const api = require('./api')
 const { send } = require('./api/helpers')
@@ -28,40 +27,48 @@ router.get('/:status/:page',
 router.post('/tags/:citationId',
   api.populateBodyWithDefaults,
   addTags)
+
+// Screening editing routes.
+router.post('/screenings/:studyId/submit', api.populateBodyWithDefaults, screenCitation)
+router.post('/screenings/:studyId/delete', api.populateBodyWithDefaults, deleteCitation)
+
 router.post('/screenings/:status/:page',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
-router.post('/screenings/submit',
-  api.populateBodyWithDefaults,
-  screenCitation)
-router.post('/screenings/change',
-  api.populateBodyWithDefaults,
-  changeCitation)
-router.post('/screenings/delete',
-  api.populateBodyWithDefaults,
-  deleteCitation)
 router.post('/screenings',
   api.populateBodyWithDefaults,
   screenCitations, showCitations)
 
-function deleteCitation (req, res, next) {
-  api.citations.deleteCitation(req.body).then(data =>
-    res.json(data)
-  )
+// TODO screenCitation and deleteCitation are near-exact duplicates of similar methods in fulltext
+// review
+function screenCitation (req, res) {
+  const { user } = req.body
+  const body = _.pick(req.body, ['status', 'exclude_reasons'])
+
+  // We try to PUT first (i.e. to modify existing screening). If that fails with 404, try POST
+  // instead to create a new screening. This avoids the need to always know whether there is an
+  // existing screening by the current user. (It would be nice if backend offered a single route.)
+  return send(`/citations/${req.params.studyId}/screenings`, user, { method: 'PUT', body: body })
+  .catch(e => (e.statusCode === 404), e => {
+    return send(`/citations/${req.params.studyId}/screenings`, user, { method: 'POST', body: body })
+  })
+  .then(data => { res.json(data) })
+  .catch(e => {
+    console.log(`screenCitation ${req.params.studyId} failed: ${e}`)
+    res.status(e.statusCode)
+    res.json({ error: e.error.message || e.toString() })
+  })
 }
 
-function changeCitation (req, res, next) {
-  api.citations.deleteCitation(req.body).then(d =>
-    api.citations.post(req.body).then(data =>
-      res.json(data)
-    )
-  )
-}
-
-function screenCitation (req, res, next) {
-  api.citations.post(req.body).then(data =>
-    res.json(data)
-  )
+function deleteCitation (req, res) {
+  const { user } = req.body
+  return send(`/citations/${req.params.studyId}/screenings`, user, { method: 'DELETE' })
+  .then(data => { res.json({ message: 'ok' }) })
+  .catch(e => {
+    console.log(`deleteCitation ${req.params.studyId} failed: ${e}`)
+    res.status(e.statusCode)
+    res.json({ error: e.error.message || e.toString() })
+  })
 }
 
 function addTags (req, res, next) {

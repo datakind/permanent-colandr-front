@@ -1,4 +1,4 @@
-/* global $, document */
+/* global $, document, Materialize, nunjucks, reviewContext */
 
 $(document).ready(function () {
   // User material style for select dropdowns.
@@ -33,10 +33,10 @@ $(document).ready(function () {
    * Action may be true to show, false to hide, or null to toggle.
    * Selector is only used when showing.
    */
-  function toggleScreeningDropdown(elem, action, selector) {
+  function toggleScreeningDropdown (elem, action, selector) {
     var screening = $(elem).closest('.screening_actions')
-    var show = (action !== null ? action :
-                screening.find('.dropdown_screening:visible').length === 0)
+    var show = (action !== null ? action
+                : screening.find('.dropdown_screening:visible').length === 0)
     // If any items were temporarily toggled, toggle them back when hiding dropdowns.
     $('li.tempswitched').toggleClass('included excluded tempswitched')
     $('.dropdown_screening').hide()
@@ -46,19 +46,19 @@ $(document).ready(function () {
   }
 
   // For an active user's screening, show dropdown with edit options when the user is clicked.
-  $('.screenuser.active').click(function (e) {
+  $('li.user_screening').on('click', '.screenuser.active', function (e) {
     e.stopPropagation()
     toggleScreeningDropdown($(this).next(), null, '.screening_menu')
   })
 
   // When Remove button (link) is clicked, so the remove-screening confirmation.
-  $('li.remove').click(function (e) {
+  $('li.user_screening').on('click', 'li.remove', function (e) {
     e.stopPropagation()
     toggleScreeningDropdown(this, true, '.removing')
   })
 
   // When Switch button (link) is clicked, toggle between included and excluded.
-  $('li.switch').click(function (e) {
+  $('li.user_screening').on('click', 'li.switch', function (e) {
     e.stopPropagation()
     var li = $(this).parent().closest('li')
     toggleScreeningDropdown(this, true,
@@ -67,41 +67,89 @@ $(document).ready(function () {
   })
 
   // When Edit button (link) is clicked, show the edit-exclusions dropdown.
-  $('li.edit_screening_exclusions').click(function (e) {
+  $('li.user_screening').on('click', 'li.edit_screening_exclusions', function (e) {
     e.stopPropagation()
     toggleScreeningDropdown(this, true, '.editexclusions')
   })
 
   // When a cancel button is clicked in a dropdown, hide dropdowns and toggle back the
   // included/excluded classes if needed.
-  $('.dropdown_screening a.cancel').click(function (e) {
+  $('li.user_screening').on('click', '.dropdown_screening a.cancel', function (e) {
     e.stopPropagation()
     e.preventDefault()
     toggleScreeningDropdown(this, false)
   })
 
-
   // ----------------------------------------------------------------------
-  /*
-  function doReview (elem, status, excludeReasons) {
-    var studyElem = $(elem).closest('[data-study-id]')
-    var studyId = studyElem.attr('data-study-id')
-    $.ajax('/reviews/' + reviewId + '/citations/screenings/' + studyId, {
+
+  // Submits edits to a review containing the given element. Shows a toast on success/failure, and
+  // re-renders the 'user_screening.html' template on success.
+  function submitReview (elem, status, excludeReasons) {
+    var submitUrl = $(elem).closest('[data-submit-url]').attr('data-submit-url')
+    $.ajax(submitUrl + '/submit', {
       method: 'POST',
       data: { status: status, exclude_reasons: excludeReasons }
     })
-    .done(function () { studyElem.slideUp() })
+    .done(function (data, textStatus, jqXHR) {
+      var container = $(elem).closest('li.user_screening')
+      var context = $.extend({screen: data}, reviewContext)
+      container.html(nunjucks.render('shared/user_screening.html', context))
+      container.removeClass('tempswitched')
+
+      Materialize.toast('Saved', 1000, 'green')
+      /* studyElem.slideUp() */
+    })
     .fail(function (jqXHR, textStatus, error) {
-      console.log('Request failed', error)
-      Materialize.toast('Review action failed: ' + error, 3000, 'red')
+      var message = jqXHR.responseJSON.error || error
+      console.log('Request failed:', message)
+      Materialize.toast('Review action failed: ' + message, 3000, 'red')
+    })
+    .always(function () {
+      toggleScreeningDropdown(this, false)
     })
   }
 
-  $('.editexclusions a.ok').on('click', function (e) {
-    var excludeReasons = $(this).closest('.editexclusions').find(':checked')
-    .map(function (el) { return $(el).attr('data-label') }).get()
-    doReview(this, 'excluded', excludeReasons)
+  // On setting the screening to Included.
+  $('li.user_screening').on('click', '.editinclusion a.ok', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    submitReview(this, 'included')
   })
+
+  // On setting the screening to Excluded, with reasons.
+  $('li.user_screening').on('click', '.editexclusions a.ok', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+
+    var excludeReasons = $(this).closest('.editexclusions').find(':checked').get()
+        .map(function (el) { return $(el).attr('data-label') })
+    submitReview(this, 'excluded', excludeReasons)
+  })
+
+  // On removing a screening.
+  $('li.user_screening').on('click', '.removing a.ok', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    var submitUrl = $(this).closest('[data-submit-url]').attr('data-submit-url')
+    $.ajax(submitUrl + '/delete', { method: 'POST' })
+    .done(function (data, textStatus, jqXHR) {
+      Materialize.toast('Deleted', 1000, 'green')
+      /* studyElem.slideUp() */
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      var message = (jqXHR.responseJSON.error || error)
+      console.log('Request failed:', message)
+      Materialize.toast('Review action failed: ' +
+        message .replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+        3000, 'red')
+    })
+    .always(function () {
+      toggleScreeningDropdown(this, false)
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  /*
 
   $('.include-btn').on('click', function (e) {
     doReview(this, 'included', null)
@@ -116,12 +164,7 @@ $(document).ready(function () {
 
 /*
 citations AND fulltext
-  $('.editinclusion a.ok').click(function (e) {
-  $('.editexclusions a.ok').click(function (e) {
-  $('.row').on('click', '.editexclusions a.ok', function (e) {
 
-  $('.removing a.cancel').click(function (e) {
-  $('.removing a.ok').click(function (e) {
   $(window).click(function (e) {
 
   $('.chips').each(function (index) {

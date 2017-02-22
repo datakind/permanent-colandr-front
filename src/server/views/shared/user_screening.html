@@ -1,6 +1,7 @@
 {#
 Variables used:
   userId: the current userId.
+  users: map of userId to user name.
   screen: the screening record being edited, whether for citations or fulltext.
   selectionCriteria: array of {label, description} objects from the review plan.
 #}
@@ -8,11 +9,7 @@ Variables used:
 <div class="screenuser {{ 'active' if userId == screen.user_id else '' }}">{{ users[screen.user_id] }}</div>
 
 {% if userId == screen.user_id %}
-<div class="screening_actions" data-submit-url="/reviews/{{ reviewId }}/{{
-      'fulltext' if screen.fulltext_id else 'citation'
-    }}/screenings/{{
-      'submit' if not screen else (screen.fulltext_id if screen.fulltext_id else screen.citation_id)
-    }}">
+<div class="screening_actions">
   <div class="dropdown_screening screening_menu" style="display:none;">
     <ul>
       <li class="remove"><i class="tiny material-icons">restore</i>remove</li>
@@ -32,7 +29,7 @@ Variables used:
     <a href="#" class="cancel">cancel</a> <a href="#" class="ok">ok</a>
   </div>
 
-  {% include "./edit_exclusions.html" %}
+  {% include "shared/edit_exclusions.html" %}
 
 </div>
 {% endif %}

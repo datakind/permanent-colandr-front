@@ -15,18 +15,15 @@ router.post('/upload', upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
 // Show PDF route
 router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
 
-// Screening routes
+// Showing full-text route
 router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
 
-router.post('/screenings/submit', api.populateBodyWithDefaults, screenFulltext)
-router.post('/screenings/change', api.populateBodyWithDefaults, changeFulltext)
-router.post('/screenings/delete', api.populateBodyWithDefaults, deleteFulltext)
-router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
-router.post('/screenings', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
+// Screening editing routes.
+router.post('/screenings/:studyId/submit', api.populateBodyWithDefaults, screenFulltext)
+router.post('/screenings/:studyId/delete', api.populateBodyWithDefaults, deleteFulltext)
 
 // Label routes
 router.get('/tags/:id', api.populateBodyWithDefaults, showTags)
-
 router.post('/tags/:id', api.populateBodyWithDefaults, updateTags)
 
 // Main list route
@@ -120,23 +117,33 @@ function showFulltexts (req, res) {
 }
 
 function screenFulltext (req, res) {
-  return api.fulltext.post(req.body).then(data => res.json(data))
+  const { user } = req.body
+  const body = _.pick(req.body, ['status', 'exclude_reasons'])
+
+  // We try to PUT first (i.e. to modify existing screening). If that fails with 404, try POST
+  // instead to create a new screening. This avoids the need to always know whether there is an
+  // existing screening by the current user. (It would be nice if backend offered a single route.)
+  return send(`/fulltexts/${req.params.studyId}/screenings`, user, { method: 'PUT', body: body })
+  .catch(e => (e.statusCode === 404), e => {
+    return send(`/fulltexts/${req.params.studyId}/screenings`, user, { method: 'POST', body: body })
+  })
+  .then(data => { res.json(data) })
+  .catch(e => {
+    console.log(`screenFulltext ${req.params.studyId} failed: ${e}`)
+    res.status(e.statusCode)
+    res.json({ error: e.error.message || e.toString() })
+  })
 }
 
-function screenFulltexts (req, res) {
-  return api.fulltext.post(req.body)
-}
-
-// TODO: This does not work
-function changeFulltext (req, res, next) {
-  return api.fulltext.deleteFulltext(req.body)
-  .then(() => api.fulltext.post(req.body))
-  .then(() => res.end())
-}
-
-function deleteFulltext (req, res, next) {
-  return api.fulltext.deleteFulltext(req.body)
-  .then(() => res.end())
+function deleteFulltext (req, res) {
+  const { user } = req.body
+  return send(`/fulltexts/${req.params.studyId}/screenings`, user, { method: 'DELETE' })
+  .then(data => { res.json({ message: 'ok' }) })
+  .catch(e => {
+    console.log(`deleteFulltext ${req.params.studyId} failed: ${e}`)
+    res.status(e.statusCode)
+    res.json({ error: e.error.message || e.toString() })
+  })
 }
 
 function uploadFulltext (req, res, next) {
