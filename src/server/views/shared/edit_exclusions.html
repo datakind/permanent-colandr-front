@@ -1,0 +1,15 @@
+<div class="dropdown_screening editexclusions" style="display:none;">
+  <ul>
+  {% for selection in selectionCriteria %}
+    <li>
+      <input type="checkbox" name="criteria[{{ selection.label }}]" id="{{ selection.label }}-{{ study.id }}"
+        {% if screen.status == "excluded" and screen.exclude_reasons|containsElement(selection.label) %}
+          checked="checked"
+        {% endif %} />
+      <label for="{{ selection.label }}-{{ study.id }}">{{ selection.label }}</label>
+    </li>
+  {% endfor %}
+  </ul>
+  <a href="#" class="cancel">cancel</a>
+  <a href="#" class="ok">ok</a>
+</div>

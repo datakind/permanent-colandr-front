@@ -1,0 +1,46 @@
+{#
+Variables used:
+  userId: the current userId.
+  screen: the screening record being edited, whether for citations or fulltext.
+  selectionCriteria: array of {label, description} objects from the review plan.
+#}
+
+<div class="screenuser {{ 'active' if userId == screen.user_id else '' }}">{{ users[screen.user_id] }}</div>
+
+{% if userId == screen.user_id %}
+<div class="screening_actions" data-submit-url="/reviews/{{ reviewId }}/{{
+      'fulltext' if screen.fulltext_id else 'citation'
+    }}/screenings/{{
+      'submit' if not screen else (screen.fulltext_id if screen.fulltext_id else screen.citation_id)
+    }}">
+  <div class="dropdown_screening screening_menu" style="display:none;">
+    <ul>
+      <li class="remove"><i class="tiny material-icons">restore</i>remove</li>
+      <li class="switch"><i class="tiny material-icons">repeat</i>switch</li>
+      {% if screen.status == "excluded" %}
+      <li class="edit_screening_exclusions"><i class="tiny material-icons">repeat</i>edit</li>
+      {% endif %}
+    </ul>
+  </div>
+  <div class="dropdown_screening removing" style="display:none;">
+    Upon removing this screening, this citation will be returned to your <strong>screen</strong> list.
+    <a href="#" class="cancel">cancel</a> <a href="#" class="ok">ok</a>
+  </div>
+
+  <div class="dropdown_screening editinclusion" style="display:none;">
+    Change your screening for this citation to <strong>include</strong> this citation?
+    <a href="#" class="cancel">cancel</a> <a href="#" class="ok">ok</a>
+  </div>
+
+  {% include "./edit_exclusions.html" %}
+
+</div>
+{% endif %}
+
+{% if screen.status == 'excluded' %}
+<ul>
+  {% for reason in screen.exclude_reasons %}
+  <li> <i class="tiny material-icons">thumb_down</i>{{ reason }}</li>
+  {% endfor %}
+</ul>
+{% endif %}

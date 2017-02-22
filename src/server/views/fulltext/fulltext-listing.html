@@ -13,59 +13,33 @@
     {% if shownStatus == 'pending' %}
     <div class="decision-form-box col s12">
       {% if study.fulltext.filename %}
-      {% include './partials/fields/_include-form.html' %}
+        {# TODO the form may be unneeded #}
+        <form action="/reviews/{{ reviewId }}/fulltext/screenings/{{ shownStatus }}/{{ page }}" method="post">
+          <input type="hidden" name="studyId" class="studyId" value="{{ study.id }}" />
+          <input type="hidden" name="action" class="action" value="included" />
+          <a href="/reviews/{{ reviewId }}/fulltext/screening/{{ study.id }}" class="btn waves-effect waves-light btn-small view-btn">View Full Text</a>
+
+          {% include "../shared/pending_screening.html" %}
+        </form>
       {% else %}
-      {% include './partials/fields/_upload-form.html' %}
+        {# TODO the form may be unneeded #}
+        <form action="/reviews/{{ reviewId }}/fulltext/upload" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="studyId" class="studyId" value="{{ study.id }}" />
+          <div class="btn waves-effect waves-light btn-small file-field input-field upload-btn-box">
+            <div class="upload-btn">
+              <span>Add Full Text</span>
+              <input class="uploaded-fulltext" name="uploaded_file" type="file">
+            </div>
+          </div>
+          <div class="upload-status"></div>
+        </form>
       {% endif %}
     </div>
     {% else %}
     <ul class="collection screens">
       {% for screen in study.fulltext.screenings %}
       <li class = "{{ screen.status }}">
-        {% if userId == screen.user_id %}
-        <div class = "screenuser active">{{ users[screen.user_id] }}</div>
-        <div class = "dropdown" style="display:none;">
-          <ul>
-            <li><a href = "#" class = "remove"><i class="tiny material-icons">restore</i>remove</a></li>
-            <li><a href = "#" class = "switch"><i class="tiny material-icons">repeat</i>switch</a></li>
-            {% if screen.status == "excluded" %}
-            <li><a href = "#" class = "edit"><i class="tiny material-icons">repeat</i>edit</a></li>
-            {% endif %}
-          </ul>
-        </div>
-        <div class = "removing" style="display:none;">
-          Upon removing this screening, this citation will be returned to your <strong>screen</strong> list. <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
-        </div>
-        <div class = "switching" style="display:none;">
-          Upon removing this screening, citation will be returned to your screen list.
-        </div>
-        <div class = "editexclusions" style="display:none;">
-          <form class="fulltext-selection-form" action="/reviews/{{ reviewId }}/fulltext/screenings/{{ shownStatus }}/{{ page }}" method="post">
-              <input type = "hidden" name = "studyId" class = "studyId" value="{{ study.id }}" />
-              <ul>
-              {% for selection in selectionCriteria %}
-              {% include './partials/selection-criteria.html' %}
-              {% endfor %}
-              </ul>
-            <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
-          </form>
-        </div>
-        {% if screen.status == "excluded" %}
-        <div class = "editinclusion" style="display:none;">
-          Change your screening for this citation to <strong>include</strong> this citation?
-          <a href = "#" class = "cancel">cancel</a> <a href = "#" class = "ok">ok</a>
-        </div>
-        {% endif %}
-        {% else %}
-        <div class = "screenuser">{{ users[screen.user_id] }}</div>
-        {% endif %}
-        {% if screen.status == 'excluded' %}
-        <ul>
-          {% for reason in screen.exclude_reasons %}
-          <li> <i class="tiny material-icons">thumb_down</i>{{ reason }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+        {% include '../shared/active_user.html' %}
       </li>
       {% endfor %}
     </ul>
