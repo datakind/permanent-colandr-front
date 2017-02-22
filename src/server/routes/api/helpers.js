@@ -15,6 +15,7 @@ function send (path, user, opts = {}) {
     auth: { user: user.token }
   }, opts)
 
+  console.log('RP', JSON.stringify(options))
   return rp(options)
 }
 
