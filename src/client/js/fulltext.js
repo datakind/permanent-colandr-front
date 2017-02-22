@@ -10,59 +10,6 @@ $(document).ready(function () {
     container.html(el)
   }
 
-  $('form#filters select').change(function () {
-    console.log('select changed')
-    this.form.submit()
-  })
-  $('select').material_select()
-  $('.chips').each(function (index) {
-    var chip = $(this)
-    var tagsString = chip.parent().find('input').val()
-    var objects = []
-    if (tagsString.length > 0) {
-      try {
-        console.log('tag string:' + tagsString)
-        var tags = tagsString.split(',')
-        for (var tag in tags) {
-          objects.push({
-            tag: tags[tag]
-          })
-        }
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    chip.material_chip({
-      data: objects,
-      placeholder: 'Enter a tag',
-      secondaryPlaceholder: '+Tag'
-    })
-  })
-  $('.collapsible').collapsible()
-  $('.screenuser.active').click(function (e) {
-    var dropdown = $(this).parent().children('.dropdown')
-    dropdown.attr('style', 'display:block')
-    var position = $(this).position()
-    console.log(position)
-    e.preventDefault()
-    e.stopPropagation()
-  })
-  $('a.doexclude').click(function (e) {
-    var dropdown = $(this).parent().children('.editexclusions')
-    dropdown.attr('style', 'display:block')
-    var position = $(this).position()
-    console.log(position)
-    e.preventDefault()
-    e.stopPropagation()
-  })
-
-  $('a.remove').click(function (e) {
-    $(this).parent().parent().parent().attr('style', 'display:none')
-    console.log($(this).parent().parent())
-    $(this).parent().parent().parent().parent().children('.removing').attr('style', 'display:block')
-    e.preventDefault()
-    e.stopPropagation()
-  })
   $('li.included a.switch').click(function (e) {
     e.stopPropagation()
     e.preventDefault()
@@ -121,30 +68,6 @@ $(document).ready(function () {
         $(this).closest('.fulltext-li').slideUp()
       }
     })
-  })
-
-  $('.row').on('click', '.editexclusions a.cancel', function (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    $('.editexclusions').each(function (index) {
-      $(this).attr('style', 'display:none')
-    })
-    var p = $(this).parent().parent()
-    if (p.is('li.tempexcluded')) {
-      p.toggleClass('included').toggleClass('excluded').removeClass('tempexcluded')
-    }
-  })
-
-  $('.editinclusion a.cancel').click(function (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    $('.editinclusion').each(function (index) {
-      $(this).attr('style', 'display:none')
-    })
-    var p = $(this).parent().parent()
-    if (p.is('li.tempincluded')) {
-      p.toggleClass('included').toggleClass('excluded').removeClass('tempincluded')
-    }
   })
 
   $('.editinclusion a.ok').click(function (e) {
@@ -309,6 +232,29 @@ $(document).ready(function () {
     }
   })
 
+  $('.chips').each(function (index) {
+    var chip = $(this)
+    var tagsString = chip.parent().find('input').val()
+    var objects = []
+    if (tagsString.length > 0) {
+      try {
+        console.log('tag string:' + tagsString)
+        var tags = tagsString.split(',')
+        for (var tag in tags) {
+          objects.push({
+            tag: tags[tag]
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    chip.material_chip({
+      data: objects,
+      placeholder: 'Enter a tag',
+      secondaryPlaceholder: '+Tag'
+    })
+  })
   $('.chips').on('chip.add', function (e, chip) {
     // you have the added chip here
     console.log('added')
@@ -370,20 +316,5 @@ $(document).ready(function () {
         console.log(data)
       }
     })
-  })
-
-  $('#filters .highlights').click(function (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    var keyTerms = $('.reviews-list .collapsible-body .keyterm')
-    var jthis = $(this)
-    if (jthis.is('.highlightsoff')) {
-      keyTerms.css('font-weight', 'bold')
-      jthis.text('Highlights_On')
-    } else {
-      keyTerms.css('font-weight', 'normal')
-      jthis.text('Highlights_Off')
-    }
-    $(this).toggleClass('highlightson').toggleClass('highlightsoff')
   })
 })

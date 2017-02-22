@@ -14,9 +14,17 @@
         <input type = "hidden" name = "citationId" class = "citationId" value="{{ study.id }}" />
         <input type = "hidden" name = "action" class = "action" value="included" />
         {% if shownStatus == 'pending' %}
-        {% include './pending.html' %}
+          <div class="col s12">
+            {% include "../../shared/pending_screening.html" %}
+          </div>
         {% else %}
-        {% include './nonpending.html' %}
+          <ul class="collection screens">
+           {% for screen in study.citation.screenings %}
+             <li class = "{{ screen.status }}">
+             {% include '../../shared/active_user.html' %}
+             </li>
+           {% endfor %}
+          </ul>
         {% endif %}
       </div>
       {% endblock %}
