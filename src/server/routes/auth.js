@@ -38,11 +38,12 @@ function signin (req, res, next) {
 function register (req, res, next) {
   send(`/register/${req.params.token}`, '', { auth: null })
   .then(() => {
-    res.redirect('/reviews')
+    req.flash('success', 'Congratulations, you have successfully registered!')
+    res.redirect('/signin#signin')
   })
   .catch(err => {
     console.log('Register failed: ' + err)
-    req.flash('error', 'Could not register user with provided credentials')
+    req.flash('error', 'Could not register user with provided credentials!')
     res.redirect('/signin#signin')
   })
 }
