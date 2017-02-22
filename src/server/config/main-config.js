@@ -11,13 +11,13 @@ const nunjucks = require('nunjucks')
 const favicon = require('serve-favicon')
 const methodOverride = require('method-override')
 
+// *** load environment variables *** //
+require('dotenv').config()
+
 // *** view folders *** //
 const viewFolders = [
   path.join(__dirname, '..', 'views')
 ]
-
-// *** load environment variables *** //
-if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 
 module.exports.init = function (app, express) {
   // *** view engine *** //
