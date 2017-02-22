@@ -10,11 +10,9 @@
       class="input-field">
       <textarea id="objective"
         class="materialize-textarea"
-        name="objective">{{ plan.objective }}</textarea>
+        name="objective" {{ 'readonly' if not isOwner }}>{{ plan.objective }}</textarea>
       <label for="objective">Objective</label>
-      <button type="submit" class="btn btn-large z-depth-0">
-        Save
-      </button>
+      <button type="submit" class="btn btn-large z-depth-0" {{ 'disabled' if not isOwner }}>Save</button>
     </form>
   </div>
 </div>

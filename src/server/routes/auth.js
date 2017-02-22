@@ -1,8 +1,10 @@
+const { send } = require('./api/helpers')
 const express = require('express')
 const router = express.Router()
 const api = require('./api')
 
 router.get('/signin', index)
+router.get('/register/:token', register)
 router.post('/signin', signin, api.auth.authenticate, goUserHome)
 router.post('/signup', signup, signin)
 /* new */
@@ -31,6 +33,18 @@ function signin (req, res, next) {
       req.flash('error', 'Could not login with the provided email and password')
       res.redirect('/signin#signin')
     })
+}
+
+function register (req, res, next) {
+  send(`/register/${req.params.token}`, '', { auth: null })
+  .then(() => {
+    res.redirect('/reviews')
+  })
+  .catch(err => {
+    console.log('Register failed: ' + err)
+    req.flash('error', 'Could not register user with provided credentials')
+    res.redirect('/signin#signin')
+  })
 }
 
 function goUserHome (req, res, next) {

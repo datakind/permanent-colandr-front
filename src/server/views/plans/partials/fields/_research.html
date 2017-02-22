@@ -4,11 +4,14 @@
       <textarea class="materialize-textarea validate"
                 name="research_questions[]"
                 length="300"
-                required>{{ question }}</textarea>
+                required
+                {{ 'readonly' if not isOwner }}>{{ question }}</textarea>
       <label>Question {{ loop.index }}</label>
     </div>
+    {% if isOwner %}
     <a class="btn-floating waves-effect waves-light red research-question-remove">
       <i class="material-icons">remove</i>
     </a>
+    {% endif %}
   </div>
 </li>

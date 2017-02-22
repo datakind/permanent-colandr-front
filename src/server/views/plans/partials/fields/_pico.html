@@ -3,6 +3,7 @@
     type="text"
     class="validate"
     name="pico[{{ field }}]"
-    value="{{ plan.pico[field] }}">
+    value="{{ plan.pico[field] }}"
+    {{ 'readonly' if not isOwner }}>
   <label for="pico-{{ field }}">{{ field | capitalize }}</label>
 </div>

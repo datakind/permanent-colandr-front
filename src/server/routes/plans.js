@@ -1,26 +1,24 @@
 const Promise = require('bluebird')
 const express = require('express')
 const router = express.Router({ mergeParams: true })
+const { send } = require('./api/helpers')
 const api = require('./api')
 
-router.get('/',
-  api.populateBodyWithDefaults,
-  index)
-router.put('/',
-  api.populateBodyWithDefaults,
-  parseLists,
-  update)
+router.get('/', api.populateBodyWithDefaults, index)
+router.put('/', api.populateBodyWithDefaults, parseLists, update)
 
 // plans routes
 
 function index (req, res, next) {
   const { reviewId, user } = req.body
   return Promise.join(
-    api.reviews.getName(user, reviewId),
+    send(`/reviews/${reviewId}`, user, { qs: { fields: 'name,owner_user_id' } }),
+    // api.reviews.getName(user, reviewId),
     api.plans.get(req.body),
-    (reviewName, plan) => {
+    (reviewInfo, plan) => {
       res.render('plans/index', {
-        reviewName,
+        isOwner: user.user_id === reviewInfo.owner_user_id,
+        reviewName: reviewInfo.name,
         reviewId,
         plan
       })
