@@ -27,7 +27,14 @@ function signup (body) {
   return send('/register', '', {
     method: 'POST',
     auth: null,
-    body: { name, email, password }
+    qs: {
+      server_name: 'http://www.colandrapp.com'
+    },
+    body: {
+      name,
+      email,
+      password
+    }
   })
 }
 
