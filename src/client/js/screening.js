@@ -1,4 +1,9 @@
-/* global $, document, Materialize, nunjucks, reviewContext */
+/* global $, document, Materialize, nunjucks, reviewContext, window */
+
+// Same as Materialize.toast, but interprets text as text rather than html.
+function textToast (text, displayLength, className, completeCallback) {
+  Materialize.toast($('<span>').text(text), displayLength, className, completeCallback)
+}
 
 $(document).ready(function () {
   // User material style for select dropdowns.
@@ -46,19 +51,19 @@ $(document).ready(function () {
   }
 
   // For an active user's screening, show dropdown with edit options when the user is clicked.
-  $('li.user_screening').on('click', '.screenuser.active', function (e) {
+  $('.screening_box').on('click', '.screenuser.active', function (e) {
     e.stopPropagation()
     toggleScreeningDropdown($(this).next(), null, '.screening_menu')
   })
 
   // When Remove button (link) is clicked, so the remove-screening confirmation.
-  $('li.user_screening').on('click', 'li.remove', function (e) {
+  $('.screening_box').on('click', 'li.remove', function (e) {
     e.stopPropagation()
     toggleScreeningDropdown(this, true, '.removing')
   })
 
   // When Switch button (link) is clicked, toggle between included and excluded.
-  $('li.user_screening').on('click', 'li.switch', function (e) {
+  $('.screening_box').on('click', 'li.switch', function (e) {
     e.stopPropagation()
     var li = $(this).parent().closest('li')
     toggleScreeningDropdown(this, true,
@@ -67,14 +72,14 @@ $(document).ready(function () {
   })
 
   // When Edit button (link) is clicked, show the edit-exclusions dropdown.
-  $('li.user_screening').on('click', 'li.edit_screening_exclusions', function (e) {
+  $('.screening_box').on('click', 'li.edit_screening_exclusions', function (e) {
     e.stopPropagation()
     toggleScreeningDropdown(this, true, '.editexclusions')
   })
 
   // When a cancel button is clicked in a dropdown, hide dropdowns and toggle back the
   // included/excluded classes if needed.
-  $('li.user_screening').on('click', '.dropdown_screening a.cancel', function (e) {
+  $('.screening_box').on('click', '.dropdown_screening a.cancel', function (e) {
     e.stopPropagation()
     e.preventDefault()
     toggleScreeningDropdown(this, false)
@@ -82,102 +87,142 @@ $(document).ready(function () {
 
   // ----------------------------------------------------------------------
 
-  // Submits edits to a review containing the given element. Shows a toast on success/failure, and
-  // re-renders the 'user_screening.html' template on success.
-  function submitReview (elem, status, excludeReasons) {
-    var submitUrl = $(elem).closest('[data-submit-url]').attr('data-submit-url')
-    $.ajax(submitUrl + '/submit', {
+  // Performs a 'submit' or 'delete' screening action for the study containing the given element.
+  // Shows a toast on failure. The caller should handle the success case.
+  function doScreeningAction (elem, actionSuffix, data) {
+    var studyElem = $(elem).closest('[data-study-url]')
+    var studyUrl = studyElem.attr('data-study-url')
+    var screeningType = studyElem.attr('data-screening-type')
+    return $.ajax(studyUrl + '/screening/' + screeningType + actionSuffix, {
       method: 'POST',
-      data: { status: status, exclude_reasons: excludeReasons }
+      data: data
     })
+    .fail(function (jqXHR, textStatus, error) {
+      var message = jqXHR.responseJSON.error || error
+      console.log('Action failed:', message)
+      textToast('Action failed: ' + message, 3000, 'red')
+    })
+  }
+
+  // Submits edits to a screening. On success, shows a toast and re-renders the
+  // 'user_screening.html' template on success.
+  function submitScreening (elem, status, excludeReasons) {
+    return doScreeningAction(elem, '/submit',
+      { status: status, exclude_reasons: excludeReasons })
     .done(function (data, textStatus, jqXHR) {
       var container = $(elem).closest('li.user_screening')
       var context = $.extend({screen: data}, reviewContext)
       container.html(nunjucks.render('shared/user_screening.html', context))
       container.removeClass('tempswitched')
-
-      Materialize.toast('Saved', 1000, 'green')
+      textToast('Saved', 1000, 'green')
       /* studyElem.slideUp() */
-    })
-    .fail(function (jqXHR, textStatus, error) {
-      var message = jqXHR.responseJSON.error || error
-      console.log('Request failed:', message)
-      Materialize.toast('Review action failed: ' + message, 3000, 'red')
     })
     .always(function () {
       toggleScreeningDropdown(this, false)
     })
   }
 
-  // On setting the screening to Included.
-  $('li.user_screening').on('click', '.editinclusion a.ok', function (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    submitReview(this, 'included')
-  })
-
-  // On setting the screening to Excluded, with reasons.
-  $('li.user_screening').on('click', '.editexclusions a.ok', function (e) {
-    e.stopPropagation()
-    e.preventDefault()
-
-    var excludeReasons = $(this).closest('.editexclusions').find(':checked').get()
-        .map(function (el) { return $(el).attr('data-label') })
-    submitReview(this, 'excluded', excludeReasons)
-  })
-
-  // On removing a screening.
-  $('li.user_screening').on('click', '.removing a.ok', function (e) {
-    e.stopPropagation()
-    e.preventDefault()
-    var submitUrl = $(this).closest('[data-submit-url]').attr('data-submit-url')
-    $.ajax(submitUrl + '/delete', { method: 'POST' })
+  // Deletes a screening for the study containing the given element.
+  function deleteScreening (elem) {
+    return doScreeningAction(elem, '/delete', null)
     .done(function (data, textStatus, jqXHR) {
-      Materialize.toast('Deleted', 1000, 'green')
+      textToast('Deleted', 1000, 'green')
       /* studyElem.slideUp() */
-    })
-    .fail(function (jqXHR, textStatus, error) {
-      var message = (jqXHR.responseJSON.error || error)
-      console.log('Request failed:', message)
-      Materialize.toast('Review action failed: ' +
-        message .replace(/</g, '&lt;').replace(/>/g, '&gt;'),
-        3000, 'red')
     })
     .always(function () {
       toggleScreeningDropdown(this, false)
     })
+  }
+
+  // ----------------------------------------------------------------------
+
+  // On setting the screening to Included.
+  $('.screening_box').on('click', '.editinclusion a.ok', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    submitScreening(this, 'included')
+  })
+
+  // On setting the screening to Excluded, with reasons.
+  $('.screening_box').on('click', '.editexclusions a.ok', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    var studyElem = $(this).closest('[data-study-url]')
+    var underExcludeButton = ($(this).closest('.exclusions').length > 0)
+
+    var excludeReasons = $(this).closest('.editexclusions').find(':checked').get()
+        .map(function (el) { return $(el).attr('data-label') })
+    submitScreening(this, 'excluded', excludeReasons)
+    .then(function () {
+      if (underExcludeButton) {
+        studyElem.slideUp()
+      }
+    })
+  })
+
+  // On clicking the Include button.
+  $('.include-btn').on('click', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    var studyElem = $(this).closest('[data-study-url]')
+    submitScreening(this, 'included')
+    .then(function () {
+      studyElem.slideUp()
+    })
+  })
+
+  // Skipping a screening: just hide the entire study listing.
+  $('.skip-btn').on('click', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    var studyElem = $(this).closest('[data-study-url]')
+    studyElem.slideUp()
+  })
+
+  // On removing a screening.
+  $('.screening_box').on('click', '.removing a.ok', function (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    var studyElem = $(this).closest('[data-study-url]')
+    deleteScreening(this)
+    .then(function () {
+      studyElem.slideUp()
+    })
+  })
+
+  // Clicks within any dropdown or on any button shouldn't propagate up.
+  $('.screening_box').on('click', '.dropdown_screening, .btn', function (e) {
+    e.stopPropagation()
+  })
+
+  // Clicks that do propagate to the window should close any open dropdowns.
+  $(window).on('click', function (e) {
+    toggleScreeningDropdown(this, false)
   })
 
   // ----------------------------------------------------------------------
-  /*
-
-  $('.include-btn').on('click', function (e) {
-    doReview(this, 'included', null)
+  // Activate Materialize "chips" for tags.
+  $('.chips').each(function () {
+    var tags = JSON.parse($(this).attr('data-tags'))
+    $(this).material_chip({
+      data: tags.map(function (t) { return { tag: t } }),
+      placeholder: 'Enter a tag',
+      secondaryPlaceholder: '+Tag'
+    })
   })
 
-  // Close the containing LI when the Skip button is clicked.
-  $('.skip-btn').on('click', function (e) {
-    $(this).closest('[data-study-id]').slideUp()
+  // Whenever a chip is added or removed, save it to the server.
+  $('.chips').on('chip.add chip.delete', function (e, chip) {
+    var tags = $(this).material_chip('data').map(function (obj) { return obj.tag })
+    var studyUrl = $(this).closest('[data-study-url]').attr('data-study-url')
+    return $.ajax(studyUrl + '/tags', { method: 'POST', data: { tags: tags } })
+    .done(function (data, textStatus, jqXHR) {
+      textToast('Saved', 1000, 'green')
+    })
+    .fail(function (jqXHR, textStatus, error) {
+      var message = jqXHR.responseJSON.error || error
+      console.log('Failed to save tags:', message)
+      textToast('Failed to save tags: ' + message, 3000, 'red')
+    })
   })
- */
 })
-
-/*
-citations AND fulltext
-
-  $(window).click(function (e) {
-
-  $('.chips').each(function (index) {
-  $('.chips').on('chip.add', function (e, chip) {
-  $('.chips').on('chip.delete', function (e, chip) {
-
-citations only
-  $('.include-btn').click(function (e) {
-  $('.skip-btn').click(function (e) {
-
-fulltext only
-  $('.uploaded-fulltext').change(function (e) {
-  $('.decision-form-box').click(function (ev) {
-  $('.decision-form-box').on('click', '.include-btn', function (e) {
-  $('.decision-form-box').on('click', '.skip-btn', function (e) {
- */
