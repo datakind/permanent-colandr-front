@@ -94,7 +94,7 @@ $(document).ready(function () {
     console.log(serialized)
     var action = form.find('.action')
     $.ajax({
-      url: 'http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/delete',
+      url: '/reviews/{{ reviewId }}/citations/screenings/delete',
       context: document.body,
       method: 'POST',
       type: 'POST',
@@ -157,7 +157,7 @@ $(document).ready(function () {
     action.val('included')
     // var li = form.closest('li')
     var serialized = form.serialize()
-    var url = 'http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/change'
+    var url = '/reviews/{{ reviewId }}/citations/screenings/change'
     console.log(url)
     console.log(serialized)
     $.ajax({
@@ -198,9 +198,9 @@ $(document).ready(function () {
     var li = form.closest('li')
     var url = ''
     if (li.is('.pending')) {
-      url = 'http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/submit'
+      url = '/reviews/{{ reviewId }}/citations/screenings/submit'
     } else {
-      url = 'http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/change'
+      url = '/reviews/{{ reviewId }}/citations/screenings/change'
     }
     console.log(url)
     $.ajax({
@@ -239,7 +239,7 @@ $(document).ready(function () {
     var serialized = form.serialize()
     console.log(serialized)
     $.ajax({
-      url: 'http://localhost:3000/reviews/{{ reviewId }}/citations/screenings/submit',
+      url: '/reviews/{{ reviewId }}/citations/screenings/submit',
       context: document.body,
       method: 'POST',
       type: 'POST',
@@ -299,7 +299,7 @@ $(document).ready(function () {
     }
     console.log(tags)
     $.ajax({
-      url: 'http://localhost:3000/reviews/{{ reviewId }}/citations/tags/' + citationId,
+      url: '/reviews/{{ reviewId }}/citations/tags/' + citationId,
       context: document.body,
       method: 'POST',
       type: 'POST',
@@ -330,7 +330,7 @@ $(document).ready(function () {
     }
     console.log(tags)
     $.ajax({
-      url: 'http://localhost:3000/reviews/{{ reviewId }}/citations/tags/' + citationId,
+      url: '/reviews/{{ reviewId }}/citations/tags/' + citationId,
       context: document.body,
       method: 'POST',
       type: 'POST',
