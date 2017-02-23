@@ -114,7 +114,12 @@ $(document).ready(function () {
       var context = $.extend({screen: data}, reviewContext)
       container.html(nunjucks.render('shared/user_screening.html', context))
       container.removeClass('tempswitched')
-      textToast('Saved', 1000, 'green')
+      textToast('Saved', 1000, 'green', () => {
+        if (reviewContext.nextUrl) {
+          window.location = context.nextUrl
+        }
+      })
+
       /* studyElem.slideUp() */
     })
     .always(function () {

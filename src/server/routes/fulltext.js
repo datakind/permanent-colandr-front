@@ -129,11 +129,16 @@ function showFullText (req, res) {
   return bluebird.join(
     api.reviews.getName(user, reviewId),
     apiGetOneStudy(user, req.params.id),
-    (reviewName, study) => {
+    send(`/users?review_id=${reviewId}`, user),
+    send(`/reviews/${reviewId}/plan`, user, { qs: { fields: 'selection_criteria' } }),
+    (reviewName, study, users, plan) => {
       res.render('fulltext/review', {
+        userId: user.user_id,
         reviewId: reviewId,
         reviewName: reviewName,
         study: study,
+        selectionCriteria: plan.selection_criteria,
+        users: _.fromPairs(users.map(u => [u.id, u.name])),
         pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
       })
     }
