@@ -20,7 +20,8 @@
 </div>
 <div class="row screening_box"
      data-screening-type="fulltext"
-     data-study-url="/study/{{ study.id }}">
+     data-study-url="/study/{{ study.id }}"
+     data-redirect-on-submit="/reviews/{{ reviewId }}/fulltext">
   <div class="decision-form-box col s12">
     <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include</button>
     <div class="exclusions right">
@@ -33,18 +34,9 @@
 <div id="pdfdoc" style="width: 100%"></div>
 {% endblock %}
 
-{% block scripts %}
-  <script type="text/javascript" src="/js/screening.js"></script>
-  <script type="text/javascript">
-  var reviewContext = {
-    userId: {{ userId | dump | safe }},
-    reviewID: {{ reviewId | dump | safe }},
-    selectionCriteria: {{ selectionCriteria | dump | safe }},
-    users: {{ users | dump | safe }},
-    nextUrl: '/reviews/{{ reviewId }}/fulltext'
-  };
-  </script>
+{% include "shared/screening_js.html %}
 
+{% block scripts %}
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
   <script>
     {# PDFObject decides whether to use the native PDF viewer or pdf.js (using the supplied viewer

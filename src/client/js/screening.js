@@ -117,8 +117,10 @@ $(document).ready(function () {
         container.removeClass('tempswitched')
       }
       textToast('Saved', 1000, 'green', () => {
-        if (reviewContext.nextUrl) {
-          window.location = context.nextUrl
+        var studyElem = $(elem).closest('[data-study-url]')
+        var url = studyElem.attr('data-redirect-on-submit')
+        if (url) {
+          window.location = url
         }
       })
 
