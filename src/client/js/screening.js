@@ -110,10 +110,12 @@ $(document).ready(function () {
     return doScreeningAction(elem, '/submit',
       { status: status, exclude_reasons: excludeReasons })
     .done(function (data, textStatus, jqXHR) {
-      var container = $(elem).closest('li.user_screening')
       var context = $.extend({screen: data}, reviewContext)
-      container.html(nunjucks.render('shared/user_screening.html', context))
-      container.removeClass('tempswitched')
+      var container = $(elem).closest('li.user_screening')
+      if (container.length > 0) {
+        container.html(nunjucks.render('shared/user_screening.html', context))
+        container.removeClass('tempswitched')
+      }
       textToast('Saved', 1000, 'green', () => {
         if (reviewContext.nextUrl) {
           window.location = context.nextUrl
