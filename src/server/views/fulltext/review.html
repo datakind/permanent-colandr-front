@@ -34,9 +34,9 @@
 <div id="pdfdoc" style="width: 100%"></div>
 {% endblock %}
 
-{% include "shared/screening_js.html %}
-
 {% block scripts %}
+  {% include "shared/screening_js.html" %}
+
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
   <script>
     {# PDFObject decides whether to use the native PDF viewer or pdf.js (using the supplied viewer

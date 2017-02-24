@@ -118,13 +118,18 @@ $(document).ready(function () {
       }
       textToast('Saved', 1000, 'green', () => {
         var studyElem = $(elem).closest('[data-study-url]')
+
+        // Hide on submit, if set
+        if (studyElem.attr('data-hide-on-submit')) {
+          studyElem.slideUp()
+        }
+
+        // And also redirect on submit, if set
         var url = studyElem.attr('data-redirect-on-submit')
         if (url) {
           window.location = url
         }
       })
-
-      /* studyElem.slideUp() */
     })
     .always(function () {
       toggleScreeningDropdown(this, false)
@@ -156,28 +161,16 @@ $(document).ready(function () {
   $('.screening_box').on('click', '.editexclusions a.ok', function (e) {
     e.stopPropagation()
     e.preventDefault()
-    var studyElem = $(this).closest('[data-study-url]')
-    var underExcludeButton = ($(this).closest('.exclusions').length > 0)
-
     var excludeReasons = $(this).closest('.editexclusions').find(':checked').get()
         .map(function (el) { return $(el).attr('data-label') })
     submitScreening(this, 'excluded', excludeReasons)
-    .then(function () {
-      if (underExcludeButton) {
-        studyElem.slideUp()
-      }
-    })
   })
 
   // On clicking the Include button.
   $('.include-btn').on('click', function (e) {
     e.stopPropagation()
     e.preventDefault()
-    var studyElem = $(this).closest('[data-study-url]')
     submitScreening(this, 'included')
-    .then(function () {
-      studyElem.slideUp()
-    })
   })
 
   // Skipping a screening: just hide the entire study listing.
