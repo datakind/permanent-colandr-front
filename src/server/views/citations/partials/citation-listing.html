@@ -1,6 +1,5 @@
 <li class="{{ shownStatus }}"
     data-study-url="/study/{{ study.id }}"
-    data-hide-on-submit="1"
     data-screening-type='{% block screening_type %}citation{% endblock %}'>
 
   <div class="collapsible-header">
@@ -17,14 +16,14 @@
     {% block buttons %}
       <div class="row screening_box">
         {% if shownStatus == 'pending' %}
-          <div class="col s12">
+          <div class="col s12" data-hide-on-submit=1>
             {% include "../../shared/pending_screening.html" %}
           </div>
         {% else %}
           <ul class="collection screens">
            {% for screen in study.citation.screenings %}
              <li class="{{ screen.status }} user_screening">
-               {% include '../../shared/user_screening.html' %}
+               {% include "../../shared/user_screening.html" %}
              </li>
            {% endfor %}
           </ul>

@@ -5,30 +5,27 @@
 {% block buttons %}
   <div class="row screening_box">
     {% if shownStatus == 'pending' %}
-    <div class="decision-form-box col s12">
+    <div class="decision-form-box col s12" data-hide-on-submit=1>
       {% if study.fulltext.filename %}
         <a href="/reviews/{{ reviewId }}/fulltext/screening/{{ study.id }}" class="btn waves-effect waves-light btn-small view-btn">View Full Text</a>
 
         {% include "../shared/pending_screening.html" %}
       {% else %}
-        {# TODO the form may be unneeded #}
-        <form action="/reviews/{{ reviewId }}/fulltext/upload" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="studyId" class="studyId" value="{{ study.id }}" />
-          <div class="btn waves-effect waves-light btn-small file-field input-field upload-btn-box">
-            <div class="upload-btn">
-              <span>Add Full Text</span>
-              <input class="uploaded-fulltext" name="uploaded_file" type="file">
-            </div>
+        <input type="hidden" name="studyId" class="studyId" value="{{ study.id }}" />
+        <div class="btn waves-effect waves-light btn-small file-field input-field upload-btn-box">
+          <div class="upload-btn">
+            <span>Add Full Text</span>
+            <input class="uploaded-fulltext" name="uploaded_file" type="file">
           </div>
-          <div class="upload-status"></div>
-        </form>
+        </div>
+        <div class="upload-status"></div>
       {% endif %}
     </div>
     {% else %}
     <ul class="collection screens">
       {% for screen in study.fulltext.screenings %}
         <li class="{{ screen.status }} user_screening">
-          {% include '../shared/user_screening.html' %}
+          {% include "../shared/user_screening.html" %}
         </li>
       {% endfor %}
     </ul>

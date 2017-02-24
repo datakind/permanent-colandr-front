@@ -120,7 +120,7 @@ $(document).ready(function () {
         var studyElem = $(elem).closest('[data-study-url]')
 
         // Hide on submit, if set
-        if (studyElem.attr('data-hide-on-submit')) {
+        if ($(elem).closest('[data-hide-on-submit]').length > 0) {
           studyElem.slideUp()
         }
 
