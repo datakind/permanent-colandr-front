@@ -15,18 +15,11 @@ router.post('/upload', upload.fields([{ name: 'uploaded_file', maxCount: 1 }]),
 // Show PDF route
 router.get('/pdf/:id', api.populateBodyWithDefaults, showPDF)
 
-// Screening routes
+// Showing full-text route
 router.get('/screening/:id', api.populateBodyWithDefaults, showFullText)
-
-router.post('/screenings/submit', api.populateBodyWithDefaults, screenFulltext)
-router.post('/screenings/change', api.populateBodyWithDefaults, changeFulltext)
-router.post('/screenings/delete', api.populateBodyWithDefaults, deleteFulltext)
-router.post('/screenings/:status/:page', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
-router.post('/screenings', api.populateBodyWithDefaults, screenFulltexts, showFulltexts)
 
 // Label routes
 router.get('/tags/:id', api.populateBodyWithDefaults, showTags)
-
 router.post('/tags/:id', api.populateBodyWithDefaults, updateTags)
 
 // Main list route
@@ -119,26 +112,6 @@ function showFulltexts (req, res) {
   })
 }
 
-function screenFulltext (req, res) {
-  return api.fulltext.post(req.body).then(data => res.json(data))
-}
-
-function screenFulltexts (req, res) {
-  return api.fulltext.post(req.body)
-}
-
-// TODO: This does not work
-function changeFulltext (req, res, next) {
-  return api.fulltext.deleteFulltext(req.body)
-  .then(() => api.fulltext.post(req.body))
-  .then(() => res.end())
-}
-
-function deleteFulltext (req, res, next) {
-  return api.fulltext.deleteFulltext(req.body)
-  .then(() => res.end())
-}
-
 function uploadFulltext (req, res, next) {
   return bluebird.join(
     api.fulltext.create(req.body, req.files),
@@ -156,11 +129,16 @@ function showFullText (req, res) {
   return bluebird.join(
     api.reviews.getName(user, reviewId),
     apiGetOneStudy(user, req.params.id),
-    (reviewName, study) => {
+    api.users.getTeam(user, req.body),
+    send(`/reviews/${reviewId}/plan`, user, { qs: { fields: 'selection_criteria' } }),
+    (reviewName, study, users, plan) => {
       res.render('fulltext/review', {
+        userId: user.user_id,
         reviewId: reviewId,
         reviewName: reviewName,
         study: study,
+        selectionCriteria: plan.selection_criteria,
+        users: _.fromPairs(users.map(u => [u.id, u.name])),
         pdf_url: `/reviews/${reviewId}/fulltext/pdf/${req.params.id}`
       })
     }

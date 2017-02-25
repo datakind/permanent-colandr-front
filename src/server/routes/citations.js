@@ -1,7 +1,6 @@
 const Promise = require('bluebird')
 const _ = require('lodash')
-const express = require('express')
-const router = express.Router({ mergeParams: true })
+const router = require('express-promise-router')({ mergeParams: true })
 const upload = require('multer')()
 const api = require('./api')
 const { send } = require('./api/helpers')
@@ -25,56 +24,6 @@ router.get('/:status',
 router.get('/:status/:page',
   api.populateBodyWithDefaults,
   showCitations)
-router.post('/tags/:citationId',
-  api.populateBodyWithDefaults,
-  addTags)
-router.post('/screenings/:status/:page',
-  api.populateBodyWithDefaults,
-  screenCitations, showCitations)
-router.post('/screenings/submit',
-  api.populateBodyWithDefaults,
-  screenCitation)
-router.post('/screenings/change',
-  api.populateBodyWithDefaults,
-  changeCitation)
-router.post('/screenings/delete',
-  api.populateBodyWithDefaults,
-  deleteCitation)
-router.post('/screenings',
-  api.populateBodyWithDefaults,
-  screenCitations, showCitations)
-
-function deleteCitation (req, res, next) {
-  api.citations.deleteCitation(req.body).then(data =>
-    res.json(data)
-  )
-}
-
-function changeCitation (req, res, next) {
-  api.citations.deleteCitation(req.body).then(d =>
-    api.citations.post(req.body).then(data =>
-      res.json(data)
-    )
-  )
-}
-
-function screenCitation (req, res, next) {
-  api.citations.post(req.body).then(data =>
-    res.json(data)
-  )
-}
-
-function addTags (req, res, next) {
-  var citationId = req.params.citationId
-  api.citations.addTags(citationId, req.body).then(data =>
-    res.json(data)
-  )
-}
-
-function screenCitations (req, res, next) {
-  api.citations.post(req.body)
-  next()
-}
 
 function apiGetStudies (user, apiParams) {
   return send('/studies', user, { qs: apiParams })

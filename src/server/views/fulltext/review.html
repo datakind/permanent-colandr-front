@@ -18,21 +18,26 @@
     {{ study.citation.title }}
   </div>
 </div>
-<div class="row">
-  <div class="col s12">
-    {# TODO This should be the same code as in the fulltext review screen #}
-    <button class="btn waves-effect waves-light green btn-small" type="button">Include</button>
-    <button class="btn waves-effect waves-light grey btn-small" type="button">Skip</button>
-    <button class="btn waves-effect waves-light red btn-small" type="button">Exclude</button>
+<div class="row screening_box"
+     data-screening-type="fulltext"
+     data-study-url="/study/{{ study.id }}"
+     data-redirect-on-submit="/reviews/{{ reviewId }}/fulltext">
+  <div class="decision-form-box col s12">
+    <button class="btn waves-effect waves-light green btn-small include-btn" type="submit">Include</button>
+    <div class="exclusions right">
+      <a href="#" class="btn-small btn waves-effect red doexclude">Exclude</a>
+      {% include "shared/edit_exclusions.html" %}
+    </div>
+
   </div>
 </div>
 <div id="pdfdoc" style="width: 100%"></div>
 {% endblock %}
 
 {% block scripts %}
-  <script type="text/javascript" src="/js/citations.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
+  {% include "shared/screening_js.html" %}
 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
   <script>
     {# PDFObject decides whether to use the native PDF viewer or pdf.js (using the supplied viewer
        url), and how to embed it into the page (e.g. <embed> or <iframe>).

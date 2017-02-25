@@ -1,0 +1,16 @@
+<div class="dropdown_screening editexclusions" style="display:none;">
+  <ul>
+  {% for selection in selectionCriteria %}
+    <li>
+      <input type="checkbox" data-label="{{ selection.label }}" id="{{ selection.label }}-{{ study.id }}"
+        autocomplete="off"
+        {% if screen.status == "excluded" and selection.label in screen.exclude_reasons %}
+          checked="checked"
+        {% endif %} />
+      <label for="{{ selection.label }}-{{ study.id }}">{{ selection.label }}</label>
+    </li>
+  {% endfor %}
+  </ul>
+  <a href="#" class="cancel">cancel</a>
+  <a href="#" class="ok">ok</a>
+</div>
