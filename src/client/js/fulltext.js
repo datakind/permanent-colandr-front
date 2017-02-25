@@ -5,7 +5,7 @@ $(document).ready(function () {
    * Adds a question to the list of research questions by cloning the templates.
    */
   function replaceUploadForm (container, context) {
-    var templ = nunjucks.render('fulltext/partials/fields/_include-form.html', context)
+    var templ = nunjucks.render('shared/pending_fulltext_screening.html', context)
     var el = $.parseHTML($.trim(templ))[0]
     container.html(el)
   }
