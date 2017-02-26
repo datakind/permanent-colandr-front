@@ -21,6 +21,7 @@
     <hr>
     <br>
     <div class="row">
+      <fieldset {{ 'disabled' if not isOwner }}>
       {% include '../shared/notifications.html' %}
       {% include './settings/basic.html' %}
       <br>
@@ -29,6 +30,7 @@
       {% include './settings/freeze.html' %}
       <br>
       {% include './settings/delete.html' %}
+      </fieldset>
     </div>
   </div>
 
