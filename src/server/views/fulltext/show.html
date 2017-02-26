@@ -35,7 +35,7 @@
     <div class="input-field col s3">
       <i class="material-icons prefix">search</i>
       <input id="search" name="tsquery" type="text" value="{{ tsquery }}" size="10">
-      <label for"search">Filter by:</label>
+      <label for="search">Filter by:</label>
     </div>
 
     <div class="col s1">
@@ -87,6 +87,8 @@
 
 {% endblock %}
 
+
 {% block scripts %}
   <script type="text/javascript" src="/js/fulltext.js"></script>
+  {% include "shared/screening_js.html" %}
 {% endblock %}
