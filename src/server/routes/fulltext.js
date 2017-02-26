@@ -49,7 +49,7 @@ function getContext (req, res) {
 
   let apiParams = {
     review_id: reviewId,
-    fields: 'id,citation.title,citation.authors,citation.journal_name,citation.pub_year,fulltext,tags',
+    fields: 'id,citation.title,citation.authors,citation.journal_name,citation.pub_year,citation.abstract,citation.keywords,fulltext,tags',
     fulltext_status: shownStatus,
     tag: req.query.tag || undefined,
     tsquery: req.query.tsquery || undefined,

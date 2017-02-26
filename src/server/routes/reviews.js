@@ -78,6 +78,7 @@ function settings (req, res, next) {
       res.render('reviews/settings', {
         reviewId: review.id,
         reviewName: review.name,
+        isOwner: req.session.user.user_id === review.owner_user_id,
         review,
         team
       })
