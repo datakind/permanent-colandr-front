@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+{% block css %}
+  <link rel="stylesheet" href="/css/auth.css">
+{% endblock %}
+
+{% block content %}
+
+  <div class="auth-page container">
+    <div class="row">
+      <div class="card-panel col offset-s3 s6">
+        <div class="row">
+          <ul class="tabs">
+            <li class="tab col s6">
+              <a class="active" href="#signin">Password reset</a>
+            </li>
+          </ul>
+        </div>
+
+        {% if not token %}
+        <div class="row">
+          <div class="col offset-s1 s10">
+            <form action="/requestReset" method="POST" class="row">
+              {% include '../shared/notifications.html' %}
+              <div class="input-field col s12">
+                <input id="email" name="email" type="email" class="validate" required>
+                <label for="email">Email</label>
+              </div>
+              <input type="submit" class="col s12 z-depth-0 btn btn-large">
+            </form>
+          </div>
+        </div>
+        {% else %}
+        <div class="row">
+          <div class="col offset-s1 s10">
+            <form action="/updatePassword/{{ token }}" method="POST" class="row">
+              {% include '../shared/notifications.html' %}
+              <div class="input-field col s12">
+                <input id="password" name="password" type="password" class="validate" required>
+                <label for="password">New password</label>
+              </div>
+              <div class="input-field col s12">
+                <input id="password_dup" name="password_dup" type="password" class="validate" required>
+                <label for="password_dup">Repeat new password</label>
+              </div>
+              <input type="submit" class="col s12 z-depth-0 btn btn-large">
+            </form>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+          <div class="col s12">
+            <p class="center-align">
+            <a href="/signin">Back to sign-in</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
