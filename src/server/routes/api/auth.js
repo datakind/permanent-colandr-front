@@ -38,6 +38,31 @@ function signup (body) {
   })
 }
 
+function requestReset (email) {
+  if (!email) return Promise.reject()
+
+  return send('/reset', '', {
+    method: 'POST',
+    auth: null,
+    qs: {
+      email,
+      server_name: 'http://www.colandrapp.com'
+    }
+  })
+}
+
+function submitReset (token, newPassword) {
+  if (!(token && newPassword)) return Promise.reject()
+
+  return send(`/reset/${token}`, '', {
+    method: 'PUT',
+    auth: null,
+    body: {
+      password: newPassword
+    }
+  })
+}
+
 function datestr (timestamp) {
   return dateformat(new Date(timestamp), 'isoDateTime')
 }
@@ -118,5 +143,5 @@ function authenticate (req, res, next) {
 }
 
 module.exports = {
-  signin, signup, authenticate
+  signin, signup, authenticate, requestReset, submitReset
 }
