@@ -1,6 +1,6 @@
 const { send } = require('./api/helpers')
-const express = require('express')
-const router = express.Router()
+const bluebird = require('bluebird')
+const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 
 router.get('/signin', index)
@@ -10,10 +10,21 @@ router.post('/signup', signup, signin)
 /* new */
 router.get('/logout', logout)
 
+router.get('/reset/:token', reset)
+router.get('/reset', reset)
+router.post('/requestReset', requestReset)
+router.post('/updatePassword/:token', updatePassword)
+
 // auth routes
 
 function index (req, res, next) {
   res.render('auth/index', {})
+}
+
+function reset (req, res, next) {
+  res.render('auth/reset', {
+    token: req.params.token
+  })
 }
 
 /* new */
@@ -48,6 +59,51 @@ function register (req, res, next) {
   })
 }
 
+function requestReset (req, res, next) {
+  return bluebird.try(() => {
+    if (!req.body.email) {
+      throw new Error('Please provide a valid email address.')
+    }
+    return api.auth.requestReset(req.body.email)
+  })
+  .then(() => {
+    req.flash('success', 'Password reset requested. Please check your email.')
+    res.redirect('/signin')
+  })
+  .catch(err => {
+    console.log('Password reset request failed: ' + err)
+    req.flash('error', err.message)
+    res.redirect('/reset')
+  })
+}
+
+function updatePassword (req, res, next) {
+  return bluebird.try(() => {
+    if (!req.body.password || req.body.password !== req.body.password_dup) {
+      throw new Error('Passwords don\'t match')
+    }
+    return api.auth.submitReset(req.params.token, req.body.password)
+  })
+  .then(token => {
+    req.session.user = token
+    req.flash('success', 'Password updated. Please log in.')
+    res.redirect('/signin#signin')
+  })
+  .catch(err => {
+    console.log('Password reset failed: ' + err)
+    let details = ': ' + err.message
+    if (err.statusCode === 500) {
+      details = ': invalid request.'
+    } else {
+      try {
+        details = ': ' + err.error.messages.password.join('\n')
+      } catch (e) {}
+    }
+    req.flash('error', 'Could not reset password' + details)
+    res.redirect(`/reset/${req.params.token}`)
+  })
+}
+
 function goUserHome (req, res, next) {
   res.redirect('/reviews')
 }
@@ -60,11 +116,11 @@ function signup (req, res, next) {
     })
     .catch(err => {
       console.log('Signup failed: ' + err)
-      let detail = ''
-      if (err.error && /already exists/.test(err.error.message)) {
-        detail = ': user already exists'
-      }
-      req.flash('error', 'Could not register with the provided information' + detail)
+      let details = ''
+      try {
+        details = ': ' + err.error.messages.password.join('\n')
+      } catch (e) {}
+      req.flash('error', 'Could not register with the provided information' + details)
       res.redirect('/signin#signup')
     })
 }
