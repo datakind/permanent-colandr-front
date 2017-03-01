@@ -1,5 +1,4 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express-promise-router')({ mergeParams: true })
 
 router.get('/', function (req, res, next) {
   if (req.session.user) {
