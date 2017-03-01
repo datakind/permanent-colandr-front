@@ -1,4 +1,4 @@
-const Promise = require('bluebird')
+const bluebird = require('bluebird')
 const router = require('express-promise-router')({ mergeParams: true })
 const api = require('./api')
 
@@ -13,14 +13,13 @@ router.delete('/:id', del)
 // reviews routes
 
 function index (req, res) {
-  return Promise.map(api.reviews.get(req.session.user, null, req.query), review => {
+  return bluebird.map(api.reviews.get(req.session.user, null, req.query), review => {
     return api.teams.get(req.session.user, review.id)
     .then(team => {
       review.team = team.filter(member => member.id !== req.session.user.user_id)
       return review
     })
   })
-  .catch(err => req.flash('error', err.message))
   .then(reviews => res.render('reviews/index', { reviews }))
 }
 
@@ -30,7 +29,7 @@ function newReview (req, res, next) {
 }
 
 function show (req, res, next) {
-  return Promise.join(
+  return bluebird.join(
     api.reviews.get(req.session.user, req.params.id),
     api.progress.get({reviewId: req.params.id, user: req.session.user}, true),
     (review, progress) => {
@@ -71,7 +70,7 @@ function show (req, res, next) {
 }
 
 function settings (req, res, next) {
-  return Promise.join(
+  return bluebird.join(
     api.reviews.get(req.session.user, req.params.id),
     api.teams.get(req.session.user, req.params.id),
     (review, team) => {

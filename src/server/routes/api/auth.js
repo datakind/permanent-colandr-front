@@ -136,6 +136,7 @@ function authenticate (req, res, next) {
       next()
     },
     err => {
+      console.log('authenticate failed: ' + err)
       req.flash('error', err.message)
       res.redirect('/signin#signin')
     }
