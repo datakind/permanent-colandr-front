@@ -1,6 +1,9 @@
 /* global $, document, nunjucks, Materialize */
 
 $(document).ready(function () {
+  // Initialize material select dropdowns
+  $('select').material_select()
+
   $('form.add-tag-form').on('submit', function (ev) {
     ev.preventDefault()
 

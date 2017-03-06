@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const rp = require('request-promise')
 
 // Send makes a request to the API URL specified.
@@ -15,7 +16,9 @@ function send (path, user, opts = {}) {
     auth: { user: user.token }
   }, opts)
 
-  console.log('RP', JSON.stringify(options))
+  console.log('RP', JSON.stringify(_.cloneDeepWith(options, (val, key, o) =>
+    typeof val === 'string' && /pass/i.test(key) ? '***' : undefined)))
+
   return rp(options)
 }
 
