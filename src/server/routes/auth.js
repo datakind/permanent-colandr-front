@@ -117,9 +117,11 @@ function signup (req, res, next) {
     .catch(err => {
       console.log('Signup failed: ' + err)
       let details = ''
-      try {
+      if (/^duplicate key value violates unique constraint/.test(err.error.message)) {
+        details = ': Email address already registered.'
+      } else if (err.error.messages.password) {
         details = ': ' + err.error.messages.password.join('\n')
-      } catch (e) {}
+      }
       req.flash('error', 'Could not register with the provided information' + details)
       res.redirect('/signin#signup')
     })
