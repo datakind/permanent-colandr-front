@@ -39,7 +39,7 @@
       <div class="tagreview-body">
         <div class="tagreview-data">
         {% for item in sentences %}
-          <div class="tagreview-confidence">{{ loop.index }}. Confidence: {{ (item.confidence * 100) | round }}%</div>
+          <div class="tagreview-confidence">{{ loop.index }}. Confidence: {{ item.confidenceLevel | confidenceToText }}</div>
           <div class="tagreview-sentence">{{ item.sentence }}</div>
         {% endfor %}
         </div>

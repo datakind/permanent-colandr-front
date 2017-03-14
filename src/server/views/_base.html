@@ -16,8 +16,10 @@
   </head>
   <body>
     {% include './shared/nav.html' %}
+    <main>
     {% block content %}
     {% endblock %}
+    </main>
     <!-- vendor scripts -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
@@ -25,6 +27,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
 
     <script src="/js/templates.js"></script>
+
+    {% block footer %}
+    <footer class='footer'>
+      <div class='container center'>
+        <img src='/images/CI+DK.png' height='76px' />
+      </div>
+    </footer>
+    {% endblock %}
 
     <!-- main -->
     {% block scripts %}{% endblock %}

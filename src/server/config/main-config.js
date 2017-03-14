@@ -19,6 +19,8 @@ const viewFolders = [
   path.join(__dirname, '..', 'views')
 ]
 
+const CONFIDENCE_LEVEL = [ 'Low', 'Medium', 'High' ]
+
 module.exports.init = function (app, express) {
   // *** view engine *** //
   const nunjucksEnv = nunjucks.configure(viewFolders, {
@@ -31,6 +33,9 @@ module.exports.init = function (app, express) {
     console.log(value)
     if (array.indexOf(value) > -1) return true
     else return false
+  })
+  nunjucksEnv.addFilter('confidenceToText', function (confLevel) {
+    return CONFIDENCE_LEVEL[confLevel] || 'N/A'
   })
 
   app.set('view engine', 'html')
