@@ -4,6 +4,7 @@
   $(function () {
     $('[id^="add-field-"]').on('click', appendQ)
     $('form').on('click', '.research-question-remove', removeQuestion)
+    $('form').on('click', '.extraction-label-remove', removeQuestion)
     $('form').on('change', '[id^="data_extraction_form_field_type_"]', updateDataExtractionField)
 
     // Prevent submission of bad research question

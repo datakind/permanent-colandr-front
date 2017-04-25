@@ -1,4 +1,4 @@
-const Promise = require('bluebird')
+const bluebird = require('bluebird')
 const _ = require('lodash')
 const router = require('express-promise-router')({ mergeParams: true })
 const upload = require('multer')()
@@ -48,7 +48,7 @@ function showCitations (req, res, next) {
     per_page: kResultsPerPage
   }
 
-  return Promise.join(
+  return bluebird.join(
     api.reviews.getName(user, reviewId),
     api.progress.get(req.body, true, 'citation_screening'),
     api.plans.get(req.body),
@@ -90,21 +90,24 @@ function showCitations (req, res, next) {
   )
 }
 
-function importPage (req, res, next) {
-  api.imports.get(req.body)
+function importPage (req, res) {
+  return api.imports.get(req.body)
     .then(imports => {
       const renderObj = { reviewId: req.body.reviewId, imports }
-      res.render('citations/import/index', renderObj)
+      return res.render('citations/import/index', renderObj)
     })
 }
 
-function createImport (req, res, next) {
-  api.imports.create(req.body, req.files)
-    .then(() => {
-      const path = `/reviews/${req.body.reviewId}/citations/import#history`
-      res.redirect(path)
-    })
-    .catch(api.handleError(next))
+function createImport (req, res) {
+  return api.imports.create(req.body, req.files)
+  .then(() => res.redirect(`/reviews/${req.body.reviewId}/citations/import#history`))
+  .catch(err => {
+    let msg = err.error.message || _.map(err.error.messages, (val, key) => {
+      return key + ': ' + val
+    }).join(', ')
+    req.flash('error', msg)
+    res.redirect(`/reviews/${req.body.reviewId}/citations/import`)
+  })
 }
 
 module.exports = router
