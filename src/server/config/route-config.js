@@ -6,6 +6,7 @@ module.exports.init = function (app) {
 
   // *** routes *** //
   const routes = require('../routes/index')
+  const aboutRoutes = require('../routes/about')
   const authRoutes = require('../routes/auth')
   const reviewsRoutes = require('../routes/reviews')
   const teamsRoutes = require('../routes/teams')
@@ -22,6 +23,7 @@ module.exports.init = function (app) {
   app.use('/', authRoutes)
 
   app.use(auth.authenticate)
+  app.use('/about', aboutRoutes)
   app.use('/user', userRoutes)
   app.use('/reviews', reviewsRoutes)
   app.use('/reviews/:reviewId/team', teamsRoutes)
