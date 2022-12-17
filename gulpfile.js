@@ -6,7 +6,8 @@ const eslint = require('gulp-eslint')
 const runSequence = require('run-sequence')
 const nodemon = require('gulp-nodemon')
 const plumber = require('gulp-plumber')
-const sass = require('gulp-sass')(require('sass'));
+const sass = require('gulp-sass')
+// (require('sass'));
 const child_process = require('child_process')
 
 // *** config *** //

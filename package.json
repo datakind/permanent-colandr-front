@@ -21,7 +21,6 @@
     "method-override": "^2.3.6",
     "morgan": "~1.7.0",
     "multer": "^1.2.0",
-    "node-sass": "^7.0.1",
     "nunjucks": "^2.5.2",
     "nunjucks-date-filter": "^0.1.1",
     "request": "^2.75.0",
