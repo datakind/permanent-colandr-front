@@ -7,13 +7,14 @@ Promise.promisifyAll(jwt)
 const kRefreshAfterSec = 300
 
 function signin (body) {
-  let { email, password } = body
-  if (!(email && password)) return Promise.reject()
+  let { email, password, CaptchaInput } = body
+  if (!(email && password && CaptchaInput)) return Promise.reject()
 
   return send('/authtoken', '', {
     auth: {
       user: email,
       pass: password,
+      captcha: CaptchaInput,
       sendImmediately: false
     }
   })
@@ -52,6 +53,7 @@ function requestReset (email) {
 }
 
 function submitReset (token, newPassword) {
+  console.log(token)
   if (!(token && newPassword)) return Promise.reject()
 
   return send(`/reset/${token}`, '', {
@@ -121,6 +123,7 @@ function devAutoSignin (next) {
 function authenticate (req, res, next) {
   return Promise.try(() => {
     let { user } = req.session
+    console.log(req)
     if (user && user.token) {
       return _verify(user)
     }
@@ -138,11 +141,55 @@ function authenticate (req, res, next) {
     err => {
       console.log('authenticate failed: ' + err)
       req.flash('error', err.message)
-      res.redirect('/signin#signin')
+      res.redirect('/signin#signin',capcode)
     }
   )
 }
 
 module.exports = {
   signin, signup, authenticate, requestReset, submitReset
+}
+
+function checkform(theform){
+  console.log(theform)
+var why = "";
+
+if(theform.CaptchaInput.value == ""){
+why += "- Please Enter CAPTCHA Code.\n";
+}
+if(theform.CaptchaInput.value != ""){
+if(ValidCaptcha(theform.CaptchaInput.value) == false){
+why += "- The CAPTCHA Code Does Not Match.\n";
+}
+}
+if(why != ""){
+alert(why);
+return false;
+}
+}
+
+// var a = Math.ceil(Math.random() * 9)+ '';
+// var b = Math.ceil(Math.random() * 9)+ '';
+// var c = Math.ceil(Math.random() * 9)+ '';
+// var d = Math.ceil(Math.random() * 9)+ '';
+// var e = Math.ceil(Math.random() * 9)+ '';
+
+// var code = a + b + c + d + e;
+// document.getElementById("txtCaptcha").value = code;
+// document.getElementById("CaptchaDiv").innerHTML = code;
+
+// Validate input against the generated number
+function ValidCaptcha(){
+var str1 = removeSpaces(document.getElementById('txtCaptcha').value);
+var str2 = removeSpaces(document.getElementById('CaptchaInput').value);
+if (str1 == str2){
+return true;
+}else{
+return false;
+}
+}
+
+// Remove the spaces from the entered and generated code
+function removeSpaces(string){
+return string.split(' ').join('');
 }

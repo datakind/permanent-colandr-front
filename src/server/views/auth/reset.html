@@ -27,7 +27,29 @@
                 <label for="email">Email</label>
               </div>
               <input type="submit" class="col s12 z-depth-0 btn btn-large">
+              <div class="capbox-inner">
+                Type the characters below:<br>
+            <input type="hidden" id="txtCaptcha">
+            <input type="text" name="CaptchaInput" id="CaptchaInput" size="15"><br>
+            </div>
             </form>
+            <div class="capbox" id="capbox">
+            </div>
+            <script type="text/javascript">
+              console.log("testefcas")
+              // document.querySelector() is used to select an element from the document using its ID
+              let capboxarea = document.querySelector('#capbox');
+              let captchaText = document.createElement("canvas")
+             var ctx = captchaText.getContext("2d");
+             ctx.font = "50px Roboto";
+             ctx.fillStyle = "#08e5ff";
+             
+             var emptyArr = "{{ capcode }}".split(",");
+             console.log(emptyArr)
+             ctx.fillText(emptyArr.join(''),captchaText.width/4, captchaText.height/2);
+             capboxarea.appendChild(captchaText)
+             
+               </script>
           </div>
         </div>
         {% else %}
@@ -45,6 +67,7 @@
               </div>
               <input type="submit" class="col s12 z-depth-0 btn btn-large">
             </form>
+            
           </div>
         </div>
         {% endif %}

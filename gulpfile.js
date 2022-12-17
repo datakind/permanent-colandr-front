@@ -6,7 +6,7 @@ const eslint = require('gulp-eslint')
 const runSequence = require('run-sequence')
 const nodemon = require('gulp-nodemon')
 const plumber = require('gulp-plumber')
-const sass = require('gulp-sass')
+const sass = require('gulp-sass')(require('sass'));
 const child_process = require('child_process')
 
 // *** config *** //
@@ -41,7 +41,7 @@ const nodemonConfig = {
 
 function precompileTemplates () {
   console.log("Precompiling nunjucks templates to src/client/js/templates.js")
-  child_process.execSync('bin/nunjucks-precompile src/server/views > src/client/js/templates.js')
+  child_process.execSync('"node_modules/.bin/nunjucks-precompile" src/server/views > src/client/js/templates.js')
 }
 
 // *** default task *** //

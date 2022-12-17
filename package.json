@@ -16,14 +16,17 @@
     "express-flash": "0.0.2",
     "express-promise-router": "^1.0.0",
     "express-session": "^1.14.1",
+    "jsdom": "^20.0.0",
     "jsonwebtoken": "^7.1.9",
     "method-override": "^2.3.6",
     "morgan": "~1.7.0",
     "multer": "^1.2.0",
+    "node-sass": "^7.0.1",
     "nunjucks": "^2.5.2",
     "nunjucks-date-filter": "^0.1.1",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
+    "sass": "^1.54.5",
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
@@ -37,7 +40,7 @@
     "gulp-nodemon": "^2.1.0",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
-    "gulp-sass": "^2.3.2",
+    "gulp-sass": "^5.1.0",
     "mocha": "^3.0.2",
     "run-sequence": "^1.2.2"
   }
