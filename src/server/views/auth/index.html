@@ -2,6 +2,20 @@
 
 {% block css %}
   <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/js/cookie-consent-js/src/cookie-consent.css"/>
+  <script src="/js/cookie-consent-js/src/cookie-consent.js"></script>
+  <script>
+    const cookieConsent = new CookieConsent({
+    contentUrl: "/js/cookie-consent-js/cookie-consent-content", // location of the language files
+    privacyPolicyUrl: "/privacy-policy"
+})
+  </script>
+  <a href="javascript:cookieConsent.reset()"></a> 
+  <script>
+    if (cookieConsent.trackingAllowed()) {
+    // Google Analytics code and/or other tracking code
+}
+  </script>
 {% endblock %}
 
 {% block content %}

@@ -1,0 +1,61 @@
+{
+  "_from": "cookie-consent-js",
+  "_id": "cookie-consent-js@2.1.6",
+  "_inBundle": false,
+  "_integrity": "sha512-ELrbxfGYN9dCY4FJ7+33+n94liMTwfHD8TW/P2r0adz5gxaqTUwpn7raecBqvN9pYve4FsGNo5qhgxdzSNepCQ==",
+  "_location": "/cookie-consent-js",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cookie-consent-js",
+    "name": "cookie-consent-js",
+    "escapedName": "cookie-consent-js",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cookie-consent-js/-/cookie-consent-js-2.1.6.tgz",
+  "_shasum": "c4c5a105c21740e19ac44e99417ddde7e5756a53",
+  "_spec": "cookie-consent-js",
+  "_where": "/Users/jay/Scripts/colandr/untitled folder/permanent-colandr-front",
+  "author": {
+    "name": "Stefan Haack",
+    "url": "shaack.com"
+  },
+  "bugs": {
+    "url": "https://github.com/shaack/cookie-consent-js/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A simple dialog and framework to handle the EU law (as written by EuGH, 1.10.2019 – C-673/17) about cookies in a website.",
+  "devDependencies": {
+    "teevi": "^2.1.9"
+  },
+  "homepage": "https://github.com/shaack/cookie-consent-js",
+  "keywords": [
+    "cookie",
+    "cookie consent",
+    "dsgvo",
+    "gdpr",
+    "eu",
+    "law",
+    "js",
+    "javascript"
+  ],
+  "license": "MIT",
+  "main": "src/cookie-consent.js",
+  "name": "cookie-consent-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaack/cookie-consent-js.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "2.1.6"
+}
